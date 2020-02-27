@@ -1,0 +1,93 @@
+{
+	"EditRecord": [
+		{
+		"DOCNUM" : "",
+		"PRINTINGBRANCH" : "",
+		"DISTPATCHTO" : "",
+		"DISTPATCHTOCODE" : "",
+		"DISTPATCHTONAME" : "",
+		"PNBACCOUNTNO" : "",
+		"PNBACCOUNTNAME" : "",
+		"Remarks" : ""
+		}
+	],
+	
+	"allopenAP": [
+		{
+		"Code" : "",
+		"Priority" : "",
+		"DocDate" : "",
+		"DocDueDate" : "",
+		"DocNum" : "",
+		"NumAtCard" : "",
+		"DocType" : "",
+		"Comments" : "",
+		"Dscription" : "",
+		"CardCode" : "",
+		"CardName" : "",
+		"DocTotal" : "",
+		"DocCur" : "",
+		"OpenSum" : "",
+		"PaymentAmount" : "",
+		"CRANo" : ""
+		}
+	],
+    "DistpatchTo": [
+		{
+		"Desc":"Customer",
+		"Code":"BN"
+		},
+		{
+		"Desc":"Payee",
+		"Code":"BU"
+		}
+    ],
+    "DistpatchToCode": [
+		{
+		"Desc":"PNB GSC Santiago Branch",
+		"Code":"4053"
+		},
+		{
+		"Desc":"PNB Zamboanga KMZ Branch",
+		"Code":"4161"
+		},
+		{
+		"Desc":"Binondo – Reina Regente",
+		"Code":"1634"
+		},
+		{
+		"Desc":"PNB Dadianga Branch",
+		"Code":"1369"
+		},
+		{
+		"Desc":"KCC Mall de Zamboanga Branch",
+		"Code":"1434"
+		}
+    ],
+    "PrintingBranch": [
+		{
+		"Desc":"PNB GSC Santiago Branch",
+		"Code":"4053"
+		},
+		{
+		"Desc":"PNB Zamboanga KMZ Branch",
+		"Code":"4161"
+		},
+		{
+		"Desc":"TBSC",
+		"Code":"0549"
+		},
+		{
+		"Desc":"1945",
+		"Code":"1945"
+		},
+		{
+		"Desc":"PNB Dadiangas Branch",
+		"Code":"1396"
+		},
+		{
+		"Desc":"KCC Mall of Zamboanga",
+		"Code":"1509"
+		}
+    ]
+}

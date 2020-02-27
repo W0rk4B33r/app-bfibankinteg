@@ -1,0 +1,24 @@
+{
+	"EditRecord": [
+		{
+		"IsCheck" : "",
+		"CRANo" : 0,
+		"DocDate" : "",
+		"DocDueDate" : "",
+		"DocNum" : 0,
+		"NumAtCard" : 0,
+		"Comments" : "",
+		"DocType" : "",
+		"Dscription" : "",
+		"CardCode" : "",
+		"CardName" : "",
+		"DocCur" : "",
+		"DocTotal" : 0,
+		"DocTotalFC" : 0,
+		"PaidSum" : 0,
+		"PaidSumFC" : 0
+		
+		}
+	]
+
+}

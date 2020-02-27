@@ -1,0 +1,345 @@
+ <mvc:View controllerName="com.apptech.app-bankinteg.controller.PaymentProcessing"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" 
+xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:t="sap.ui.table">
+	<App>
+		<pages>
+			<Page title="Invoice Tagging" id="pageTerm">
+				<content>
+					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
+						<items>
+							<IconTabFilter id="tab1" text="Records" count="0" key="tab1">
+								<!--<Select id="selectRecordGroup" items="{oMdlStatGroup>/allstatgroup}" width="40%" enabled="true" change="onSelectStatGroup">-->
+								<!--	<core:ListItem key="{oMdlStatGroup>Code}" text="{oMdlStatGroup>Code} - {oMdlStatGroup>Desc} "/>-->
+								<!--</Select>-->
+								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
+									rowSelectionChange="onSelectionChange">
+									<t:extension>
+										<Toolbar>
+											<content>
+												<Button text="Add" tooltip="Add" press="onAddMode" icon="sap-icon://add"/>
+												<Button text="View" tooltip="View" press="onView" icon="sap-icon://edit"/>
+												<ToolbarSpacer/>
+												<SearchField placeholder="Filter" value="" search="filterGlobally" width="15rem"/>
+											</content>
+										</Toolbar>
+									</t:extension>
+								</t:Table>
+								<!--<Text text="Unit Details" class="mTextLarge sapUiSmallMarginTop"/>-->
+								<!--<t:Table id="tblQuotationUnits" selectionMode="Single" visibleRowCount="5" ariaLabelledBy="title" enableCellFilter="true">-->
+								<!--	<t:extension>-->
+								<!--		<Toolbar></Toolbar>-->
+								<!--	</t:extension>-->
+								<!--</t:Table>-->
+							</IconTabFilter>
+							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
+								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
+								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
+								<VBox class="sapUiTinyMargin">
+									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
+										<f:content>
+											<!--Buyer-->
+											<Label text="Date From" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="DateFrom" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateFrom}" required="true">
+													<layoutData>
+														<l:GridData span="L3 M4 S12"/>
+													</layoutData>
+											</DatePicker>
+											<Label text="Date To" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="DateTo" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateTo}" required="true">
+													<layoutData>
+														<l:GridData span="L3 M4 S12"/>
+													</layoutData>
+											</DatePicker>
+											<Label text="Supplier Code" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="SupplierCode" value="{oMdlEditRecord>/EditRecord/SupplierCode}" required="true"  showValueHelp="true"
+												valueHelpOnly="true" valueHelpRequest="handleValueHelpSupplier">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Supplier Name" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="SupplierName" value="{oMdlEditRecord>/EditRecord/SupplierName}" required="true" enabled="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Tagging Date" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="DateTagged" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+											<Label text="Batch Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="DocumentNo" value="{oMdlEditRecord>/EditRecord/DocumentNo}" enabled = "false" showValueHelp="true"
+												valueHelpOnly="true" valueHelpRequest="handleValueHelpBatch">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<Label text="Status" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+												<Input width="100%" id="Status" value="{oMdlEditRecord>/EditRecord/Status}" enabled = "false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Input>
+											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
+											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
+											<!--	<layoutData>-->
+											<!--		<l:GridData span="L3 M4 S12"/>-->
+											<!--	</layoutData>-->
+											<!--</Select>-->
+											<Label text="" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Button text="Search" id="searchID" tooltip="Search" press="onSearch" icon="sap-icon://search">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Button>
+											<!--<Panel-->
+											<!--	id="dataBindingDatePanel"-->
+											<!--	headerText="DatePicker using data binding">-->
+											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
+											<!--	<DatePicker-->
+											<!--		id="DP4"-->
+											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
+											<!--		class="sapUiSmallMarginBottom"/>-->
+											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
+											<!--</Panel>-->
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
+										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Multi" visibleRowCount="6" ariaLabelledBy="title">
+											<t:columns>
+											<!--	<t:Column width="5rem">-->
+											<!--		<Label text="Select"/>-->
+											<!--		<t:template>-->
+											<!--			<Button type="Reject" text="" press="onDeleteRow" icon="sap-icon://delete"/>-->
+											<!--		</t:template>-->
+											<!--	</t:Column>-->
+												<t:Column width="5rem">
+													<Label text="Priority"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>Priority'}"
+															textAlign="End" fieldWidth="80%" width="100%"/>
+														<!--<Text text=""/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Invoice Doc. Type"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>InvoiceType'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocNum}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Invoice #"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocNum'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocNum}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="7rem">
+													<Label text="Invoice Date"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocDate'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocDate}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="7rem">
+													<Label text="Check Date"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocDueDate'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Supplier Reference #"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>NumAtCard'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="12rem">
+													<Label text="Invoice Remarks"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>Comments'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>Comments}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="5rem">
+													<Label text="Invoice Type"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocType'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocType}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="12rem">
+													<Label text="Description"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>Dscription'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>Dscription}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="8rem">
+													<Label text="Supplier Code"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>CardCode'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>CardCode}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="8rem">
+													<Label text="Supplier Name"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>CardName'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>CardName}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Inovice Currency"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocCur'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocCur}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="Invoice Total"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocTotal}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="5rem">
+													<Label text="Remaining Balance"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>RemainingBalance', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>DocTotalFC}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="5rem">
+													<Label text="Payment Amount"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															textAlign="End" fieldWidth="80%" width="100%"/>
+														<!--<Text text="{oMdlAP>PaidSum}"/>-->
+													</t:template>
+												</t:Column>
+												<t:Column width="6rem">
+													<Label text="CRA#"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>CRANo'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<!--<Text text="{oMdlAP>PaidSumFc}"/>-->
+													</t:template>
+												</t:Column>
+											</t:columns>
+												<t:extension>
+													<Toolbar>
+														<content>
+															<Button text="Delete Row/s" tooltip="Delete Row/s" press="onDeleteRow"  enabled="true" icon="sap-icon://delete"/>
+															<Button type="Reject" text="Cancel Transaction" tooltip="Cancel Transaction" enabled="true"  press="onCancelTransaction"/>
+														</content>
+													</Toolbar>
+												</t:extension>
+										</t:Table>
+									</f:SimpleForm>
+									<f:SimpleForm>
+										<Label text="Remarks" width="100%">
+											<layoutData>
+												<l:GridData span="L3 M2 S12"/>
+											</layoutData>
+										</Label>
+										<TextArea id="Remarks" value="{oMdlEditRecord>/EditRecord/Remarks}" maxLength="254" width="100%" placeholder ="Remarks"/>
+									</f:SimpleForm>
+									<!--</content>-->
+								</VBox>
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</content>
+				<footer id="footer">
+					<Toolbar>
+						<!--<ToolbarSpacer/>-->
+						<!--<Button type="Accept" text="ADD" press="onAdd" />-->
+						<!--<Button type="Accept" text="PRINT" press="onPrint" />-->
+						<!--<Button type="Accept" text="SAVE" press="onSave" />-->
+						<!--<Button type="Reject" text="CANCEL" press="onCancel" />-->
+						<Bar>
+						  <!--  <contentLeft>-->
+							 <!--   <Button type="Accept" text="Find Mode" tooltip="Find Mode" press="onFindMode" />-->
+								<!--<Button type ="Accept" text="Add Mode" tooltip="Find Mode" press="onAddMode" />-->
+						  <!--  </contentLeft>-->
+							<contentRight>
+						        <Button type="Accept" id="btnDraft" text="ADD DRAFT" press="onAdd" />
+								<Button type="Accept" id="btnPrint" text="PRINT" press="onPrint" />
+								<Button type="Accept" id="btnSave" text="SAVE" press="onSave" />
+								<Button type="Reject" id="btnCancel" text="CANCEL" press="onCancel" />
+						    </contentRight>
+						 </Bar>
+					</Toolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View> 

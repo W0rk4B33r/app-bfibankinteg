@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No Bank Found"
+		title="Select Bank"
+		search="handleSearch"
+		confirm="handleValueHelpCloseBank"
+		cancel="handleValueHelpCloseBank"
+		showClearButton="true"
+		items="{oMdlBank>/allpnbbank}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{oMdlBank>BankCode}"
+			description="{oMdlBank>Account}" />
+	</SelectDialog>
+</core:FragmentDefinition>

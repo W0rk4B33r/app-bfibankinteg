@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No Supplier Found"
+		title="Select Supplier"
+		search="handleSearch"
+		confirm="handleValueHelpCloseSupplier"
+		cancel="handleValueHelpCloseSupplier"
+		showClearButton="true"
+		items="{oMdlSupplier>/allsupplierwithopenap}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{oMdlSupplier>CardName}"
+			description="{oMdlSupplier>CardCode}" />
+	</SelectDialog>
+</core:FragmentDefinition>

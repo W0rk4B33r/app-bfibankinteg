@@ -1,0 +1,12 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+
+	xmlns:core="sap.ui.core">
+	<ActionSheet
+		title="Choose Your Action"
+		showCancelButton="true"
+		placement="Bottom">
+			<Button text="Logout" press="onLogout" />
+			<Button text="Create UDT" press="onLoadUDTandUDF" />
+	</ActionSheet>
+</core:FragmentDefinition>

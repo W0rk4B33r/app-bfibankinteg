@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		noDataText="No Batch Found"
+		title="Select Supplier"
+		search="handleSearchBatch"
+		confirm="handleValueHelpCloseBatch"
+		cancel="handleValueHelpCloseBatch"
+		showClearButton="true"
+		items="{oMdlBatch>/allbatch}">
+		<StandardListItem
+			iconDensityAware="false"
+			iconInset="false"
+			title="{oMdlBatch>U_App_DocNum}"
+			description="Supplier : {oMdlBatch>U_App_SupplierName} DateCreated : {oMdlBatch>U_App_CreatedDate}" />
+	</SelectDialog>
+</core:FragmentDefinition>

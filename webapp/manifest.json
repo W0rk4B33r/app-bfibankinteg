@@ -1,0 +1,171 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "com.apptech.app-bankinteg",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}"
+	},
+
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "com.apptech.app-bankinteg.view.Login",
+			"type": "XML",
+			"async": true,
+			"id": "Login"
+		},
+		"dependencies": {
+			"minUI5Version": "1.60.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.apptech.app-bankinteg.i18n.i18n"
+				}
+			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.apptech.app-bankinteg.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				
+				{
+					"name": "Main",
+					"view": "Main",
+					"pattern": "Main",
+					"targetAggregation": "pages",
+					"controlId": "app"
+				},
+				{
+					"name": "Dashboard",
+					"pattern": "Dashboard",
+					"target": [
+						"Dashboard"
+					]
+				},
+				{
+					"name": "Login",
+					"pattern": "Login",
+					"target": [
+						"Login"
+					]
+				},
+				{
+					"name": "PaymentProcessing",
+					"pattern": "PaymentProcessing",
+					"target": [
+						"PaymentProcessing"
+					]
+				},
+				{
+					"name": "PaymentFileExtraction",
+					"pattern": "PaymentFileExtraction",
+					"target": [
+						"PaymentFileExtraction"
+					]
+				},
+				{
+					"name": "ReturnFileUploading",
+					"pattern": "ReturnFileUploading",
+					"target": [
+						"ReturnFileUploading"
+					]
+				}
+			],
+			"targets": {
+				"Main": {
+					"viewType": "XML",
+					"viewName": "Main",
+					"viewLevel": 1
+				},
+				"Dashboard": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "Dashboard",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				},
+				"Login": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "Login"
+				},
+				"PaymentProcessing": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "PaymentProcessing",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				},
+				"PaymentFileExtraction": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "PaymentFileExtraction",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				},
+				"ReturnFileUploading": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "ReturnFileUploading",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				}
+			}
+		}
+	}
+}

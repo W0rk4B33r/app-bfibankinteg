@@ -1,0 +1,73 @@
+ <mvc:View controllerName="com.apptech.app-bankinteg.controller.Login"
+xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" >
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page title="BFI BANK INTEGRATION" id="pageLogin" busyIndicatorDelay="500">
+					<content>
+						<Panel xmlns="sap.m" class="sapUiResponsiveContentPadding" width="auto" expandable="true" expanded="true" id="panel0" headerText="Panel with SimpleForm">
+							<headerToolbar>
+								<Toolbar id="toolbar1">
+									<Title text="Login"/>
+									<ToolbarSpacer/>
+								</Toolbar>
+							</headerToolbar>
+							<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
+								<f:content>
+									<Label text="Database" width="100%" id="label00">
+										<layoutData>
+											<l:GridData span="L2 M4 S12"/>
+										</layoutData>
+									</Label>
+									<!--<Select id="selectDatabase" items="{oMdlDB>/alldb}" showSecondaryValues="true" items="">-->
+									<!--	<core:ListItem key="{oMdlDB>NAME}" text="{oMdlDB>Name} - {oMdlDB>COMPANYNAME} "/>-->
+									<!--	<layoutData>-->
+									<!--		<l:GridData span="L10 M8 S12"/>-->
+									<!--	</layoutData>-->
+									<!--</Select>-->
+									<Select id="selectDatabase"  items="{oMdlDatabase>/Database}" selectedKey=""  showSecondaryValues="true">
+										<core:ListItem key="{oMdlDatabase>NAME}" text="{oMdlDatabase>NAME} - {oMdlDatabase>COMPANYNAME} "/>
+										<layoutData>
+											<l:GridData span="L10 M8 S12"/>
+										</layoutData>
+									</Select>
+									<Label text="Username" width="100%" id="label0">
+										<layoutData>
+											<l:GridData span="L2 M4 S12"/>
+										</layoutData>
+									</Label>
+									<Input width="100%" id="Username" required="true" submit="onLogin">
+										<layoutData>
+											<l:GridData span="L10 M8 S12"/>
+										</layoutData>
+									</Input>
+									<Label text="Password" width="100%" id="label1">
+										<layoutData>
+											<l:GridData span="L2 M4 S12"/>
+										</layoutData>
+									</Label>
+									<Input width="100%" id="Password" type="Password" required="true" submit="onLogin">
+										<layoutData>
+											<l:GridData span="L10 M8 S12"/>
+										</layoutData>
+									</Input>
+									<Label text="" width="100%" id="label12">
+										<layoutData>
+											<l:GridData span="L2 M4 S12"/>
+										</layoutData>
+									</Label>
+									<Button xmlns="sap.m" text="Login" id="button3" icon="sap-icon://visits" iconFirst="false" type="Emphasized" press="onLogin" xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" action:wiring="\{'press':\{'navigation':\{'routeName':'Main'\}\}\}">
+										<layoutData>
+											<l:GridData span="L12 M8 S12"/>
+										</layoutData>
+									</Button>
+								</f:content>
+							</f:SimpleForm>
+							<content/>
+						</Panel>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

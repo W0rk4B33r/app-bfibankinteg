@@ -1,0 +1,18 @@
+{
+	"Uploading": [
+		{
+		"CheckAmount" : "",
+		"CheckNum" : "",
+		"VoucherNum" : "",
+		"SupplierCode" : "",
+		"SupplierName" : "",
+		"BankAccount" : "",
+		"PaymentDate" : "",
+		"CheckDate" : "",
+		"RefNum" : ""
+		
+		
+		}
+	]
+
+}

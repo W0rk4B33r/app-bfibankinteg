@@ -1,0 +1,25 @@
+{
+ "Result": [{
+   "name": "Vikas Singh",
+   "mobile": 8828054345,
+   "mail": "info.vikaskumar41@gmail.com",
+   "address": "Bihar,INDIA"
+  }, {
+   "name": "Kunal Singh",
+   "mobile": 3434343456,
+   "mail": "info.kumalkumar@gmail.com",
+   "address": "Bihar,INDIA"
+  }, {
+   "name": "Rajeev Singh",
+   "mobile": 4568235678,
+   "mail": "info.Rjeeev@gmail.com",
+   "address": "Bihar,INDIA"
+  }, {
+   "name": "Senjeev Singh",
+   "mobile": 2345678765,
+   "mail": "senjeev41@gmail.com",
+   "address": "Bihar,INDIA"
+  }
+
+ ]
+}

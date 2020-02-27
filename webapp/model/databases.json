@@ -1,0 +1,29 @@
+{
+    "Database": [
+		{
+	        "NAME": "DEVBFI_TRUCKSCALE",
+	        "COMPANYNAME": "DEMO BFIDEV TRUCKSCALE",
+	        "LOCALIZATION": "AU"
+	    },
+	    {
+	        "NAME": "DEVBFI_CRA2",
+	        "COMPANYNAME": "DEMO BFIDEV CRA2",
+	        "LOCALIZATION": "AU"
+	    },
+	    {
+	        "NAME": "DEVBFI_CTIS",
+	        "COMPANYNAME": "DEMO BFIDEV CTIS",
+	        "LOCALIZATION": "AU"
+	    },
+	    {
+	        "NAME": "DEVBFI_FSQR",
+	        "COMPANYNAME": "DEMO BFIDEV FSQR",
+	        "LOCALIZATION": "AU"
+	    },
+	    {
+	        "NAME": "DEVBFI_CRA",
+	        "COMPANYNAME": "DEMO BFIDEV CRA",
+	        "LOCALIZATION": "AU"
+	    }
+     ]
+}

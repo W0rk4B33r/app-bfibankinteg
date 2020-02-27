@@ -1,0 +1,158 @@
+ <mvc:View controllerName="com.apptech.app-bankinteg.controller.ReturnFileUploading"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:u="sap.ui.unified" 
+xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:t="sap.ui.table">
+	<App>
+		<pages>
+			<Page title="Return File Uploading" id="pageTerm">
+				<footer class="footer">
+					<Bar id="bar0">
+						<contentLeft>
+							<u:FileUploader change="handleFiles" id="fileUploader" name="myFileUpload" uploadUrl="upload/" tooltip="Upload your file to the local server"
+								uploadComplete="handleUploadComplete"/>
+							<Button xmlns="sap.m" text="Upload File" id="button0" press="FileUpload" type="Accept"/>
+						</contentLeft>
+						<contentRight>
+							<Button xmlns="sap.m" text="Post Outgoing Payment" id="button1" press="PostOutGoingPayment" type="Emphasized"/>
+						</contentRight>
+					</Bar>
+				</footer>
+				<content>
+					<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
+						<t:Table id="tblDetails" rows="{oMdlUploading>/Uploading}" selectionMode="Single" visibleRowCount="6" ariaLabelledBy="title">
+							<t:columns>
+								<!--<t:Column width="6rem">-->
+								<!--	<Label text="AP Invoice#"/>-->
+								<!--	<t:template>-->
+								<!--		<Input-->
+								<!--			value="{ path:'oMdlUploading>APInvoiceNo'}"-->
+								<!--			textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>-->
+										<!--<Text text="{oMdlAP>DocNum}"/>-->
+								<!--	</t:template>-->
+								<!--</t:Column>-->
+								<!--<t:Column width="6rem">-->
+								<!--	<Label text="Supplier Reference #"/>-->
+								<!--	<t:template>-->
+								<!--		<Input-->
+								<!--			value="{ path:'oMdlUploading>SupplierRefNo'}"-->
+								<!--			textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>-->
+										<!--<Text text="{oMdlAP>NumAtCard}"/>-->
+								<!--	</t:template>-->
+								<!--</t:Column>-->
+								<!--<t:Column width="12rem">-->
+								<!--	<Label text="Invoice Remarks"/>-->
+								<!--	<t:template>-->
+								<!--		<Input-->
+								<!--			value="{ path:'oMdlUploading>InvoiceRemarks'}"-->
+								<!--			textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>-->
+										<!--<Text text="{oMdlAP>Comments}"/>-->
+								<!--	</t:template>-->
+								<!--</t:Column>-->
+								<!--<t:Column width="6rem">-->
+								<!--	<Label text="Inovice Currency"/>-->
+								<!--	<t:template>-->
+								<!--		<Input-->
+								<!--			value="{ path:'oMdlUploading>InvoiceCurr'}"-->
+								<!--			textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>-->
+										<!--<Text text="{oMdlAP>DocCur}"/>-->
+								<!--	</t:template>-->
+								<!--</t:Column>-->
+								<!--<t:Column width="5rem">-->
+								<!--	<Label text="Payment Amount"/>-->
+								<!--	<t:template>-->
+								<!--		<Input-->
+								<!--			value="{ path:'oMdlUploading>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"-->
+								<!--			textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>-->
+										<!--<Text text="{oMdlAP>PaidSum}"/>-->
+								<!--	</t:template>-->
+								<!--</t:Column>-->
+								<t:Column width="7rem">
+									<Label text="Check Amount"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>CheckAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocTotalFC}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="7rem">
+									<Label text="Check Number"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>CheckNum'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocTotal}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="8rem">
+									<Label text="Bank Voucher Number"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>VoucherNum'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocDueDate}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="8rem">
+									<Label text="Supplier Code"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>SupplierCode'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>CardCode}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="9rem">
+									<Label text="Supplier Name"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>SupplierName'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>CardName}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="7rem">
+									<Label text="Bank Account"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>BankAccount'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocDate}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="7rem">
+									<Label text="Payment Date"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>PaymentDate'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocDate}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="7rem">
+									<Label text="Check Date"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>CheckDate'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocDueDate}"/>-->
+									</t:template>
+								</t:Column>
+								<t:Column width="7rem">
+									<Label text="Reference Number"/>
+									<t:template>
+										<Input
+											value="{ path:'oMdlUploading>RefNum'}"
+											textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+										<!--<Text text="{oMdlAP>DocDueDate}"/>-->
+									</t:template>
+								</t:Column>
+							</t:columns>
+						</t:Table>
+					</f:SimpleForm>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View> 

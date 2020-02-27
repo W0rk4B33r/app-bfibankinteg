@@ -1,0 +1,16 @@
+
+{
+	"EditRecord": [
+		{
+		"Code" : 0,
+		"DateFrom" : "",
+		"DateTo" : "",
+		"SupplierCode" : "",
+		"SupplierName" : "",
+		"TaggingDate" : "",
+		"DocumentNo" : 0,
+		"Status" : ""
+		}
+	]
+
+}

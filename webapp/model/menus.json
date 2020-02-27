@@ -1,0 +1,26 @@
+{
+	"navigation": [{
+			"title": "Invoice Tagging",
+			"icon": "sap-icon://manager-insight",
+			"key": "paymentprocessing"
+		}, {
+			"title": "Payment File Extraction",
+			"icon": "sap-icon://manager-insight",
+			"key": "paymentfileextration"
+		}, {
+			"title": "Return File Uploading",
+			"icon": "sap-icon://manager-insight",
+			"key": "returnfileuploading"
+		}
+
+	],
+	"fixedNavigation": [{
+		"title": "Reports and Analytics",
+		"icon": "sap-icon://manager-insight",
+		"key": "reportanalytics"
+	}, {
+		"title": "Bug Report",
+		"icon": "sap-icon://message-error",
+		"key": "bugreport"
+	}]
+}

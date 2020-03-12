@@ -8,9 +8,6 @@
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
 							<IconTabFilter id="tab1" text="Records" count="0" key="tab1">
-								<!--<Select id="selectRecordGroup" items="{oMdlStatGroup>/allstatgroup}" width="40%" enabled="true" change="onSelectStatGroup">-->
-								<!--	<core:ListItem key="{oMdlStatGroup>Code}" text="{oMdlStatGroup>Code} - {oMdlStatGroup>Desc} "/>-->
-								<!--</Select>-->
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>
@@ -24,30 +21,22 @@
 										</Toolbar>
 									</t:extension>
 								</t:Table>
-								<!--<Text text="Unit Details" class="mTextLarge sapUiSmallMarginTop"/>-->
-								<!--<t:Table id="tblQuotationUnits" selectionMode="Single" visibleRowCount="5" ariaLabelledBy="title" enableCellFilter="true">-->
-								<!--	<t:extension>-->
-								<!--		<Toolbar></Toolbar>-->
-								<!--	</t:extension>-->
-								<!--</t:Table>-->
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
+								<Button text="Save as Draft" id="btnSaveAsDraft" tooltip="Save as Draft" press="onSaveAsDraft"/>
 								<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>
 								<Button text="Export File" id="btnExport" tooltip="Save" press="onExportFile" icon="sap-icon://download"/>
-								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
+								<Button text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTrans"/>
 								<VBox class="sapUiTinyMargin">
-									<!--<Panel class="sapUiResponsiveContentPadding" width="auto" expandable="false" expanded="true" id="panel0">-->
-									<!--	<content>-->
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>
-											<!--Buyer-->
 											<Label text="Batch" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
 											<Input width="100%" id="DocumentNo" value="{oMdlPayExtract>/EditRecord/DOCNUM}" showValueHelp="true"
-												valueHelpOnly="true" valueHelpRequest="handleValueHelpBatch">
+												valueHelpOnly="true" valueHelpRequest="handleSelectDialogPress">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -108,23 +97,11 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<ComboBox width="100%" items="{path:'oMdlEditRecord>/DistpatchToCode'}"-->
-											<!--	selectionChange="onSelectionChangeTranType">-->
-											<!--	<core:Item key="{oMdlEditRecord>Code}" text="{oMdlEditRecord>Code} - {oMdlEditRecord>Desc}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</ComboBox>-->
 											<Label text="PNB Account #" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<!--<Input width="100%" id="PNBAccountNo" value="" required="true" enabled="true">-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Input>-->
 											<Input width="100%" id="PNBAccountNo" value="{oMdlPayExtract>/EditRecord/PNBACCOUNTNO}" showValueHelp="true"
 												valueHelpOnly="true" valueHelpRequest="handleValueHelpBank">
 												<layoutData>
@@ -141,38 +118,15 @@
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<!--<Select id="selectDatabase"  items="{oMdlDocStat>/Status}" selectedKey="{oMdlEditRecord>/EditRecord/Status}"  showSecondaryValues="true">-->
-											<!--	<core:ListItem key="{oMdlDocStat>text}" text="{oMdlDocStat>key}"/>-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Select>-->
 											<Label text="" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<!--<Button text="Search" id="btnSearch" tooltip="Search" press="onSearch" icon="sap-icon://search">-->
-											<!--	<layoutData>-->
-											<!--		<l:GridData span="L3 M4 S12"/>-->
-											<!--	</layoutData>-->
-											<!--</Button>-->
-											<!--<Panel-->
-											<!--	id="dataBindingDatePanel"-->
-											<!--	headerText="DatePicker using data binding">-->
-											<!--	<Label text="DatePicker using DataBinding" labelFor="DP4"/>-->
-											<!--	<DatePicker-->
-											<!--		id="DP4"-->
-											<!--		value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"-->
-											<!--		class="sapUiSmallMarginBottom"/>-->
-											<!--	<Text text="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'long'}}" class="sapUiSmallMargin"/>-->
-											<!--</Panel>-->
 										</f:content>
 									</f:SimpleForm>
-									<!--	</content>-->
-									<!--</Panel>-->
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
-										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Multi" visibleRowCount="6" ariaLabelledBy="title">
+										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Single" visibleRowCount="6" ariaLabelledBy="title">
 											<t:columns>
 												<t:Column width="6rem">
 													<Label text="Invoice Doc. Type"/>
@@ -180,7 +134,6 @@
 														<Input
 															value="{ path:'oMdlAP>InvoiceType'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -189,7 +142,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocNum'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocNum}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="7rem">
@@ -198,7 +150,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocDate'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocDate}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="7rem">
@@ -207,7 +158,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocDueDate'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocDueDate}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -216,7 +166,6 @@
 														<Input
 															value="{ path:'oMdlAP>NumAtCard'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>NumAtCard}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="12rem">
@@ -225,7 +174,6 @@
 														<Input
 															value="{ path:'oMdlAP>Comments'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>Comments}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="5rem">
@@ -234,7 +182,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocType'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocType}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="12rem">
@@ -243,7 +190,6 @@
 														<Input
 															value="{ path:'oMdlAP>Dscription'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>Dscription}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="8rem">
@@ -252,7 +198,6 @@
 														<Input
 															value="{ path:'oMdlAP>CardCode'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>CardCode}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="8rem">
@@ -261,7 +206,6 @@
 														<Input
 															value="{ path:'oMdlAP>CardName'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>CardName}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -270,7 +214,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocCur'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocCur}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -279,7 +222,6 @@
 														<Input
 															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocTotal}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="5rem">
@@ -288,7 +230,6 @@
 														<Input
 															value="{ path:'oMdlAP>OpenSum', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>DocTotalFC}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="5rem">
@@ -297,7 +238,6 @@
 														<Input
 															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>PaidSum}"/>-->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -306,7 +246,6 @@
 														<Input
 															value="{ path:'oMdlAP>CRANo'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
-														<!--<Text text="{oMdlAP>PaidSumFc}"/>-->
 													</t:template>
 												</t:Column>
 											</t:columns>

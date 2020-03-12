@@ -78,11 +78,11 @@ sap.ui.define([
           });
           // //create udt
           // //Payement Processing Draft  Header
-          // this.createTable("APP_OPPD", "Payment Processing", "bott_NoObject");
+          // this.createTable("APP_OPPD", "Payment Processing - Header", "bott_NoObject");
           // //Payement Processing Details
-          // this.createTable("APP_PPD1", "Payment Processing", "bott_NoObject");
+          // this.createTable("APP_PPD1", "Payment Processing - Details", "bott_NoObject");
           // //Saved Draft OutGoing Payment
-          // this.createTable("APP_ODOP", "Payment Processing", "bott_NoObject");
+          // this.createTable("APP_ODOP", "Payment File Extraction", "bott_NoObject");
           // //create udf
           // //Payement Processing Header
           //  this.createField("App_DocNum", "Document Number", "@APP_OPPD", "db_Alpha", "", 30);
@@ -121,7 +121,7 @@ sap.ui.define([
           // this.createField("App_UpdatedDate", "Updated Date", "@APP_PPD1", "db_Alpha", "", 30);
           // // Saved Draft OutGoing Payment
           // this.createField("App_DocEntry", "Document Entry", "@APP_ODOP", "db_Alpha", "", 30);
-          // this.createField("App_DocNum", "Batch Number", "@APP_ODOP", "db_Alpha", "", 30);
+          // this.createField("App_DocNum", "Batch Number", "@APP_ODOP", "db_Alpha", "", 300);
           // this.createField("App_PNBPrntBrnch", "PNB Printing Branch", "@APP_ODOP", "db_Alpha", "", 30);
           // this.createField("App_DistPatchTo", "Dispatch To", "@APP_ODOP", "db_Alpha", "", 30);
           // this.createField("App_DispatchCode", "Dispatch Code", "@APP_ODOP", "db_Alpha", "", 30);
@@ -134,6 +134,20 @@ sap.ui.define([
           // this.createField("App_UpdatedBy", "Updated By", "@APP_ODOP", "db_Alpha", "", 30);
           // this.createField("App_UpdatedDate", "Updated Date", "@APP_ODOP", "db_Alpha", "", 30);
           // this.createField("App_Status", "Status", "@APP_ODOP", "db_Alpha", "", 30);
+          //tagging if Outgoing payment is created from this integ
+          // this.createField("App_isFromBankInteg", "Status", "OPDF", "db_Alpha", "", 30);
+          // //Payement Processing Details
+          // this.createField("App_DocNum", "Batch Number", "@APP_ODOP", "db_Alpha", "", 30);
+          // this.createField("App_DocEntry", "Document Entry", "@APP_DOP1", "db_Alpha", "", 30);
+          //this.createField("App_InvDocNum", "Inv. Document Number", "@APP_DOP1", "db_Alpha", "", 30);
+          // this.createField("App_CreatedBy", "Created By", "@APP_DOP1", "db_Alpha", "", 30);
+          // this.createField("App_CreatedDate", "Created Date", "@APP_DOP1", "db_Alpha", "", 30);
+          // this.createField("App_UpdatedBy", "Updated By", "@APP_DOP1", "db_Alpha", "", 30);
+          // this.createField("App_UpdatedDate", "Updated Date", "@APP_DOP1", "db_Alpha", "", 30);
+          // //Add App_BatchNum in A/R invoice once tagged batch
+          // this.createField("App_BatchNum", "Batch Number", "OPCH", "db_Alpha", "", 30);
+          // //Add App_BatchNum in A/P Downpayment once tagged batch
+          // this.createField("App_BatchNum", "Batch Number", "ODPO", "db_Alpha", "", 30);
           
         },
 
@@ -232,7 +246,32 @@ sap.ui.define([
           });
         }
 
+			return -1;
 
-  });
+		},
+		//GET ALL Database
+		getAllRecords: function(queryTag){
+			// var aReturnResult = [];
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBankIntegration&QUERYTAG="+ queryTag +
+				"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				type: "GET",
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					MessageToast.show(error);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					this.oMdlDatabase.setJSON("{\"Database\" : " + JSON.stringify(results) + "}");
+					this.getView().setModel(this.oMdlDatabase, "oMdlDatabase");
+				}
+			});
+		}
+		
+	});
 });
   

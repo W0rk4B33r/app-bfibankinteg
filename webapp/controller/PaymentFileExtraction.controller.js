@@ -135,8 +135,10 @@ sap.ui.define([
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
-				xhrFields: {
-					withCredentials: true
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					MessageToast.show(error);
@@ -174,8 +176,9 @@ sap.ui.define([
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
-				xhrFields: {
-					withCredentials: true
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
@@ -259,8 +262,9 @@ sap.ui.define([
 						"&VALUE1=" + DocEntry + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
-					xhrFields: {
-						withCredentials: true
+					dataType: "json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 					},
 					error: function (xhr, status, error) {
 						MessageToast.show(error);
@@ -364,7 +368,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.prepareBatchRequestBody(batchArray,batchArrayUpdate);
 			$.ajax({
-				url: "/destinations/BiotechSL/b1s/v1/$batch",
+				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -521,8 +525,10 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=" + value1 + "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
-				xhrFields: {
-					withCredentials: true
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
@@ -588,7 +594,7 @@ sap.ui.define([
 		getBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
-				url: "/destinations/BiotechSL/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
+				url: "https://18.136.35.41:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
 					CardCode + "'",
 				type: "GET",
 				xhrFields: {

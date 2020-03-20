@@ -23,6 +23,7 @@ sap.ui.define([
 		onInit: function () {
 			//get DataBase loggedin
 			this.dataBase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.userCode = jQuery.sap.storage.Storage.get("userCode");	
 			
 			this.oMdlEditRecord = new JSONModel("model/paymentprocessing.json");
 			this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
@@ -116,9 +117,11 @@ sap.ui.define([
 			$.ajax({
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
-				beforeSend: function(xhr) {
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
+				},
 				error: function (xhr, status, error) {
 					// if (xhr.status === 400) {
 					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
@@ -143,18 +146,13 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
-				beforeSend: function(xhr) {
+				dataType: "json",
+				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
+				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
 				context: this
@@ -174,9 +172,11 @@ sap.ui.define([
 			$.ajax({
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
-				beforeSend: function(xhr) {
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
+				},
 				error: function (xhr, status, error) {
 					// if (xhr.status === 400) {
 					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
@@ -298,7 +298,7 @@ sap.ui.define([
 		
 		
 		//End Updating
-		prepareBatchRequestBody: function (oRequest) {
+		prepareBatchRequestBody: function (oRequest,BatchUpdate) {
 
 			var batchRequest = "";
 
@@ -315,6 +315,16 @@ sap.ui.define([
 				batchRequest = batchRequest + "POST /b1s/v1/" + objectUDT.tableName;
 				batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
 				batchRequest = batchRequest + JSON.stringify(objectUDT.data) + "\n\n";
+			}
+			
+			var objectUDTUpdate = "";
+			for (var ii = 0; ii < BatchUpdate.length; ii++) {
+
+				objectUDTUpdate = BatchUpdate[ii];
+				batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+				batchRequest = batchRequest + "PATCH /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.docEntry +")";
+				batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
+				batchRequest = batchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
 			}
 
 			batchRequest = batchRequest + endBatch;
@@ -336,7 +346,7 @@ sap.ui.define([
 			var queryTag = "",value1 = "",value2 ="",value3="",value4 = "",dbName = "SBODEMOAU_SL";
 			value1 = BatchNum;
 			this.getSearchDataHead(dbName, "spAppBankIntegration", "getHeaderDat", value1, value2, value3, value4);
-			this.getSearchDataDet(dbName, "spAppBankIntegration", "getBatchData", value1, value2, value3, value4);
+			this.getSearchDataDet(dbName, "spAppBankIntegration", "getBatch_Data", value1, value2, value3, value4);
 			
 			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Record Code : " + BatchNum + " [EDIT]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
@@ -386,16 +396,12 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
-				beforeSend: function(xhr) {
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
+				},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
 						sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
@@ -416,9 +422,11 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
-				beforeSend: function(xhr) {
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
+				},
 				error: function (xhr, status, error) {
 					MessageToast.show(error);
 				},
@@ -441,14 +449,7 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -526,19 +527,14 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
 				+ "&VALUE1=" + 	this.getView().byId("DocumentNo").getValue() + "&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
-				  },
 				contentType: "application/json",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -609,7 +605,7 @@ sap.ui.define([
 			code = this.oMdlEditRecord.getData().EditRecord.Code;
 			oT_PAYMENT_PROCESSING_H.U_App_Status = "Cancelled";
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = remarks;
-			oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy= "manager";
+			oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy= this.userCode;
 			oT_PAYMENT_PROCESSING_H.U_App_UpdatedDate = this.getTodaysDate();
 			Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 			
@@ -636,6 +632,7 @@ sap.ui.define([
 			//ON EDIT / ON SAVE RECORD OBJECT
 			var oT_PAYMENT_PROCESSING_H = {};
 			var oT_PAYMENT_PROCESSING_D = {};
+			var oInvoice = {};
 			
 			
 			oT_PAYMENT_PROCESSING_H.Code = CodeH;
@@ -648,7 +645,7 @@ sap.ui.define([
 			oT_PAYMENT_PROCESSING_H.U_App_TaggingDate = this.getTodaysDate();//this.oMdlEditRecord.getData().EditRecord.DateTagged;
 			oT_PAYMENT_PROCESSING_H.U_App_Status = this.Status;//this.oMdlEditRecord.getData().EditRecord.Status;
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = this.oMdlEditRecord.getData().EditRecord.Remarks;
-			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= "manager";
+			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= this.userCode;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedDate = this.getTodaysDate();
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
@@ -666,6 +663,8 @@ sap.ui.define([
 			var oTable = this.getView().byId("tblDetails");
 			// var myTableRows= oTable.getRows();
 			var selectedIndeices=oTable.getSelectedIndices();
+			// var table = "";
+			var BatchUpdate = [];
 			for (d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				for (i = 0; i < selectedIndeices.length; i++) {
 					row = selectedIndeices[i];
@@ -692,7 +691,7 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_PaymentAmount = this.oMdlAP.getData().allopenAP[d].PaymentAmount;
 						oT_PAYMENT_PROCESSING_D.U_App_CRANo = this.oMdlAP.getData().allopenAP[d].CRANo;
 						oT_PAYMENT_PROCESSING_D.U_App_LineNumber = iLineNumDP;
-						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= "manager";
+						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.userCode;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedDate = this.getTodaysDate();
 						
 						// oT_PAYMENT_PROCESSING_D.U_App_UpdatedBy = "";
@@ -704,34 +703,39 @@ sap.ui.define([
 							"tableName": "U_APP_PPD1",
 							"data": oT_PAYMENT_PROCESSING_D//AppUI5.generateUDTCode();
 						}))));
-						// code = +code + 1;
+						
+						oInvoice.U_App_BatchNum = BatchCode;
+						// if (this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP'){
+						// 	table = "OPCH";
+						// }else{
+						// 	table = "ODPO";
+						// }
+						BatchUpdate.push(JSON.parse(JSON.stringify(({
+							"tableName": (this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP' ? "PurchaseInvoices" : "PurchaseDownPayments"),
+							"data": oInvoice,//AppUI5.generateUDTCode();,
+							"docEntry": this.oMdlAP.getData().allopenAP[d].DocEntry//AppUI5.generateUDTCode();
+						}))));
+					
 					}
 				}
 			}
+			
 			//array will be passed to function helper for constructing body text in request
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray);
+			var sBodyRequest = this.prepareBatchRequestBody(batchArray,BatchUpdate);
 			//ajax call to SL
 			$.ajax({
 
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
-				data: sBodyRequest, //If batch, body data should not be JSON.stringified
+				data: sBodyRequest,
 				xhrFields: {
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
 				},
 				context: this
@@ -748,7 +752,117 @@ sap.ui.define([
 		
 			
 		},	
+		// End Add process ----------------
+		//Start Updating
+		// onUpdateProcess: function(){
+		// 	var table= "";
+		// 	var code = "";
+		// 	var Data;
+		// 	var oT_PAYMENT_PROCESSING_H = {};
+		// 	var oT_PAYMENT_PROCESSING_D = {};
+		// 	//header
+		// 	table = "U_APP_OPPD";
+		// 	var batchNum = this.byId("DocumentNo").getValue();
+		// 	var remarks = this.byId("Remarks").getValue();
+		// 	code = this.oMdlEditRecord.getData().EditRecord.Code;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_DocNum = batchNum;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_DateFrom = this.oMdlEditRecord.getData().EditRecord.DateFrom;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_DateTo = this.oMdlEditRecord.getData().EditRecord.DateTo;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_Suppliercode = this.oMdlEditRecord.getData().EditRecord.SupplierCode;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_SupplierName = this.oMdlEditRecord.getData().EditRecord.SupplierName;
+		// 	// oT_PAYMENT_PROCESSING_H.U_App_TaggingDate = this.oMdlEditRecord.getData().EditRecord.DateTagged;
+		// 	oT_PAYMENT_PROCESSING_H.U_App_Status = "P";
+		// 	oT_PAYMENT_PROCESSING_H.U_App_Remarks = remarks;
+		// 	oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy= "manager";
+		// 	oT_PAYMENT_PROCESSING_H.U_App_UpdatedDate = this.getTodaysDate();
+		// 	Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
+			
+		// 	// var batchArray = [
+		// 	// 	//directly insert data if data is single row per table 
+		// 	// 	{
+		// 	// 		"tableName": "U_APP_OPPD",
+		// 	// 		"data": oT_PAYMENT_PROCESSING_H
+		// 	// 	}
+		// 	// ];
+			
+		// 	this.updateRecords(table, code, Data,batchNum);
+		// 	//Deatails
+		// 	var d,i;
+		// 	var row;
+		// 	var oTable = this.getView().byId("tblDetails");
+		// 	// var myTableRows= oTable.getRows();
+		// 	var selectedIndeices=oTable.getSelectedIndices();
+		// 	table = "U_APP_PPD1";
+		// 	for (d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+		// 		for (i = 0; i < selectedIndeices.length; i++) {
+		// 			row = selectedIndeices[i];
+		// 			if (row === d) {
+		// 				var iLineNumDP = d + 1;
+		// 				code = this.oMdlAP.getData().allopenAP[d].Code;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_DocNum = batchNum;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_Priority = this.oMdlAP.getData().allopenAP[d].Priority;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_InvoiceNo = this.oMdlAP.getData().allopenAP[d].DocNum;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_InvoiceDate = this.oMdlAP.getData().allopenAP[d].DocDate;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_CheckDate = this.oMdlAP.getData().allopenAP[d].DocDueDate;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_SuppRefNo = this.oMdlAP.getData().allopenAP[d].NumAtCard;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_Remarks = this.oMdlAP.getData().allopenAP[d].Comments;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_InvoiceType = this.oMdlAP.getData().allopenAP[d].DocType;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_Desc = this.oMdlAP.getData().allopenAP[d].Dscription;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_InvoiceCur = this.oMdlAP.getData().allopenAP[d].DocCur;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_InvoiceTotal = this.oMdlAP.getData().allopenAP[d].DocTotal;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_RemainingBal = this.oMdlAP.getData().allopenAP[d].OpenSum;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_PaymentAmount = this.oMdlAP.getData().allopenAP[d].PaymentAmount;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_CRANo = this.oMdlAP.getData().allopenAP[d].CRANo;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_LineNumber = iLineNumDP;
+		// 				oT_PAYMENT_PROCESSING_D.U_App_UpdatedBy= "manager";
+		// 				oT_PAYMENT_PROCESSING_D.U_App_UpdatedDate = this.getTodaysDate();
+						
+		// 				// batchArray.push(JSON.parse(JSON.stringify(({
+		// 				// 	"tableName": "U_APP_PPD1",
+		// 				// 	"data": oT_PAYMENT_PROCESSING_D//this.generateUDTCode();
+		// 				// }))));
 
+		// 				Data = JSON.stringify(oT_PAYMENT_PROCESSING_D);
+		// 				try{
+		// 					this.updateRecords(table, code, Data,batchNum);
+		// 				} catch (err) {
+		// 					//console.log(err.message);
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// 	// //array will be passed to function helper for constructing body text in request
+		// 	// var sBodyRequest = this.prepareBatchRequestBody(batchArray,"PATCH");
+		// 	// //ajax call to SL
+		// 	// $.ajax({
 
-    });
+		// 	// 	url: "/destinations/BiotechSL/b1s/v1/$batch",
+		// 	// 	type: "PATCH",
+		// 	// 	contentType: "multipart/mixed;boundary=a",
+		// 	// 	data: sBodyRequest, //If batch, body data should not be JSON.stringified
+		// 	// 	xhrFields: {
+		// 	// 		withCredentials: true
+		// 	// 	},
+		// 	// 	error: function (xhr, status, error) {
+		// 	// 		//this.oPage.setBusy(false);
+		// 	// 		sap.m.MessageToast.show("Error");
+		// 	// 	},
+		// 	// 	success: function (json) {
+		// 	// 		//this.oPage.setBusy(false);
+		// 	// 		sap.m.MessageToast.show("Success UpDated Batch: " + batchNum );
+		// 	// 	},
+		// 	// 	context: this
+
+		// 	// }).done(function (results) {
+		// 	// 	if (results) {
+		// 	// 		// this.getView().byId("DocumentNo").setValue(batchNum);
+		// 	// 		// this.getView().byId("Status").setValue("Open");
+		// 	// 		// this.onClearField();
+		// 	// 		// this.oMdlBatch.refresh();
+		// 	// 	}
+		// 	// });
+		// }
+		
+	});
+
 });

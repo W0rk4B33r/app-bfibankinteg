@@ -1,4 +1,4 @@
- <mvc:View controllerName="com.apptech.app-bankinteg.controller.Dashboard"
+ <!-- <mvc:View controllerName="com.apptech.app-bankinteg.controller.Dashboard"
 	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"  xmlns:f="sap.f"
 	xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="Dashboard" id="dashboard">
@@ -7,7 +7,7 @@
 				<!--Sales Agent / Broker  -->
 				<l:HorizontalLayout allowWrapping="true">
 					<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reservations" frameType="TwoByOne"
-						subheader="Manage Reservations" press="tileREQuotations">
+						subheader="Manage Reservations">
 						<TileContent unit="Count">
 							<NumericContent scale="" value="80" valueColor="Good" withMargin="false"/>
 						</TileContent>
@@ -19,7 +19,7 @@
 						</TileContent>
 					</GenericTile>
 					<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Batch" frameType="TwoByOne"
-						subheader="Manage Reservations" press="tileREReservations">
+						subheader="Manage Reservations">
 						<TileContent>
 							<content>
 								<NumericContent value="10" class="sapUiMediumMarginButtom" withMargin="true" icon="sap-icon://insurance-house"/>
@@ -61,4 +61,4 @@
 			</l:VerticalLayout>
 		</ScrollContainer>
 	</Page>
-</mvc:View> 
+</mvc:View>  -->

@@ -127,17 +127,12 @@ sap.ui.define([
 			$.ajax({
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
 				type: "GET",
-				async: false,
-				xhrFields: {
-					withCredentials: true
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
+					
 						sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
@@ -164,9 +159,9 @@ sap.ui.define([
 				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_RE_GETDOCNUM&tableName=" +
 					sTableName,
 				type: "GET",
-				async: false,
-				xhrFields: {
-					withCredentials: true
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					jQuery.sap.log.error("This should never have happened!");

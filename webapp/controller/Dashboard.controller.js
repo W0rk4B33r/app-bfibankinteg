@@ -23,8 +23,10 @@ sap.ui.define([
         $.ajax({
           url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getStatusCount&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
           type: "GET",
-          xhrFields: {
-            withCredentials: true
+          async: false,
+          dataType: "json",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
           },
           error: function (xhr, status, error) {
             MessageToast.show(error);

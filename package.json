@@ -14,7 +14,7 @@
                 "build:ui": "ui5 build --a "
         },
         "dependencies": {
-                "@openui5/sap.m": "^1.73.1",
+                "@openui5/sap.m": "^1.7",
                 "@openui5/sap.tnt": "^1.73.2",
                 "@openui5/sap.ui.commons": "^1.73.2",
                 "@openui5/sap.ui.core": "^1.73.1",

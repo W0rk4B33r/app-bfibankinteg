@@ -6,7 +6,7 @@ sap.ui.define([
 ], function(Controller, JSONModel ,MessageToast,AppUI5) {
   "use strict";
 
-	return Controller.extend("com.apptech-experts.BFI_BANKINTEG.controller.Login", {
+	return Controller.extend("com.apptech.app-bankinteg.controller.Login", {
 		onInit: function () {
 		//get all databse
 		//this.oMdlDatabase = new JSONModel("model/databases.json");

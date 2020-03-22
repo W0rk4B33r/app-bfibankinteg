@@ -1,15 +1,15 @@
 sap.ui.define([
+	"sap/ui/core/mvc/Controller",
 	"jquery.sap.global",
 	  "sap/ui/Device",
 	  "sap/ui/core/Fragment",
-	  "sap/ui/core/mvc/Controller",
 	  "sap/ui/model/json/JSONModel",
 	  "sap/m/Popover",
 	  "sap/m/Button",
 	  "sap/m/library",
 	  "sap/m/MessageToast",
 	  "com/apptech/app-bankinteg/controller/AppUI5"
-  ], function(Controller) {
+  ], function(Controller, jQuery, Device, Fragment, JSONModel, Popover, Button, library, MessageToast, AppUI5) {
 	"use strict";
   
 	return Controller.extend("com.apptech.app-bankinteg.controller.Main", {
@@ -22,7 +22,7 @@ sap.ui.define([
 			  this.DB = sap.ui.getCore().getModel("Database");
 			  this.userCode = jQuery.sap.storage.Storage.get("userCode");	
 			  
-			  this.getView().byId("userCode").setText(this.userCode);
+			  //this.getView().byId("userCode").setText(this.userCode);
 			  
 			  this.oMdlMenu = new JSONModel("model/menus.json");
 			  this.getView().setModel(this.oMdlMenu);

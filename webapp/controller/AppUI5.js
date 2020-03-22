@@ -10,7 +10,7 @@ sap.ui.define([
 	"sap/m/MessageToast"
 ], function (jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast) {
 	"use strict";
-	return ("com.apptech-experts.BFI_BANKINTEG.controller.AppUI5",{
+	return ("com.apptech.app-bankinteg.controller.AppUI5",{
 
 		/*
 		Guide on improving Apptech JS library:

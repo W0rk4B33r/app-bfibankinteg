@@ -4,7 +4,7 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"com/apptech-experts/BFI_BANKINTEG/controller/AppUI5",
+	"com/apptech/app-bankinteg/controller/AppUI5",
 	"sap/ui/core/Fragment",
 	"sap/m/Dialog",
 	"sap/m/ButtonType",

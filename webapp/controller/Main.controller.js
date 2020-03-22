@@ -9,7 +9,7 @@ sap.ui.define([
 	  "sap/m/library",
 	  "sap/m/MessageToast",
 	  "com/apptech/app-bankinteg/controller/AppUI5"
-  ], function(Controller) {
+  ], function(jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast,AppUI5) {
 	"use strict";
   
 	return Controller.extend("com.apptech.app-bankinteg.controller.Main", {
@@ -22,7 +22,7 @@ sap.ui.define([
 			  this.DB = sap.ui.getCore().getModel("Database");
 			  this.userCode = jQuery.sap.storage.Storage.get("userCode");	
 			  
-			  this.getView().byId("userCode").setText(this.userCode);
+			  //this.getView().byId("userCode").setText(this.userCode);
 			  
 			  this.oMdlMenu = new JSONModel("model/menus.json");
 			  this.getView().setModel(this.oMdlMenu);

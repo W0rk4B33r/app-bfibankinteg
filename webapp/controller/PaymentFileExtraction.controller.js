@@ -4,7 +4,7 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"com/apptech-experts/BFI_BANKINTEG/controller/AppUI5",
+	"com/apptech/app-bankinteg/controller/AppUI5",
 	"sap/ui/core/Fragment",
 	"sap/m/Dialog",
 	"sap/m/ButtonType",
@@ -121,8 +121,6 @@ sap.ui.define([
 		renameColumns: function () {
 			this.oTable.getColumns()[0].setLabel("Batch Number");
 			this.oTable.getColumns()[0].setFilterProperty("U_App_DocNum");
-			// this.oTable.getColumns()[1].setLabel("Supplier Code");
-			// this.oTable.getColumns()[2].setLabel("Supplier Name");
 			this.oTable.getColumns()[1].setLabel("Draft No.");
 			this.oTable.getColumns()[2].setLabel("Status");
 			this.oTable.getColumns()[3].setLabel("Created Date");
@@ -258,8 +256,8 @@ sap.ui.define([
 
 				//AJAX selected Key
 				$.ajax({
-					url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
-						"&VALUE1=" + DocEntry + "&VALUE2=&VALUE3=&VALUE4=",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
+						"&VALUE1=" + DraftNum + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
 					dataType: "json",
@@ -462,7 +460,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.prepareBatchRequestBody(batchArray,false);
 			$.ajax({
-				url: "http://18.136.35.41:5000/b1s/v1/$batch",
+				url: "https://18.136.35.41:5000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -522,7 +520,7 @@ sap.ui.define([
 		//search------------
 		getSearchDataDet: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=" + value1 + "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				async: false,
@@ -548,6 +546,7 @@ sap.ui.define([
 				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts",
 				type: "POST",
 				contentType: "application/json",
+				async: false,
 				data: JSON.stringify(oRecord),
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
@@ -575,6 +574,7 @@ sap.ui.define([
 				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts(" + DocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
+				async: false,
 				data: Data,
 				xhrFields: {
 					withCredentials: true

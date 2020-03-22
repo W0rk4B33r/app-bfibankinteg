@@ -4,7 +4,7 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"com/apptech-experts/BFI_BANKINTEG/controller/AppUI5",
+	"com/apptech/app-bankinteg/controller/AppUI5",
 	"sap/ui/core/Fragment",
 	"sap/m/Dialog",
 	"sap/m/ButtonType",
@@ -115,7 +115,7 @@ sap.ui.define([
 		//GET ALL BATCHCODE
 		getAllBatch: function(){
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -143,7 +143,7 @@ sap.ui.define([
 		getAllRecord: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -170,7 +170,7 @@ sap.ui.define([
 		//CREATING MODEL SUPPLIER WITH OPEN AP
 		getAllSupplier: function(){
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -393,7 +393,7 @@ sap.ui.define([
 		getSearchDataHead: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			//get all open AP base on parameters
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -419,7 +419,7 @@ sap.ui.define([
 		getSearchDataDet: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			this.oMdlAP = new sap.ui.model.json.JSONModel();
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -444,6 +444,7 @@ sap.ui.define([
 				url: "https://18.136.35.41:50000/b1s/v1/"+table+"('"+code+"')",
 				type: "PATCH",
 				contentType: "application/json",
+				async: false,
 				data: Data, //If batch, body data should not be JSON.stringified
 				xhrFields: {
 					withCredentials: true
@@ -524,7 +525,7 @@ sap.ui.define([
 		
 		deleteIfExisting: function(){
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
 				+ "&VALUE1=" + 	this.getView().byId("DocumentNo").getValue() + "&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				contentType: "application/json",

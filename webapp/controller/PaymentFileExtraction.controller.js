@@ -387,6 +387,44 @@ sap.ui.define([
 			});
 			
 		},
+		postSo: function(){
+			var contentsss = {};
+
+			contentsss = {
+				"CardCode": "C20000",
+				"DocDueDate": "2020-03-03",
+				"DocumentLines": [
+					{
+						"ItemCode": "A00001",
+						"Quantity": "1",
+						"UnitPrice": "30"
+					}
+				]
+			};
+
+			$.ajax({
+				url: "https://18.136.35.41:5000/b1s/v1/Orders",
+				type: "POST",
+				contentType: "application/json",
+				data: contentsss,
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					sap.m.MessageToast.show(error);
+				},
+				success: function (json) {
+					jQuery.sap.log.debug(json);
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+
+				}
+			});
+
+		},
 		onPostDraftOP: function (oEvent) {
 			if (!this.checkIfBlankField()) {
 				return;
@@ -464,7 +502,6 @@ sap.ui.define([
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
-				async: false,
 				xhrFields: {
 					withCredentials: true
 				},
@@ -478,27 +515,27 @@ sap.ui.define([
 
 			}).done(function (results) {
 				if (results) {
-					var re = /\(([^)]+)\)/g;
-					var s = results;
-					var m;
-					var a = {};
-					var DocEntries = [];
-					do {
-						m = re.exec(s);
-						if (m) {
-							a.docentry = m[1];
-							DocEntries.push(a.docentry);
-						}
-					} while (m);
-					for (var i = 0; i < DocEntries.length; i++) {
-						this.updateDraft(DocEntries[i]);
-					}
-					this.SavePostedDraft(DocEntries, false);
+					// var re = /\(([^)]+)\)/g;
+					// var s = results;
+					// var m;
+					// var a = {};
+					// var DocEntries = [];
+					// do {
+					// 	m = re.exec(s);
+					// 	if (m) {
+					// 		a.docentry = m[1];
+					// 		DocEntries.push(a.docentry);
+					// 	}
+					// } while (m);
+					// for (var i = 0; i < DocEntries.length; i++) {
+					// 	this.updateDraft(DocEntries[i]);
+					// }
+					// this.SavePostedDraft(DocEntries, false);
 					//this.exportData();
-					sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
-					this.onClearAdd();
-					this.oMdlAllRecord.refresh();
-					this.prepareTable(false);
+					//sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
+					// this.onClearAdd();
+					// this.oMdlAllRecord.refresh();
+					// this.prepareTable(false);
 				}
 			});
 		},

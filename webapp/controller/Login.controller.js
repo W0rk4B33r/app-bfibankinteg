@@ -59,9 +59,10 @@ sap.ui.define([
 				url: "https://18.136.35.41:50000/b1s/v1/Login",
 				data: JSON.stringify(oLoginCredentials),
 				type: "POST",
-				// xhrFields: {
-				// 	withCredentials: true
-				// },
+				crossDomain: true,
+                xhrFields: {
+					withCredentials: true
+				},
 				error: function (xhr, status, error) {
 					// var Message = xhr.responseJSON["error"].message.value;
 					// sap.m.MessageToast.show(Message);

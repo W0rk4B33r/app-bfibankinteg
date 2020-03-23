@@ -34,8 +34,10 @@ xmlns:f="sap.ui.layout.form"
 								<!--</t:Table>-->
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
-								<!--<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>-->
-								<!--<Button text="Export File" tooltip="Export" press="handleExcelExport"/>-->
+								<Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save"/>
+								<Button text="ADD DRAFT" id="btnDraft" tooltip="Save as Draft" press="onAdd"/>
+								<Button text="SAVE" id="btnSave" tooltip="Save" press="onSave" icon="sap-icon://save"/>
+								<Button type="Reject" text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancel"/>
 								<VBox class="sapUiTinyMargin">
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>
@@ -298,7 +300,7 @@ xmlns:f="sap.ui.layout.form"
 													<Toolbar>
 														<content>
 															<Button text="Delete Row/s" tooltip="Delete Row/s" press="onDeleteRow"  enabled="true" icon="sap-icon://delete"/>
-															<Button type="Reject" text="Cancel Transaction" tooltip="Cancel Transaction" enabled="true"  press="onCancelTransaction"/>
+															<!-- <Button type="Reject" text="Cancel Transaction" tooltip="Cancel Transaction" enabled="true"  press="onCancelTransaction"/> -->
 														</content>
 													</Toolbar>
 												</t:extension>
@@ -318,27 +320,6 @@ xmlns:f="sap.ui.layout.form"
 						</items>
 					</IconTabBar>
 				</content>
-				<footer id="footer">
-					<Toolbar>
-						<!--<ToolbarSpacer/>-->
-						<!--<Button type="Accept" text="ADD" press="onAdd" />-->
-						<!--<Button type="Accept" text="PRINT" press="onPrint" />-->
-						<!--<Button type="Accept" text="SAVE" press="onSave" />-->
-						<!--<Button type="Reject" text="CANCEL" press="onCancel" />-->
-						<Bar>
-						  <!--  <contentLeft>-->
-							 <!--   <Button type="Accept" text="Find Mode" tooltip="Find Mode" press="onFindMode" />-->
-								<!--<Button type ="Accept" text="Add Mode" tooltip="Find Mode" press="onAddMode" />-->
-						  <!--  </contentLeft>-->
-							<contentRight>
-						        <Button type="Accept" id="btnDraft" text="ADD DRAFT" press="onAdd" />
-								<Button type="Accept" id="btnPrint" text="PRINT" press="onPrint" />
-								<Button type="Accept" id="btnSave" text="SAVE" press="onSave" />
-								<Button type="Reject" id="btnCancel" text="CANCEL" press="onCancel" />
-						    </contentRight>
-						 </Bar>
-					</Toolbar>
-				</footer>
 			</Page>
 		</pages>
 	</App>

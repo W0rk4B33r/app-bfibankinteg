@@ -123,12 +123,6 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
 						sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},

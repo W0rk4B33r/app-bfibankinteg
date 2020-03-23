@@ -1,5 +1,5 @@
  <mvc:View controllerName="com.apptech.app-bankinteg.controller.PaymentFileExtraction"
-	mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App>
 		<pages>

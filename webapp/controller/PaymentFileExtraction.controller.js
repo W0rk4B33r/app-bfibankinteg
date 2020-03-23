@@ -1145,6 +1145,4 @@ sap.ui.define([
 		});
 		saveAs(blob, fileName);
 	}
-
-	});
 });

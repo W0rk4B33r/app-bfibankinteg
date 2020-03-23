@@ -5,8 +5,8 @@
 		noDataText="No Batch Found"
 		title="Select Supplier"
 		search="handleSearchBatch"
-		confirm="handleValueHelpCloseBatch"
-		cancel="handleValueHelpCloseBatch"
+		confirm="handleClose"
+		cancel="handleClose"
 		showClearButton="true"
 		items="{oMdlBatch>/allbatch}">
 		<StandardListItem

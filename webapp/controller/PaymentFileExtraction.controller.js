@@ -464,6 +464,7 @@ sap.ui.define([
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
+				async: false,
 				xhrFields: {
 					withCredentials: true
 				},

@@ -848,8 +848,9 @@ sap.ui.define([
 					controller: this
 				}).then(function (oDialog) {
 					this._oDialog = oDialog;
-					this._oDialog.setModel(this.getView().getModel("oMdlBatch"));
-					this._configDialog(oButton);
+					this._oDialog.setModel(this.getView().getModel("oMdlBatch"), "oMdlBatch");
+
+					this._configDialog(this._oDialog);
 					this._oDialog.open();
 				}.bind(this));
 			} else {
@@ -870,8 +871,7 @@ sap.ui.define([
 			this._oDialog.setResizable(bResizable == "true");
 
 			// Set style classes
-			var sResponsiveStyleClasses =
-				"sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer";
+			var sResponsiveStyleClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer";
 			var sResponsivePadding = oButton.data("responsivePadding");
 			if (sResponsivePadding) {
 				this._oDialog.addStyleClass(sResponsiveStyleClasses);

@@ -13,7 +13,6 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="POstSO" tooltip="Add" press="postSo"/>
 												<Button text="Add" tooltip="Add" press="onAdd" icon="sap-icon://add"/>
 												<Button text="View" tooltip="Edit" press="onEdit" icon="sap-icon://edit"/>
 												<ToolbarSpacer/>

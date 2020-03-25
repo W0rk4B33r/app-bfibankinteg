@@ -346,6 +346,8 @@ sap.ui.define([
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 			// this.onClearField();
+			this.getView().byId("btnPrint").setVisible(true);
+			this.getView().byId("btnCancel").setVisible(true);
 			if (Status === "Draft"){
 				this.getView().byId("DateFrom").setEnabled(true);
 				this.getView().byId("DateTo").setEnabled(true);
@@ -362,16 +364,10 @@ sap.ui.define([
 				this.getView().byId("btnDraft").setEnabled(false);
 			}
 			
-			
-			// this.getView().byId("DocumentNo").setEnabled(true);
-			// this.getView().byId("DateTagged").setValue(null);
-			// this.getAllBatch();
-			// this.oMdlBatch.refresh();
 
 		},
 		//Search
 		onSearch: function(oEvent){
-			
 			var queryTag = "",value1 = "",value2 ="",value3="",value4 = "",dbName = "SBODEMOAU_SL";
 			value1 = this.oMdlEditRecord.getData().EditRecord.DateFrom;
 			 value2 = this.oMdlEditRecord.getData().EditRecord.DateTo;
@@ -448,13 +444,17 @@ sap.ui.define([
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
-					sap.m.MessageToast.show("Batch" + batchNum + "updated succesfully!");
+					sap.m.MessageToast.show("Batch : " + batchNum + " cancelled!");
+					this.prepareTable(false);
+					this.oMdlAllRecord.refresh();
 				},
 				context: this
 
 			}).done(function (results) {
 				if (results) {
-					sap.m.MessageToast.show("Batch : " + batchNum + " updated succesfully!");
+					sap.m.MessageToast.show("Batch : " + batchNum + " cancelled!");
+					this.prepareTable(false);
+					this.oMdlAllRecord.refresh();
 				}
 			});
 		},
@@ -495,14 +495,14 @@ sap.ui.define([
 			
 			this.getView().byId("btnSave").setEnabled(true);
 			this.getView().byId("btnDraft").setEnabled(true);
+			this.getView().byId("btnPrint").setVisible(false);
+			this.getView().byId("btnCancel").setVisible(false);
 			
 			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 		},
 		onAdd: function (oEvent) {
-			// this.oPage.setBusy(true);
-			//this.formMode = "Add";
 			//Check if ther is selected line items
 			var oTable = this.getView().byId("tblDetails");
 			var selectedIndeices=oTable.getSelectedIndices();
@@ -510,11 +510,12 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please select line item/s!");
 				return;
 			}
+			AppUI5.showBusyIndicator();
 			this.Status = "Draft";
 			//Check if Existing
 			this.deleteIfExisting();
 			this.onAddProcess();
-			// this.oPage.setBusy(false);
+			AppUI5.hideBusyIndicator();
 		},
 		
 		deleteIfExisting: function(){
@@ -530,9 +531,9 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
 				},
 				context: this
 			}).done(function (results) {
@@ -568,9 +569,11 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please select line item/s!");
 				return;
 			}
+			AppUI5.showBusyIndicator();
 			this.Status = "Saved";
 			this.deleteIfExisting();
 			this.onAddProcess();
+			AppUI5.hideBusyIndicator();
 		},
 		onDeleteRow: function(oEvent){
 			var oTable = this.getView().byId("tblDetails");
@@ -589,6 +592,7 @@ sap.ui.define([
 		},
 		//Cancel Process
 		onCancelTransaction: function(oEvent){
+			AppUI5.showBusyIndicator();
 			var table= "";
 			var code = "";
 			var Data;
@@ -605,6 +609,7 @@ sap.ui.define([
 			Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 			
 			this.updateRecords(table, code, Data,batchNum);
+			AppUI5.hideBusyIndicator();
 			
 		},
 		//Cancel Process
@@ -729,6 +734,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );

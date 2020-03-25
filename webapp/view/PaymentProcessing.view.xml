@@ -37,7 +37,7 @@ xmlns:f="sap.ui.layout.form"
 								<Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save"/>
 								<Button text="ADD DRAFT" id="btnDraft" tooltip="Save as Draft" press="onAdd"/>
 								<Button text="SAVE" id="btnSave" tooltip="Save" press="onSave" icon="sap-icon://save"/>
-								<Button type="Reject" text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancel"/>
+								<Button type="Reject" text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTransaction"/>
 								<VBox class="sapUiTinyMargin">
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>

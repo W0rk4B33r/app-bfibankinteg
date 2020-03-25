@@ -4,31 +4,6 @@
 	<Page title="Dashboard" id="dashboard">
 		<ScrollContainer id="initialPage" horizontal="false" vertical="true" height="100%">
 			<l:VerticalLayout class="sapUiResponsiveMargin">
-				<!--Sales Agent / Broker  -->
-				<l:HorizontalLayout allowWrapping="true">
-					<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reservations" frameType="TwoByOne"
-						subheader="Manage Reservations">
-						<TileContent unit="Count">
-							<NumericContent scale="" value="80" valueColor="Good" withMargin="false"/>
-						</TileContent>
-						<TileContent>
-							<content>
-								
-								<NumericContent value="10" class="sapUiMediumMarginButtom" withMargin="true" icon="sap-icon://insurance-house"/>
-							</content>
-						</TileContent>
-					</GenericTile>
-					<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Batch" frameType="TwoByOne"
-						subheader="Manage Reservations">
-						<TileContent>
-							<content>
-								<NumericContent value="10" class="sapUiMediumMarginButtom" withMargin="true" icon="sap-icon://insurance-house"/>
-							</content>
-						</TileContent>
-					</GenericTile>
-				
-				</l:HorizontalLayout>
-				<!-- Cashier / Treasury -->
 				<l:HorizontalLayout allowWrapping="true">
 					<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop" header="Batch" subheader="Manage Payments here">
 						<tileContent>

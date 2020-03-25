@@ -13,7 +13,8 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/util/Export",
 	"sap/ui/core/util/ExportTypeCSV"
-], function (Controller, JSONModel, MessageToast, Filter, FilterOperator, AppUI5, Fragment, Dialog, ButtonType, Button, Text, MessageBox, Export, ExportTypeCSV) {
+], function (Controller, JSONModel, MessageToast, Filter, FilterOperator, AppUI5, Fragment,
+	 Dialog, ButtonType, Button, Text, MessageBox, Export, ExportTypeCSV) {
 	"use strict";
 
 	return Controller.extend("com.apptech.app-bankinteg.controller.PaymentFileExtraction", {
@@ -341,9 +342,12 @@ sap.ui.define([
 			this.exportData();
 		},
 		onSaveAsDraft: function (oEvent) {
+			AppUI5.showBusyIndicator();
 			this.SavePostedDraft("", true);
+			AppUI5.hideBusyIndicator();
 		},
 		onCancelTrans: function(oEvent){
+			AppUI5.showBusyIndicator();
 			var oT_PAYMENT_EXTRACTING_H = {};
 			var oT_PAYMENT_EXTRACTING_D = {};
 
@@ -375,6 +379,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -383,11 +388,13 @@ sap.ui.define([
 				if (results) {
 					MessageToast.show("Cancelled Transaction!");
 					this.prepareTable(false);
+					AppUI5.hideBusyIndicator();
 				}
 			});
 			
 		},
 		onPostDraftOP: function (oEvent) {
+			AppUI5.showBusyIndicator();
 			if (!this.checkIfBlankField()) {
 				return;
 			}
@@ -469,9 +476,11 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.showBusyIndicator();
 				},
 				success: function (json) {
 					jQuery.sap.log.debug(json);
+					AppUI5.showBusyIndicator();
 				},
 				context: this
 
@@ -498,6 +507,7 @@ sap.ui.define([
 					this.onClearAdd();
 					this.oMdlAllRecord.refresh();
 					this.prepareTable(false);
+					AppUI5.showBusyIndicator();
 				}
 			});
 		},
@@ -553,6 +563,7 @@ sap.ui.define([
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Saved to Out Going Payment Draft. ");
+					AppUI5.showBusyIndicator();
 				},
 				context: this
 
@@ -560,6 +571,7 @@ sap.ui.define([
 				if (results) {
 					this.DocEntry = results.DocEntry;
 					sap.m.MessageToast.show("Saved to Out Going Payment Draft. ");
+					AppUI5.showBusyIndicator();
 				}
 			});
 		},
@@ -581,6 +593,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.showBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -602,6 +615,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.showBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -674,6 +688,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
+					AppUI5.hideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this

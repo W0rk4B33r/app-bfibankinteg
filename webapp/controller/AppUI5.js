@@ -7,8 +7,9 @@ sap.ui.define([
 	"sap/m/Popover",
 	"sap/m/Button",
 	"sap/m/library",
-	"sap/m/MessageToast"
-], function (jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast) {
+	"sap/m/MessageToast",
+	"sap/ui/core/BusyIndicator"
+], function (jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast,BusyIndicator) {
 	"use strict";
 	return ("com.apptech.app-bankinteg.controller.AppUI5",{
 
@@ -416,6 +417,26 @@ sap.ui.define([
 		},
 		selectedDatabase: function(db){
 			return this.sDBCompany;
+		},
+		//NDC 03/24/2020
+		//added busy indicator
+		hideBusyIndicator : function() {
+			BusyIndicator.hide();
+		},
+
+		showBusyIndicator : function (iDuration, iDelay) {
+			BusyIndicator.show(iDelay);
+
+			if (iDuration && iDuration > 0) {
+				if (this._sTimeoutId) {
+					clearTimeout(this._sTimeoutId);
+					this._sTimeoutId = null;
+				}
+
+				this._sTimeoutId = setTimeout(function() {
+					this.hideBusyIndicator();
+				}.bind(this), iDuration);
+			}
 		}
 		
 

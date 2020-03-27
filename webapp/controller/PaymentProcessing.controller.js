@@ -45,6 +45,10 @@ sap.ui.define([
 			this.oMdlBatch = new JSONModel();
 			this.getAllBatch();
 			
+			//Create model for data fetch if record is existing
+			this.oMdlExistingHeader = new JSONModel();
+			this.oMdlExistingDetails = new JSONModel();
+			
 			
 			this.aCols = [];
 			this.aColsDetails = [];
@@ -292,7 +296,7 @@ sap.ui.define([
 		
 		
 		//End Updating
-		prepareBatchRequestBody: function (oRequest,BatchUpdate) {
+		prepareBatchRequestBody: function (oRequest,BatchUpdate,batchDeleteArray) {
 
 			var batchRequest = "";
 
@@ -300,7 +304,17 @@ sap.ui.define([
 			var endBatch = "--b--\n--a--";
 
 			batchRequest = batchRequest + beginBatch;
+			
+			if (batchDeleteArray !== 0){
+				var objectUDTDelete = "";
+				for (var i = 0; i < batchDeleteArray.length; i++) {
 
+					objectUDTDelete = batchDeleteArray[i];
+					batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+					batchRequest = batchRequest + "DELETE /b1s/v1/" + objectUDTDelete.tableName +"('"+ objectUDTDelete.data +"')\n";
+				}
+			}
+			
 			var objectUDT = "";
 			for (var i = 0; i < oRequest.length; i++) {
 
@@ -510,10 +524,10 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please select line item/s!");
 				return;
 			}
-			AppUI5.showBusyIndicator();
+			AppUI5.showBusyIndicator(4000);
 			this.Status = "Draft";
 			//Check if Existing
-			this.deleteIfExisting();
+			//this.deleteIfExisting();
 			this.onAddProcess();
 			AppUI5.hideBusyIndicator();
 		},
@@ -543,6 +557,41 @@ sap.ui.define([
 			});
 			
 		},
+		CheckIfExisting: function(queryTag,value1){
+			var HeaderCode = "";
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				+"&VALUE1="+ value1 +"&VALUE2=&VALUE3=&VALUE4=",
+				type: "GET",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					MessageToast.show(error);	
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					if (results.length === 0){
+						return HeaderCode = 0;
+					}
+					if (queryTag === 'CheckIfExistingHeader'){
+						// this.oMdlExistingHeader.setJSON("{\"ExistingHeader\" : " + JSON.stringify(results) + "}");
+						// this.getView().setModel(this.oMdlExistingHeader, "oMdlExistingHeader");
+						HeaderCode = results[0].Code; 
+
+						return HeaderCode;
+					}else{
+						this.oMdlExistingDetails.setJSON("{\"ExistingDetails\" : " + JSON.stringify(results) + "}");
+						this.getView().setModel(this.oMdlExistingDetails, "oMdlExistingDetails");
+					}
+				}
+			});
+			return HeaderCode;
+		},
 		// deleteExistingH: function(){
 		// 	$.ajax({
 		// 		url: "/destinations/BiotechSL/b1s/v1/U_APP_OPPD('200206140929.60109')",
@@ -571,7 +620,7 @@ sap.ui.define([
 			}
 			AppUI5.showBusyIndicator();
 			this.Status = "Saved";
-			this.deleteIfExisting();
+			//this.deleteIfExisting();
 			this.onAddProcess();
 			AppUI5.hideBusyIndicator();
 		},
@@ -615,6 +664,31 @@ sap.ui.define([
 		//Cancel Process
 		//Add Process----------------
 		onAddProcess: function (oEvent) {
+			//Get data if existing
+			//header
+			var headerCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
+			//If Newly add Skip Delete
+			if (headerCode !== 0){
+				//details
+				this.CheckIfExisting("CheckIfExistingDetails",this.getView().byId("DocumentNo").getValue());
+				//Compose for Delete
+				var batchDeleteArray = [
+					{
+						"tableName": "U_APP_OPPD",
+						"data": headerCode
+					}
+				];
+				for (d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
+					batchDeleteArray.push(JSON.parse(JSON.stringify(({
+						"tableName": "U_APP_PPD1",
+						"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
+					}))));
+				}
+			}else{
+				var batchDeleteArray = 0
+			}
+			
+			//End delete
 			var that = this;
 			var CodeH = AppUI5.generateUDTCode("GetCode");
 			// var DocNum = AppUI5.generateUDTCode("GetDocNum");
@@ -721,7 +795,7 @@ sap.ui.define([
 			}
 			
 			//array will be passed to function helper for constructing body text in request
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray,BatchUpdate);
+			var sBodyRequest = this.prepareBatchRequestBody(batchArray,BatchUpdate,batchDeleteArray);
 			//ajax call to SL
 			$.ajax({
 

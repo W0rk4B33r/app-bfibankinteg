@@ -24,17 +24,11 @@ sap.ui.define([
 
 		onInit: function () {
 			//get DataBase loggedin
-			this.dataBase = jQuery.sap.storage.Storage.get("dataBase");
-			this.userCode = jQuery.sap.storage.Storage.get("userCode");
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 
 			var oModelProd = new JSONModel("model/record.json");
 			this.getView().setModel(oModelProd);
-
-			//JSON model....
-			var json = new JSONModel("model/record.json");
-			//Setting model to view with alias name...
-			//Alias name="tabAlias"....
-			this.getView().setModel(json, "tabAlias");
 
 			this.oExport = new JSONModel();
 			// this.oMdlBank.setJSON("{\"allpnbbank\" : " + JSON.stringify(results) + "}");
@@ -51,13 +45,13 @@ sap.ui.define([
 			// //CREATING MODEL SUPPLIER WITH OPEN AP---------------------
 			//GET ALL BATCHCODE
 			this.oMdlBatch = new JSONModel();
-			this.getAllRecords("getAllSavedBatch", "Batch");
+			this.fGetRecords("getAllSavedBatch", "Batch");
 			//CREATING MODEL SUPPLIER WITH OPEN AP
 			this.oMdlBank = new JSONModel();
-			this.getAllRecords("getAllBank", "Bank");
+			this.fGetRecords("getAllBank", "Bank");
 			//CREATING MODEL SUPPLIER WITH OPEN AP---------------------
-			this.DocEntry = 0;
-			this.BatchNumber = "";
+			this.iDocEntry = 0;
+			this.sBatchNumber = "";
 
 			this.oMdlBPInfo = new JSONModel();
 			// this.oMdlFileExport = new JSONModel();
@@ -71,15 +65,15 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
-			this.prepareTable(true);
+			this.fPrepareTable(true);
 
 
 
 		},
 		//TABLE VIEW--------------------------------
-		prepareTable: function (bIsInit) {
+		fPrepareTable: function (bIsInit) {
 
-			var aResults = this.getHANAData("getAllSaveDrafts");
+			var aResults = this.fGetTableData("getAllSaveDrafts");
 
 			if (aResults.length !== 0) {
 
@@ -113,13 +107,13 @@ sap.ui.define([
 					this.oTable.bindRows("/rows");
 					this.oTable.setSelectionMode("Single");
 					this.oTable.setSelectionBehavior("Row");
-					this.renameColumns();
+					this.rRenameColumns();
 				}
 
 			}
 
 		},
-		renameColumns: function () {
+		rRenameColumns: function () {
 			this.oTable.getColumns()[0].setLabel("Batch Number");
 			this.oTable.getColumns()[0].setFilterProperty("U_App_DocNum");
 			this.oTable.getColumns()[1].setLabel("Draft No.");
@@ -128,10 +122,10 @@ sap.ui.define([
 		},
 
 		//GET ALL BATCHCODE
-		getAllRecords: function (queryTag, Record) {
+		fGetRecords: function (queryTag, sRecord) {
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -145,14 +139,15 @@ sap.ui.define([
 						sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
 						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
 					} else {
-						sap.m.MessageToast.show("Error");
+						var Message = xhr.responseJSON["error"].message.value;			
+						sap.m.MessageToast.show(Message);
 					}
 				},
 				success: function (json) {},
 				context: this
 			}).done(function (results) {
 				if (results) {
-					if (Record === "Batch") {
+					if (sRecord === "Batch") {
 						this.oMdlBatch.setJSON("{\"allbatch\" : " + JSON.stringify(results) + "}");
 						this.getView().setModel(this.oMdlBatch, "oMdlBatch");
 						// }else if(Record === "AllDrafts"){
@@ -168,10 +163,10 @@ sap.ui.define([
 				}
 			});
 		},
-		getHANAData: function (queryTag) {
+		fGetTableData: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -185,7 +180,8 @@ sap.ui.define([
 						sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
 						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
 					} else {
-						sap.m.MessageToast.show("Error");
+						var Message = xhr.responseJSON["error"].message.value;			
+						sap.m.MessageToast.show(Message);
 					}
 				},
 				success: function (json) {},
@@ -200,10 +196,10 @@ sap.ui.define([
 			return aReturnResult;
 
 		},
-		onAdd: function (oEvent) {
-			this.onClearAdd();
+		onClickAdd: function (oEvent) {
+			this.fClearFields();
 		},
-		onClearAdd: function () {
+		fClearFields: function () {
 			try {
 				this.getView().byId("btnSearch").setVisible(true);
 				this.getView().byId("btnPostDraft").setVisible(true);
@@ -241,24 +237,24 @@ sap.ui.define([
 			}
 
 		},
-		onEdit: function (oEvent) {
+		onClickEdit: function (oEvent) {
 			var iIndex = this.oTable.getSelectedIndex();
 			//var sQueryTable = "M_TERMS_TEMPLATE";
-			var DraftNum = "";
-			var BatchNum = "";
+			var sDraftNum = "";
+			var sBatchNum = "";
 			if (iIndex !== -1) {
 				var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
-				DraftNum = oRowSelected.U_App_DraftNo;
+				sDraftNum = oRowSelected.U_App_DraftNo;
 
-				BatchNum = oRowSelected.U_App_DocNum;
-				BatchNum = BatchNum.split(',');
-				BatchNum = JSON.stringify(BatchNum).replace("[", "").replace("]", "").replace(" ", "").replace(/"/g, "'");
-				BatchNum = BatchNum.replace(" ", "");
+				sBatchNum = oRowSelected.U_App_DocNum;
+				sBatchNum = sBatchNum.split(',');
+				sBatchNum = JSON.stringify(sBatchNum).replace("[", "").replace("]", "").replace(" ", "").replace(/"/g, "'");
+				sBatchNum = sBatchNum.replace(" ", "");
 
 				//AJAX selected Key
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
-						"&VALUE1=" + DraftNum + "&VALUE2=&VALUE3=&VALUE4=",
+					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
+						"&VALUE1=" + sDraftNum + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
 					dataType: "json",
@@ -271,7 +267,8 @@ sap.ui.define([
 							sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
 							sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
 						} else {
-							sap.m.MessageToast.show("Error");
+							var Message = xhr.responseJSON["error"].message.value;			
+							sap.m.MessageToast.show(Message);
 						}
 					},
 					success: function (json) {},
@@ -293,10 +290,10 @@ sap.ui.define([
 					value3 = "",
 					value4 = "",
 					dbName = "SBODEMOAU_SL";
-				value1 = BatchNum;
-				value2 = DraftNum;
+				value1 = sBatchNum;
+				value2 = sDraftNum;
 				queryTag = "getBatchData";
-				this.getSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
+				this.fGetSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
 				this.oMdlAP.refresh();
 
 				//Disable field in preview mode
@@ -332,43 +329,42 @@ sap.ui.define([
 			tab.setSelectedKey("tab2");
 		},
 		onSelectionChangeDispatchTo: function (oEvent) {
-			var str = this.getView().byId("DispatchToCode").getValue();
-			var res = str.slice(7);
-			this.getView().byId("DispatchToName").setValue(res);
+			var sDispatchCode = this.getView().byId("DispatchToCode").getValue();
+			var sResult = sDispatchCode.slice(7);
+			this.getView().byId("DispatchToName").setValue(sResult);
 			//MessageToast.show("onSelectionChangeTranType");
 		},
 		onExportFile: function (oEvent) {
-			// this.getBPInfo(this.oMdlAP.getData().allopenAP[0].CardCode);
-			this.exportData();
+			// this.fGetBPInfo(this.oMdlAP.getData().allopenAP[0].CardCode);
+			this.fExportData();
 		},
 		onSaveAsDraft: function (oEvent) {
-			AppUI5.showBusyIndicator();
-			this.SavePostedDraft("", true);
-			AppUI5.hideBusyIndicator();
+			AppUI5.fShowBusyIndicator();
+			this.fSavePostedDraft("", true);
+			AppUI5.fHideBusyIndicator();
 		},
 		onCancelTrans: function(oEvent){
-			AppUI5.showBusyIndicator();
+			AppUI5.fShowBusyIndicator();
 			var oT_PAYMENT_EXTRACTING_H = {};
 			var oT_PAYMENT_EXTRACTING_D = {};
 
 			oT_PAYMENT_EXTRACTING_H.U_App_Status ="Cancelled";
-			var batchArrayUpdate = [];
-			var batchArray = [{
+			var aBatchUpdate = [];
+			var aBatchInsert = [{
 				"tableName": "U_APP_ODOP",
 				"data": oT_PAYMENT_EXTRACTING_H,
 				"Code" : this.oMdlPayExtract.getData().EditRecord.Code
 			}];
-			var code = "";
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				oT_PAYMENT_EXTRACTING_D.Cancelled = 'Y';
 
-				batchArrayUpdate.push(JSON.parse(JSON.stringify(({
+				aBatchUpdate.push(JSON.parse(JSON.stringify(({
 					"tableName": "PaymentDrafts",
 					"data": oT_PAYMENT_EXTRACTING_D,
 					"DocEntry" : this.oMdlAP.getData().allopenAP[d].DraftDocEntry
 				}))));
 			}
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray,batchArrayUpdate);
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,aBatchUpdate);
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
@@ -378,8 +374,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.hideBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -387,15 +384,15 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					MessageToast.show("Cancelled Transaction!");
-					this.prepareTable(false);
-					AppUI5.hideBusyIndicator();
+					this.fPrepareTable(false);
+					AppUI5.fHideBusyIndicator();
 				}
 			});
 			
 		},
 		onPostDraftOP: function (oEvent) {
-			AppUI5.showBusyIndicator();
-			if (!this.checkIfBlankField()) {
+			AppUI5.fShowBusyIndicator();
+			if (!this.fCheckIfBlankField()) {
 				return;
 			}
 			var oRecord = {};
@@ -403,13 +400,13 @@ sap.ui.define([
 			oRecord.PaymentChecks = [];
 			oRecord.PaymentInvoices = [];
 			oRecord.CashFlowAssignments = [];
-			var batchArray = [];
+			var aBatchInsert = [];
 			//header
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				oRecord.DocType = "rSupplier";
 				oRecord.HandWritten = "tNO";
 				oRecord.Printed = "tNO";
-				oRecord.DocDate = this.getTodaysDate;
+				oRecord.DocDate = this.fGetTodaysDate;
 				oRecord.CardCode = this.oMdlAP.getData().allopenAP[d].CardCode;
 				oRecord.CardName = this.oMdlAP.getData().allopenAP[d].CardName;
 				oRecord.Address = null;
@@ -424,8 +421,8 @@ sap.ui.define([
 				oRecord.TransferRealAmount = 0.0;
 				oRecord.DocObjectCode = "bopot_OutgoingPayments";
 				oRecord.DocTypte = "rSupplier";
-				oRecord.DueDate = this.getTodaysDate; //"2020-02-06";
-				var Total = 0;
+				oRecord.DueDate = this.fGetTodaysDate; //"2020-02-06";
+				var iTotal = 0;
 				// for (var i = 0; i < this.oMdlAP.getData().allopenAP.length; i++) {
 				// if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode) {
 				oPaymentInvoices.LineNum = 0;
@@ -451,21 +448,19 @@ sap.ui.define([
 				oPaymentInvoices.TotalDiscount = 0.0;
 				oPaymentInvoices.TotalDiscountFC = 0.0;
 				oPaymentInvoices.TotalDiscountSC = 0.0;
-				Total = Total + this.oMdlAP.getData().allopenAP[d].PaymentAmount;
+				iTotal = iTotal + this.oMdlAP.getData().allopenAP[d].PaymentAmount;
 				oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
-				// counter = i;
-				// }
-				// }
-				Array.prototype.push.apply(oRecord.PaymentInvoices);
-				oRecord.CashSum = Total;
 
-				batchArray.push(JSON.parse(JSON.stringify(({
+				Array.prototype.push.apply(oRecord.PaymentInvoices);
+				oRecord.CashSum = iTotal;
+
+				aBatchInsert.push(JSON.parse(JSON.stringify(({
 					"tableName": "PaymentDrafts",
 					"data": oRecord
 				}))));
-				// this.PostPaymentDraft(oRecord);
+				// this.fPostPaymentDraft(oRecord);
 			}
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray,false);
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
@@ -475,62 +470,63 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.showBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {
 					jQuery.sap.log.debug(json);
-					AppUI5.showBusyIndicator();
+					AppUI5.fHideBusyIndicator();
 				},
 				context: this
 
 			}).done(function (results) {
 				if (results) {
 					var re = /\(([^)]+)\)/g;
-					var s = results;
+					var sResult = results;
 					var m;
 					var a = {};
 					var DocEntries = [];
 					do {
-						m = re.exec(s);
+						m = re.exec(sResult);
 						if (m) {
 							a.docentry = m[1];
 							DocEntries.push(a.docentry);
 						}
 					} while (m);
 					for (var i = 0; i < DocEntries.length; i++) {
-						this.updateDraft(DocEntries[i]);
+						this.fUpdateDraft(DocEntries[i]);
 					}
-					this.SavePostedDraft(DocEntries, false);
-					this.exportData();
+					this.fSavePostedDraft(DocEntries, false);
+					this.fExportData();
 					sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
-					this.onClearAdd();
+					this.fClearFields();
 					this.oMdlAllRecord.refresh();
-					this.prepareTable(false);
-					AppUI5.showBusyIndicator();
+					this.fPrepareTable(false);
+					AppUI5.fHideBusyIndicator();
 				}
 			});
 		},
-		onSearch: function (oEvent) {
+		onClickSearch: function (oEvent) {
 			var queryTag = "",
 				value1 = "",
 				value2 = 0,
 				value3 = "",
 				value4 = "",
 				dbName = "SBODEMOAU_SL";
-			var a = this.getView().byId("DocumentNo").getValue();
-			var b = a.split(',');
-			var c = JSON.stringify(b).replace("[", "").replace("]", "").replace(" ", "").replace(/"/g, "'");
-			this.BatchNumber = a.replace(" ", "").split(",");
+			var sDocNum = this.getView().byId("DocumentNo").getValue();
+			var sDocNumber = sDocNum.split(',');
+			var sResult = JSON.stringify(sDocNumber).replace("[", "").replace("]", "").replace(" ", "").replace(/"/g, "'");
+			this.sBatchNumber = sDocNum.replace(" ", "").split(",");
 
-			value1 = c.replace(" ", "");
+			value1 = sResult.replace(" ", "");
 			queryTag = "getBatchData";
-			this.getSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
+			this.fGetSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
 		},
 		//search------------
-		getSearchDataDet: function (dbName, procName, queryTag, value1, value2, value3, value4) {
+		fGetSearchDataDet: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.dataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=" + value1 + "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				async: false,
@@ -539,7 +535,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -550,7 +547,7 @@ sap.ui.define([
 				}
 			});
 		},
-		PostPaymentDraft: function (oRecord) {
+		fPostPaymentDraft: function (oRecord) {
 			$.ajax({
 
 				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts",
@@ -562,49 +559,51 @@ sap.ui.define([
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
-					sap.m.MessageToast.show("Saved to Out Going Payment Draft. ");
-					AppUI5.showBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				context: this
 
 			}).done(function (results) {
 				if (results) {
-					this.DocEntry = results.DocEntry;
+					this.iDocEntry = results.DocEntry;
 					sap.m.MessageToast.show("Saved to Out Going Payment Draft. ");
-					AppUI5.showBusyIndicator();
+					AppUI5.fHideBusyIndicator();
 				}
 			});
 		},
 		//Update Draft
-		updateDraft: function (DocEntry) {
-			var Data;
+		fUpdateDraft: function (iDocEntry) {
+			var oData;
 			var oT_PAYMENT_PROCESSING_H = {};
 			oT_PAYMENT_PROCESSING_H.U_App_DraftNo = DocEntry;
-			Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
+			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts(" + DocEntry + ")",
+				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
-				data: Data,
+				data: oData,
 				xhrFields: {
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.showBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
-
-			}).done(function (results) {
-				if (results) {}
 			});
+			// .done(function (results) {
+			// 	if (results) {}
+			// });
 		},
 		//end Update Draft
 		//get bp info
-		getBPInfo: function (CardCode) {
+		fGetBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
@@ -614,8 +613,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.showBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -624,8 +624,8 @@ sap.ui.define([
 					var oResult = JSON.stringify(results).replace("[", "").replace("]", "");
 					this.oMdlBPInfo.setJSON("{\"EditRecord\" : " + oResult + "}");
 					this.getView().setModel(this.oMdlBPInfo, "oMdlBPInfo");
-					// that.prepareTable(false);
-					this.exportData(oResult);
+					// that.fPrepareTable(false);
+					this.fExportData(oResult);
 					//return results;
 				}
 			});
@@ -633,15 +633,15 @@ sap.ui.define([
 		//get bp info----
 
 		//Saving of Posted Draft
-		SavePostedDraft: function (DocEntry, isDraft) {
+		fSavePostedDraft: function (DocEntry, isDraft) {
 
-			var CodeH = AppUI5.generateUDTCode("GetCode");
-			var DraftNo = AppUI5.generateUDTCode("GetDraftNo");
+			var sCodeH = AppUI5.generateUDTCode("GetCode");
+			var sDraftNo = AppUI5.generateUDTCode("GetDraftNo");
 			var oT_PAYMENT_EXTRACTING_H = {};
 			var oT_PAYMENT_EXTRACTING_D = {};
 
-			oT_PAYMENT_EXTRACTING_H.Code = CodeH;
-			oT_PAYMENT_EXTRACTING_H.Name = CodeH;
+			oT_PAYMENT_EXTRACTING_H.Code = sCodeH;
+			oT_PAYMENT_EXTRACTING_H.Name = sCodeH;
 			// oT_PAYMENT_EXTRACTING_H.U_App_DocEntry = DocEntry ;//this.DocEntry;
 			oT_PAYMENT_EXTRACTING_H.U_App_DocNum = this.oMdlPayExtract.getData().EditRecord.DOCNUM; //'BFI202001292017_007';//
 			oT_PAYMENT_EXTRACTING_H.U_App_PNBPrntBrnch = this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH; //'4053'; //
@@ -652,32 +652,32 @@ sap.ui.define([
 			oT_PAYMENT_EXTRACTING_H.U_App_PNBAccountName = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNAME; //'12398726'; //
 			oT_PAYMENT_EXTRACTING_H.U_App_Remarks = ""; //this.oMdlPayExtract.getData().EditRecord.Remarks;
 			oT_PAYMENT_EXTRACTING_H.U_App_Status = (!isDraft ? "Posted Draft Document" : "Draft");
-			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = DraftNo;
-			oT_PAYMENT_EXTRACTING_H.U_App_CreatedBy = this.userCode;
-			oT_PAYMENT_EXTRACTING_H.U_App_CreatedDate = this.getTodaysDate();
+			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = sDraftNo;
+			oT_PAYMENT_EXTRACTING_H.U_App_CreatedBy = this.sUserCode;
+			oT_PAYMENT_EXTRACTING_H.U_App_CreatedDate = this.fGetTodaysDate();
 
-			var batchArray = [{
+			var aBatchInsert = [{
 				"tableName": "U_APP_ODOP",
 				"data": oT_PAYMENT_EXTRACTING_H
 			}];
-			var code = "";
+			var sCode = "";
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
-				code = AppUI5.generateUDTCode("GetCode");
-				oT_PAYMENT_EXTRACTING_D.Code = code;
-				oT_PAYMENT_EXTRACTING_D.Name = code;
+				sCode = AppUI5.generateUDTCode("GetCode");
+				oT_PAYMENT_EXTRACTING_D.Code = sCode;
+				oT_PAYMENT_EXTRACTING_D.Name = sCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_DocNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
 				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? DocEntry[d] : "");
-				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo = DraftNo;
+				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo = sDraftNo;
 				oT_PAYMENT_EXTRACTING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
-				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.userCode;
-				oT_PAYMENT_EXTRACTING_D.U_App_CreatedDate = this.getTodaysDate();
+				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.sUserCode;
+				oT_PAYMENT_EXTRACTING_D.U_App_CreatedDate = this.fGetTodaysDate();
  
-				batchArray.push(JSON.parse(JSON.stringify(({
+				aBatchInsert.push(JSON.parse(JSON.stringify(({
 					"tableName": "U_APP_DOP1",
 					"data": oT_PAYMENT_EXTRACTING_D
 				}))));
 			}
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray,false);
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
@@ -687,8 +687,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.hideBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -697,92 +698,85 @@ sap.ui.define([
 				if (results) {
 					if (isDraft) {
 						MessageToast.show("Saved as Draft!");
-						this.onClearAdd();
+						this.fClearFields();
 						this.oMdlAllRecord.refresh();
-						this.prepareTable(false);
+						this.fPrepareTable(false);
 					}
 				}
 			});
 		},
-		exportData: function (DraftResults) {
+		fExportData: function (DraftResults) {
 
 			this.oRecord= {};
 			this.oRecord.Details= [];
-			this.Content={};
+			this.oContent={};
 			this.dataObject= {};
-			// var PayeeName;
-			// var PayeeCode;
-			// var TIN;
-			// var ZipCode;
-			// var Address;
-			// var test;
-							
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
-				var TotalCheck = 1;
-				var PayeeName = this.oMdlAP.getData().allopenAP[d].CardName;
-				var Address = (this.oMdlAP.getData().allopenAP[d].Address === null ? "" :  this.oMdlAP.getData().allopenAP[d].Address);
-				var Address2 = "";
-				var TIN = (this.oMdlAP.getData().allopenAP[d].TIN === null ? "" :  this.oMdlAP.getData().allopenAP[d].TIN);
-				var ZipCode = (this.oMdlAP.getData().allopenAP[d].ZipCode === null ? "" :  this.oMdlAP.getData().allopenAP[d].ZipCode);
-				var PayeeCode =this.oMdlAP.getData().allopenAP[d].CardCode;//results.CardCode;
-				var PNBAccountNo = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNO;//'RBA'; //
-				var today = new Date();
-				var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' +  today.getFullYear().toString().substr(-2);
-				var PrintingBranch = this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH;//'4053'; //
-				var dispatchMode= "O";
-				var DispatchTo = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;//'4053'; // 
-				var DispatchCode = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;
-				var DispatchToName = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTONAME;//'PNB GSC Santiago Branch'; //
-				var fileRefNo = this.DocEntry;
-				var WHTApplicable = "";
-				var WHTTaxCode = "";
-				var WHTTaxRate = "";
-				var VATApplicable  = "";
-				var WHTDateBaseAmount = "";
-				var totalAmount = 0;
-				var RecordIdentifier = "I";
-				var InvoiceNo  = this.oMdlAP.getData().allopenAP[d].DocNum;
-				var InvoiceDate = this.oMdlAP.getData().allopenAP[d].DocDate;
-				var year = InvoiceDate.substring(0, 4);
-				var month = InvoiceDate.substring(4, 6);
-				var day = InvoiceDate.substring(6, 8);
+				var iTotalCheck = 1;
+				var sPayeeName = this.oMdlAP.getData().allopenAP[d].CardName;
+				var sAddress = (this.oMdlAP.getData().allopenAP[d].Address === null ? "" :  this.oMdlAP.getData().allopenAP[d].Address);
+				var sAddress2 = "";
+				var sTIN = (this.oMdlAP.getData().allopenAP[d].TIN === null ? "" :  this.oMdlAP.getData().allopenAP[d].TIN);
+				var sZipCode = (this.oMdlAP.getData().allopenAP[d].ZipCode === null ? "" :  this.oMdlAP.getData().allopenAP[d].ZipCode);
+				var sPayeeCode =this.oMdlAP.getData().allopenAP[d].CardCode;//results.CardCode;
+				var sPNBAccountNo = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNO;//'RBA'; //
+				var sToday = new Date();
+				var sDate = ("0" + sToday.getDate()).slice(-2) + '/' + ("0" + (sToday.getMonth() + 1)).slice(-2) + '/' +  sToday.getFullYear().toString().substr(-2);
+				var sPrintingBranch = this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH;//'4053'; //
+				var sDispatchMode= "O";
+				var sDispatchTo = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;//'4053'; // 
+				var sDispatchCode = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;
+				var sDispatchToName = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTONAME;//'PNB GSC Santiago Branch'; //
+				var sFileRefNo = this.iDocEntry;
+				var sWHTApplicable = "";
+				var sWHTTaxCode = "";
+				var sWHTTaxRate = "";
+				var sVATApplicable  = "";
+				var sWHTDateBaseAmount = "";
+				var iTotalAmount = 0;
+				var sRecordIdentifier = "I";
+				var sInvoiceNo  = this.oMdlAP.getData().allopenAP[d].DocNum;
+				var sInvoiceDate = this.oMdlAP.getData().allopenAP[d].DocDate;
+				var sYear = InvoiceDate.substring(0, 4);
+				var sMonth = InvoiceDate.substring(4, 6);
+				var sDay = InvoiceDate.substring(6, 8);
 
-				 InvoiceDate =  month + '/' + day + '/' + year.toString().substr(-2) ;
+				sInvoiceDate =  sMonth + '/' + sDay + '/' + sYear.toString().substr(-2) ;
 
-				var Desc = this.oMdlAP.getData().allopenAP[d].Dscription;
-				var InvoiceAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
-				var InvoiceWHTAmount = "";
-				var InvoiceVATAmount = "";
-				var InvoiceNetAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
+				var sDesc = this.oMdlAP.getData().allopenAP[d].Dscription;
+				var sInvoiceAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
+				var sInvoiceWHTAmount = "";
+				var sInvoiceVATAmount = "";
+				var sInvoiceNetAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
 
-				this.Content.Details = "D" + "~" + InvoiceAmount.toFixed(2) + "~" + PayeeName  + "~" + Address  + "~" + Address2
-										+ "~" + TIN + "~" + ZipCode + "~" + PayeeCode + "~" + PNBAccountNo	+ "~" + date + "~" + PrintingBranch
-										+ "~" + dispatchMode + "~" + DispatchTo + "~" + DispatchCode + "~" + DispatchToName 
-										+ "~" + fileRefNo + "~" + WHTApplicable + "~" + WHTTaxCode + "~" + WHTTaxRate 
-										+ "~" + VATApplicable + "~" + WHTDateBaseAmount;
-				this.oRecord.Details.push(JSON.parse(JSON.stringify(this.Content)));
+				this.oContent.Details = "D" + "~" + sInvoiceAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
+										+ "~" + sTIN + "~" + sZipCode + "~" + sPayeeCode + "~" + sPNBAccountNo	+ "~" + sDate + "~" + sPrintingBranch
+										+ "~" + sDispatchMode + "~" + sDispatchTo + "~" + sDispatchCode + "~" + sDispatchToName 
+										+ "~" + sFileRefNo + "~" + sWHTApplicable + "~" + sWHTTaxCode + "~" + sWHTTaxRate 
+										+ "~" + sVATApplicable + "~" + sWHTDateBaseAmount;
+				this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
-				this.Content.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc
-									   + "~" + InvoiceAmount.toFixed(2) + "~" + InvoiceWHTAmount + "~" + InvoiceVATAmount
-									   + "~" + InvoiceNetAmount.toFixed(2);
-				 totalAmount = totalAmount + InvoiceAmount ;
-				 this.oRecord.Details.push(JSON.parse(JSON.stringify(this.Content)));
+				this.oContent.Details = sRecordIdentifier + "~" + sInvoiceNo + "~" + sInvoiceDate + "~" + sDesc
+									   + "~" + sInvoiceAmount.toFixed(2) + "~" + sInvoiceWHTAmount + "~" + sInvoiceVATAmount
+									   + "~" + sInvoiceNetAmount.toFixed(2);
+				 totalAmount = iTotalAmount + sInvoiceAmount ;
+				 this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
-				// this.Content.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc
+				// this.oContent.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc
 				// 					   + "~" + InvoiceAmount + "~" + InvoiceWHTAmount + "~" + InvoiceVATAmount
 				// 					   + "~" + InvoiceNetAmount;
 				//  totalAmount = totalAmount + InvoiceAmount ;
-				//  this.oRecord.Details.push(JSON.parse(JSON.stringify(this.Content)));
+				//  this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
 				 //this.oRecord.Details.push(JSON.parse(JSON.stringify(this.header)),JSON.parse(JSON.stringify(this.Details)));
 			}
 			this.oMdlFileExport = new JSONModel(this.oRecord);
 			this.getView().setModel(this.oMdlFileExport, "oMdlFileExport");
-			this.handleExcelExport(this.oRecord);
+			this.fHandleExcelExport(this.oRecord);
 
 		},
 
-		checkIfBlankField: function () {
+		fCheckIfBlankField: function () {
 			if (this.getView().byId("DocumentNo").getValue() === "") {
 				MessageToast.show("Please choose batch!");
 				return false;
@@ -1008,118 +1002,82 @@ sap.ui.define([
 			this.oMdlEditRecord.refresh();
 		},
 		//Bank FRAGMENT -------------------
-		getTodaysDate: function () {
-			var today = new Date();
-			var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-			return date;
+		fGetTodaysDate: function () {
+			var sToday = new Date();
+			var sDate = sToday.getFullYear() + '-' + (sToday.getMonth() + 1) + '-' + sToday.getDate();
+			return sDate;
 		},
-		// generateUDTCode: function (docType) {
+		fPrepareBatchRequestBody: function (oRequestInsert,oRequestUpdate) {
 
-		// 	var generatedCode = "";
+			var sBatchRequest = "";
 
-		// 	$.ajax({
-		// 		url: "/BiotechXSJS/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
-		// 		type: "GET",
-		// 		async: false,
-		// 		xhrFields: {
-		// 			withCredentials: true
-		// 		},
-		// 		error: function (xhr, status, error) {
-		// 			// if (xhr.status === 400) {
-		// 			// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-		// 			// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-		// 			// }else{
-		// 			// 	sap.m.MessageToast.show(error);
-		// 			// }
-		// 			sap.m.MessageToast.show(error);
-		// 		},
-		// 		success: function (json) {
-		// 			generatedCode = json[0][""];
+			var sBeginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
+			var sEndBatch = "--b--\n--a--";
 
-		// 		},
-		// 		context: this
-		// 	}).done(function (results) {
-		// 		if (results) {
-		// 			if (docType === "GetLastBatchOfDay"){
-		// 				generatedCode = results[0]["Code"];
-		// 			}else{
-		// 				generatedCode = results[0][""];
-		// 			}
-		// 		}
-		// 	});
-		// 	return generatedCode;
-		// },
-		prepareBatchRequestBody: function (oRequest,oRequestUpdate) {
-
-			var batchRequest = "";
-
-			var beginBatch = "--a\nContent-Type: multipart/mixed;boundary=b\n\n";
-			var endBatch = "--b--\n--a--";
-
-			batchRequest = batchRequest + beginBatch;
+			sBatchRequest = sBatchRequest + sBeginBatch;
 			
 			if (oRequestUpdate !== false){
 				//Update
 				//Update UDT
-				for (var i = 0; i < oRequest.length; i++) {
+				for (var i = 0; i < oRequestInsert.length; i++) {
 
-					objectUDT = oRequest[i];
-					batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-					batchRequest = batchRequest + "PATCH /b1s/v1/"  + objectUDT.tableName + "('"+ objectUDT.Code +"')";
-					batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
-					batchRequest = batchRequest + JSON.stringify(objectUDT.data) + "\n\n";
+					objectUDT = oRequestInsert[i];
+					sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+					sBatchRequest = sBatchRequest + "PATCH /b1s/v1/"  + objectUDT.tableName + "('"+ objectUDT.Code +"')";
+					sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";
+					sBatchRequest = sBatchRequest + JSON.stringify(objectUDT.data) + "\n\n";
 				}
 				//update Draft Document	
 				var objectUDTUpdate = "";
 				for (var i = 0; i < oRequestUpdate.length; i++) { 
 	
 					objectUDTUpdate = oRequestUpdate[i];
-					batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-					batchRequest = batchRequest + "PATCH /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.DocEntry +")";
-					batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
-					batchRequest = batchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
+					sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+					sBatchRequest = sBatchRequest + "PATCH /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.DocEntry +")";
+					sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";
+					sBatchRequest = sBatchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
 				}
 			}else{
 				//POST
 				var objectUDT = "";
-				for (var i = 0; i < oRequest.length; i++) {
+				for (var i = 0; i < oRequestInsert.length; i++) {
 	
-					objectUDT = oRequest[i];
-					batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-					batchRequest = batchRequest + "POST /b1s/v1/" + objectUDT.tableName;
-					batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
-					batchRequest = batchRequest + JSON.stringify(objectUDT.data) + "\n\n";
+					objectUDT = oRequestInsert[i];
+					sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+					sBatchRequest = sBatchRequest + "POST /b1s/v1/" + objectUDT.tableName;
+					sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";
+					sBatchRequest = sBatchRequest + JSON.stringify(objectUDT.data) + "\n\n";
 				}
 			}
 
-			batchRequest = batchRequest + endBatch;
+			sBatchRequest = sBatchRequest + sEndBatch;
 
-			return batchRequest;
+			return sBatchRequest;
 
 		},
 		//Exporting of data to txt file
-		handleExcelExport: function (header, details) {
+		fHandleExcelExport: function (header, details) {
 			//Generate text file name
-			var fileName;
-			var costumerCode = "1131141";
-			var today = new Date();
-			var date = ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2) + '' + today.getFullYear().toString().substr(-
+			var sFileName;
+			var sCostumerCode = "1131141";
+			var sToday = new Date();
+			var sDate = ("0" + (sToday.getMonth() + 1)).slice(-2) + '' + ("0" + sToday.getDate()).slice(-2) + '' + sToday.getFullYear().toString().substr(-
 				2);
-			var LastBatch = AppUI5.generateUDTCode("GetLastBatchOfDay");
-			if (LastBatch === "0") {
-				LastBatch = 1;
+			var sLastBatch = AppUI5.generateUDTCode("GetLastBatchOfDay");
+			if (sLastBatch === "0") {
+				sLastBatch = 1;
 			}
-			var pad = "000";
-			var result = (pad + LastBatch).slice(-pad.length);
+			var sPad = "000";
+			var sResult = (sPad + sLastBatch).slice(-sPad.length);
 
-			fileName = "EC" + costumerCode + date + result;
+			sFileName = "EC" + sCostumerCode + sDate + sResult;
 			//Generate text file name
 
 			// getting model into oModel variable.
 			var oModel = this.getView().getModel("oMdlFileExport"); //this.getView().getModel("oMdlFileExport");
 
 			var aTextFileExport = this.getView().getModel("oMdlFileExport").getData().Details;
-			onSaveTextFile(aTextFileExport,fileName);
+			onSaveTextFile(aTextFileExport,sFileName);
 			return;
 
 			// comment for meantime

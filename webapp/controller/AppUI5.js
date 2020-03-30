@@ -420,11 +420,11 @@ sap.ui.define([
 		},
 		//NDC 03/24/2020
 		//added busy indicator
-		hideBusyIndicator : function() {
+		fHideBusyIndicator : function() {
 			BusyIndicator.hide();
 		},
 
-		showBusyIndicator : function (iDuration, iDelay) {
+		fShowBusyIndicator : function (iDuration, iDelay) {
 			BusyIndicator.show(iDelay);
 
 			if (iDuration && iDuration > 0) {
@@ -434,7 +434,7 @@ sap.ui.define([
 				}
 
 				this._sTimeoutId = setTimeout(function() {
-					this.hideBusyIndicator();
+					this.fHideBusyIndicator();
 				}.bind(this), iDuration);
 			}
 		}

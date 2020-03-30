@@ -11,8 +11,7 @@ sap.ui.define([
 		//get all databse
 		//this.oMdlDatabase = new JSONModel("model/databases.json");
 		this.oMdlDatabase = new JSONModel();
-		this.getAllRecords("getAllDB");
-		this.myModel = new sap.ui.model.json.JSONModel();
+		this.fGetAllRecords("getAllDB");
 		
 		},
 		 action: function (oEvent) {
@@ -47,7 +46,7 @@ sap.ui.define([
 			}
 		},
 		onLogin: function (oEvent) {
-			AppUI5.showBusyIndicator(4000);
+			AppUI5.fShowBusyIndicator(4000);
 			var sUserName = this.getView().byId("Username");
 			var sPassword = this.getView().byId("Password");
 			var sDBCompany = this.getView().byId("selectDatabase");
@@ -64,10 +63,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					// var Message = xhr.responseJSON["error"].message.value;
-					// sap.m.MessageToast.show(Message);
-					console.log(xhr);
-					AppUI5.hideBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				context:this,
 				success: function (json) {}
@@ -78,12 +76,12 @@ sap.ui.define([
 					jQuery.sap.storage.Storage.put("userCode",sUserName.getValue());
 					jQuery.sap.storage.Storage.put("isLogin",true);
 					sap.ui.core.UIComponent.getRouterFor(this).navTo("PaymentProcessing");
-					AppUI5.hideBusyIndicator();
+					AppUI5.fHideBusyIndicator();
 				}
 			});
 		},
 		//GET ALL Database
-		getAllRecords: function(queryTag){
+		fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
 				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBankIntegration&QUERYTAG="+ queryTag +
@@ -95,7 +93,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this

@@ -25,7 +25,7 @@ sap.ui.define([
 			this.getView().setModel(this.oMdlUploading, "oMdlUploading");
 			
 			//get DataBase loggedin
-			this.dataBase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");	
 		},
 		FileUpload: function(oEvent){
 			var oFileUploader = this.getView().byId("fileUploader");
@@ -37,7 +37,7 @@ sap.ui.define([
 			var reader = new FileReader();
 			reader.onload = function(e){
 				var arrTxt = e.currentTarget.result.split("~");
-				var data = [];
+				var oData = [];
 					var record = {};
 					  	record.CheckAmount = arrTxt[1];//arrTxt[i].substring(9, 17);
 					  	record.CheckNum = arrTxt[2];
@@ -50,17 +50,14 @@ sap.ui.define([
 					  	record.RefNum = arrTxt[9];
 					  	
 					  
-					  	data.push(JSON.parse(JSON.stringify(record)));
-				that.getView().getModel("oMdlUploading").setProperty("/Uploading", data);
+					  	oData.push(JSON.parse(JSON.stringify(record)));
+				that.getView().getModel("oMdlUploading").setProperty("/Uploading", oData);
 			};
 			reader.readAsBinaryString(file);
 			
 		},
 		PostOutGoingPayment: function(oEvent){
-			// if (!this.checkIfBlankField()){
-			// 	return;
-			// }
-			var DocEntry;
+			var sDocEntry;
 			var oRecord = {};
 			var oPaymentChecks = {};
 			var oPaymentInvoices = {};
@@ -157,7 +154,7 @@ sap.ui.define([
 				// oRecord.Cup = null;
 				// oRecord.U_APP_IsPosted = "N";
 				oRecord.CashSum = 0.0;
-				DocEntry = this.oMdlUploading.getData().Uploading[0].RefNum.replace(" ","");
+				sDocEntry = this.oMdlUploading.getData().Uploading[0].RefNum.replace(" ","");
 				for (var d = 0; d < this.oMdlUploading.getData().Uploading.length; d++) {
 					// //check details
 					oPaymentChecks.LineNum = 0;
@@ -226,12 +223,12 @@ sap.ui.define([
 			// this.PostPaymentDraft(oRecord);
 			// this.SavePostedDraft();
 			
-			this.UpdatePaymentDraft(oRecord,DocEntry);
+			this.fUpdatePaymentDraft(oRecord,sDocEntry);
 		},
-		UpdatePaymentDraft: function(oRecord,DocEntry){
+		fUpdatePaymentDraft: function(oRecord,sDocEntry){
 			$.ajax({
 
-				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts("+ DocEntry + ")",
+				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts("+ sDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				data: JSON.stringify(oRecord), //If batch, body data should not be JSON.stringified
@@ -244,13 +241,12 @@ sap.ui.define([
 						sap.m.MessageToast.show("Session End.");
 						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
 					}else{
-						sap.m.MessageToast.show("Error");
+						var Message = xhr.responseJSON["error"].message.value;			
+						sap.m.MessageToast.show(Message);
 					}
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
-					//sap.m.MessageToast.show("Saved to Out Going Payment Draft. " );
-					this.PostOutgoing(DocEntry);
+					this.PostOutgoing(sDocEntry);
 				},
 				context: this
 
@@ -262,37 +258,24 @@ sap.ui.define([
 				}
 			});
 		},
-		PostOutgoing: function(DocEntry){
+		PostOutgoing: function(sDocEntry){
 			$.ajax({
 
-				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts("+ DocEntry + ")/SaveDraftToDocument",
+				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts("+ sDocEntry + ")/SaveDraftToDocument",
 				type: "POST",
 				contentType: "application/json",
-				// data: JSON.stringify(oRecord), //If batch, body data should not be JSON.stringified
-				// xhrFields: {
-				// 	withCredentials: true
-				// },
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End.");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show("Error");
-					// }
-						sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
-					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Successfully posted!" );
 				},
 				context: this
 
 			}).done(function (results) {
 				if (results) {
-					//this.DocEntry = results.DocEntry;
 					sap.m.MessageToast.show("Successfully posted! " );
-					
 				}
 			});
 		}

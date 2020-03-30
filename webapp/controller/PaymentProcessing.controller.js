@@ -22,8 +22,8 @@ sap.ui.define([
 
 		onInit: function () {
 			//get DataBase loggedin
-			this.dataBase = jQuery.sap.storage.Storage.get("dataBase");	
-			this.userCode = jQuery.sap.storage.Storage.get("userCode");	
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");	
 			
 			this.oMdlEditRecord = new JSONModel("model/paymentprocessing.json");
 			this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
@@ -34,21 +34,20 @@ sap.ui.define([
 			//set Tagging Date to current date
 			this.getView().byId("DateTagged").setDateValue( new Date());
 			//For Status
-			this.Status = "";
+			this.sStatus = "";
 			
 			
 			//CREATING MODEL SUPPLIER WITH OPEN AP
 			this.oMdlSupplier = new JSONModel();
-			this.getAllSupplier();
+			this.fGetAllSupplier();
 			//CREATING MODEL SUPPLIER WITH OPEN AP---------------------
 			//GET ALL BATCHCODE
 			this.oMdlBatch = new JSONModel();
-			this.getAllBatch();
+			this.fGetAllBatch();
 			
 			//Create model for data fetch if record is existing
 			this.oMdlExistingHeader = new JSONModel();
 			this.oMdlExistingDetails = new JSONModel();
-			
 			
 			this.aCols = [];
 			this.aColsDetails = [];
@@ -59,13 +58,13 @@ sap.ui.define([
 			this.oIconTab = this.getView().byId("tab1");
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
-			this.prepareTable(true);
+			this.fPrepareTable(true);
 			
 			
 		},
-		prepareTable: function (bIsInit) {
+		fPrepareTable: function (bIsInit) {
 			
-			var aResults = this.getAllRecord();
+			var aResults = this.fGetAllRecord();
 
 			if (aResults.length !== 0) {
 
@@ -99,13 +98,13 @@ sap.ui.define([
 					this.oTable.bindRows("/rows");
 					this.oTable.setSelectionMode("Single");
 					this.oTable.setSelectionBehavior("Row");
-					this.renameColumns();
+					this.fRenameColumns();
 				}
 
 			}
 
 		},
-		renameColumns: function () {
+		fRenameColumns: function () {
 			this.oTable.getColumns()[0].setLabel("Batch Number");
 			this.oTable.getColumns()[0].setFilterProperty("U_App_DocNum");
 			this.oTable.getColumns()[1].setLabel("Supplier Code");
@@ -117,9 +116,9 @@ sap.ui.define([
 			this.oTable.getColumns()[5].setLabel("Created Date");
 		},
 		//GET ALL BATCHCODE
-		getAllBatch: function(){
+		fGetAllBatch: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -127,7 +126,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-						sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -138,10 +138,10 @@ sap.ui.define([
 				}
 			});
 		},	
-		getAllRecord: function (queryTag) {
+		fGetAllRecord: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -150,7 +150,8 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -166,9 +167,9 @@ sap.ui.define([
 		},
 		//GET ALL BATCHCODE----------------
 		//CREATING MODEL SUPPLIER WITH OPEN AP
-		getAllSupplier: function(){
+		fGetAllSupplier: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -176,13 +177,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					// if (xhr.status === 400) {
-					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					// }else{
-					// 	sap.m.MessageToast.show(error);
-					// }
-						sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -293,10 +289,8 @@ sap.ui.define([
 		},
 		//Batch Fragment---------------
 		
-		
-		
 		//End Updating
-		prepareBatchRequestBody: function (oRequest,BatchUpdate,batchDeleteArray) {
+		fPrepareBatchRequestBody: function (oRequest,oRequestUpdate,oRequestDelete) {
 
 			var batchRequest = "";
 
@@ -305,11 +299,11 @@ sap.ui.define([
 
 			batchRequest = batchRequest + beginBatch;
 			
-			if (batchDeleteArray !== 0){
+			if (oRequestDelete !== 0){
 				var objectUDTDelete = "";
-				for (var i = 0; i < batchDeleteArray.length; i++) {
+				for (var i = 0; i < oRequestDelete.length; i++) {
 
-					objectUDTDelete = batchDeleteArray[i];
+					objectUDTDelete = oRequestDelete[i];
 					batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
 					batchRequest = batchRequest + "DELETE /b1s/v1/" + objectUDTDelete.tableName +"('"+ objectUDTDelete.data +"')\n";
 				}
@@ -326,9 +320,9 @@ sap.ui.define([
 			}
 			
 			var objectUDTUpdate = "";
-			for (var ii = 0; ii < BatchUpdate.length; ii++) {
+			for (var ii = 0; ii < oRequestUpdate.length; ii++) {
 
-				objectUDTUpdate = BatchUpdate[ii];
+				objectUDTUpdate = oRequestUpdate[ii];
 				batchRequest = batchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
 				batchRequest = batchRequest + "PATCH /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.docEntry +")";
 				batchRequest = batchRequest + "\nContent-Type: application/json\n\n";
@@ -344,11 +338,11 @@ sap.ui.define([
 		onView: function(oEvent){
 			var iIndex = this.oTable.getSelectedIndex();
 			var BatchNum = "";
-			var Status = "";
+			var sStatus = "";
 			if (iIndex !== -1) {
 				var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
 				BatchNum = oRowSelected.U_App_DocNum;
-				Status = oRowSelected.U_App_Status;
+				sStatus = oRowSelected.U_App_Status;
 			}
 			
 			var queryTag = "",value1 = "",value2 ="",value3="",value4 = "",dbName = "SBODEMOAU_SL";
@@ -362,7 +356,7 @@ sap.ui.define([
 			// this.onClearField();
 			this.getView().byId("btnPrint").setVisible(true);
 			this.getView().byId("btnCancel").setVisible(true);
-			if (Status === "Draft"){
+			if (sStatus === "Draft"){
 				this.getView().byId("DateFrom").setEnabled(true);
 				this.getView().byId("DateTo").setEnabled(true);
 				this.getView().byId("SupplierCode").setEnabled(true);
@@ -397,7 +391,7 @@ sap.ui.define([
 		getSearchDataHead: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			//get all open AP base on parameters
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -406,7 +400,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-						sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -423,7 +418,7 @@ sap.ui.define([
 		getSearchDataDet: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			this.oMdlAP = new sap.ui.model.json.JSONModel();
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -432,7 +427,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -454,12 +450,13 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
 					sap.m.MessageToast.show("Batch : " + batchNum + " cancelled!");
-					this.prepareTable(false);
+					this.fPrepareTable(false);
 					this.oMdlAllRecord.refresh();
 				},
 				context: this
@@ -467,7 +464,7 @@ sap.ui.define([
 			}).done(function (results) {
 				if (results) {
 					sap.m.MessageToast.show("Batch : " + batchNum + " cancelled!");
-					this.prepareTable(false);
+					this.fPrepareTable(false);
 					this.oMdlAllRecord.refresh();
 				}
 			});
@@ -524,17 +521,17 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please select line item/s!");
 				return;
 			}
-			AppUI5.showBusyIndicator(4000);
-			this.Status = "Draft";
+			AppUI5.fShowBusyIndicator(4000);
+			this.sStatus = "Draft";
 			//Check if Existing
 			//this.deleteIfExisting();
 			this.onAddProcess();
-			AppUI5.hideBusyIndicator();
+			AppUI5.fHideBusyIndicator();
 		},
 		
 		deleteIfExisting: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
 				+ "&VALUE1=" + 	this.getView().byId("DocumentNo").getValue() + "&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				contentType: "application/json",
@@ -544,8 +541,9 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.hideBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {
 				},
@@ -560,7 +558,7 @@ sap.ui.define([
 		CheckIfExisting: function(queryTag,value1){
 			var HeaderCode = "";
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -569,7 +567,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);	
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -618,11 +617,11 @@ sap.ui.define([
 				sap.m.MessageToast.show("Please select line item/s!");
 				return;
 			}
-			AppUI5.showBusyIndicator();
-			this.Status = "Saved";
+			AppUI5.fShowBusyIndicator(4000);
+			this.sStatus = "Saved";
 			//this.deleteIfExisting();
 			this.onAddProcess();
-			AppUI5.hideBusyIndicator();
+			AppUI5.fHideBusyIndicator();
 		},
 		onDeleteRow: function(oEvent){
 			var oTable = this.getView().byId("tblDetails");
@@ -641,7 +640,7 @@ sap.ui.define([
 		},
 		//Cancel Process
 		onCancelTransaction: function(oEvent){
-			AppUI5.showBusyIndicator();
+			AppUI5.fShowBusyIndicator(4000);
 			var table= "";
 			var code = "";
 			var Data;
@@ -653,12 +652,12 @@ sap.ui.define([
 			code = this.oMdlEditRecord.getData().EditRecord.Code;
 			oT_PAYMENT_PROCESSING_H.U_App_Status = "Cancelled";
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = remarks;
-			oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy= this.userCode;
+			oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy= this.sUserCode;
 			oT_PAYMENT_PROCESSING_H.U_App_UpdatedDate = this.getTodaysDate();
 			Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 			
 			this.updateRecords(table, code, Data,batchNum);
-			AppUI5.hideBusyIndicator();
+			AppUI5.fHideBusyIndicator();
 			
 		},
 		//Cancel Process
@@ -666,26 +665,26 @@ sap.ui.define([
 		onAddProcess: function (oEvent) {
 			//Get data if existing
 			//header
-			var headerCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
+			var aHeaderCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
 			//If Newly add Skip Delete
-			if (headerCode !== 0){
+			if (aHeaderCode !== 0){
 				//details
 				this.CheckIfExisting("CheckIfExistingDetails",this.getView().byId("DocumentNo").getValue());
 				//Compose for Delete
-				var batchDeleteArray = [
+				var aBatchDelete = [
 					{
 						"tableName": "U_APP_OPPD",
-						"data": headerCode
+						"data": aHeaderCode
 					}
 				];
 				for (d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
-					batchDeleteArray.push(JSON.parse(JSON.stringify(({
+					aBatchDelete.push(JSON.parse(JSON.stringify(({
 						"tableName": "U_APP_PPD1",
 						"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
 					}))));
 				}
 			}else{
-				var batchDeleteArray = 0
+				var aBatchDelete = 0
 			}
 			
 			//End delete
@@ -719,53 +718,50 @@ sap.ui.define([
 			oT_PAYMENT_PROCESSING_H.U_App_TaggingDate = this.getTodaysDate();//this.oMdlEditRecord.getData().EditRecord.DateTagged;
 			oT_PAYMENT_PROCESSING_H.U_App_Status = this.Status;//this.oMdlEditRecord.getData().EditRecord.Status;
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = this.oMdlEditRecord.getData().EditRecord.Remarks;
-			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= this.userCode;
+			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= this.sUserCode;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedDate = this.getTodaysDate();
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
 			
-			var batchArray = [
+			var aBatch = [
 				//directly insert data if data is single row per table 
 				{
 					"tableName": "U_APP_OPPD",
 					"data": oT_PAYMENT_PROCESSING_H
 				}
 			];
-			var d,i;
-			var row;
-			var code = "";
+			var iCounter,iCounter2;
+			var iRow;
+			var iCode = "";
 			var oTable = this.getView().byId("tblDetails");
-			// var myTableRows= oTable.getRows();
 			var selectedIndeices=oTable.getSelectedIndices();
-			// var table = "";
-			var BatchUpdate = [];
-			for (d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
-				for (i = 0; i < selectedIndeices.length; i++) {
-					row = selectedIndeices[i];
-					if (row === d) {
-						var iLineNumDP = d + 1;
-						//oT_PAYMENT_PROCESSING_D.O = "I";
-						code = AppUI5.generateUDTCode("GetCode");
-						oT_PAYMENT_PROCESSING_D.Code = code;
-						oT_PAYMENT_PROCESSING_D.Name = code;
+			var aBatchUpdate = [];
+			for (iCounter = 0; iCounter < this.oMdlAP.getData().allopenAP.length; iCounter++) {
+				for (iCounter2 = 0; iCounter2 < selectedIndeices.length; iCounter2++) {
+					iRow = selectedIndeices[iCounter2];
+					if (iRow === iCounter) {
+						var iLineNumDP = iCounter + 1;
+						iCode = AppUI5.generateUDTCode("GetCode");
+						oT_PAYMENT_PROCESSING_D.Code = iCode;
+						oT_PAYMENT_PROCESSING_D.Name = iCode;
 						oT_PAYMENT_PROCESSING_D.U_App_DocNum =  BatchCode;//this.oMdlEditRecord.getData().allopenAP[d].DocumentNo;
 						oT_PAYMENT_PROCESSING_D.U_App_Priority = "";
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDocType = this.oMdlAP.getData().allopenAP[d].InvoiceType;
-						oT_PAYMENT_PROCESSING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceNo = this.oMdlAP.getData().allopenAP[d].DocEntry;
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDate = this.oMdlAP.getData().allopenAP[d].DocDate;
-						oT_PAYMENT_PROCESSING_D.U_App_CheckDate = this.oMdlAP.getData().allopenAP[d].DocDueDate;
-						oT_PAYMENT_PROCESSING_D.U_App_SuppRefNo = this.oMdlAP.getData().allopenAP[d].NumAtCard;
-						oT_PAYMENT_PROCESSING_D.U_App_Remarks = this.oMdlAP.getData().allopenAP[d].Comments;
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceType = this.oMdlAP.getData().allopenAP[d].DocType;
-						oT_PAYMENT_PROCESSING_D.U_App_Desc = this.oMdlAP.getData().allopenAP[d].Dscription;
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceCur = this.oMdlAP.getData().allopenAP[d].DocCur;
-						oT_PAYMENT_PROCESSING_D.U_App_InvoiceTotal = this.oMdlAP.getData().allopenAP[d].DocTotal;
-						oT_PAYMENT_PROCESSING_D.U_App_RemainingBal = this.oMdlAP.getData().allopenAP[d].RemainingBalance;
-						oT_PAYMENT_PROCESSING_D.U_App_PaymentAmount = this.oMdlAP.getData().allopenAP[d].PaymentAmount;
-						oT_PAYMENT_PROCESSING_D.U_App_CRANo = this.oMdlAP.getData().allopenAP[d].CRANo;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDocType = this.oMdlAP.getData().allopenAP[iCounter].InvoiceType;
+						oT_PAYMENT_PROCESSING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[iCounter].DocNum;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceNo = this.oMdlAP.getData().allopenAP[iCounter].DocEntry;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDate = this.oMdlAP.getData().allopenAP[iCounter].DocDate;
+						oT_PAYMENT_PROCESSING_D.U_App_CheckDate = this.oMdlAP.getData().allopenAP[iCounter].DocDueDate;
+						oT_PAYMENT_PROCESSING_D.U_App_SuppRefNo = this.oMdlAP.getData().allopenAP[iCounter].NumAtCard;
+						oT_PAYMENT_PROCESSING_D.U_App_Remarks = this.oMdlAP.getData().allopenAP[iCounter].Comments;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceType = this.oMdlAP.getData().allopenAP[iCounter].DocType;
+						oT_PAYMENT_PROCESSING_D.U_App_Desc = this.oMdlAP.getData().allopenAP[iCounter].Dscription;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceCur = this.oMdlAP.getData().allopenAP[iCounter].DocCur;
+						oT_PAYMENT_PROCESSING_D.U_App_InvoiceTotal = this.oMdlAP.getData().allopenAP[iCounter].DocTotal;
+						oT_PAYMENT_PROCESSING_D.U_App_RemainingBal = this.oMdlAP.getData().allopenAP[iCounter].RemainingBalance;
+						oT_PAYMENT_PROCESSING_D.U_App_PaymentAmount = this.oMdlAP.getData().allopenAP[iCounter].PaymentAmount;
+						oT_PAYMENT_PROCESSING_D.U_App_CRANo = this.oMdlAP.getData().allopenAP[iCounter].CRANo;
 						oT_PAYMENT_PROCESSING_D.U_App_LineNumber = iLineNumDP;
-						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.userCode;
+						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.sUserCode;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedDate = this.getTodaysDate();
 						
 						// oT_PAYMENT_PROCESSING_D.U_App_UpdatedBy = "";
@@ -773,7 +769,7 @@ sap.ui.define([
 						
 						// oRecord.M_TERMS_TEMPLATE_D.push(JSON.parse(JSON.stringify(oT_TERMS_TEMP)));
 						
-						batchArray.push(JSON.parse(JSON.stringify(({
+						aBatch.push(JSON.parse(JSON.stringify(({
 							"tableName": "U_APP_PPD1",
 							"data": oT_PAYMENT_PROCESSING_D//AppUI5.generateUDTCode();
 						}))));
@@ -784,10 +780,10 @@ sap.ui.define([
 						// }else{
 						// 	table = "ODPO";
 						// }
-						BatchUpdate.push(JSON.parse(JSON.stringify(({
-							"tableName": (this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP' ? "PurchaseInvoices" : "PurchaseDownPayments"),
+						aBatchUpdate.push(JSON.parse(JSON.stringify(({
+							"tableName": (this.oMdlAP.getData().allopenAP[iCounter].InvoiceType === 'AP' ? "PurchaseInvoices" : "PurchaseDownPayments"),
 							"data": oInvoice,//AppUI5.generateUDTCode();,
-							"docEntry": this.oMdlAP.getData().allopenAP[d].DocEntry//AppUI5.generateUDTCode();
+							"docEntry": this.oMdlAP.getData().allopenAP[iCounter].DocEntry//AppUI5.generateUDTCode();
 						}))));
 					
 					}
@@ -795,7 +791,7 @@ sap.ui.define([
 			}
 			
 			//array will be passed to function helper for constructing body text in request
-			var sBodyRequest = this.prepareBatchRequestBody(batchArray,BatchUpdate,batchDeleteArray);
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatch,aBatchUpdate,aBatchDelete);
 			//ajax call to SL
 			$.ajax({
 
@@ -807,8 +803,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
-					AppUI5.hideBusyIndicator();
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
@@ -821,7 +818,7 @@ sap.ui.define([
 					this.getView().byId("Status").setValue("Open");
 					this.onClearField();
 					this.oMdlBatch.refresh();
-					that.prepareTable(false);
+					that.fPrepareTable(false);
 				}
 			});
 		

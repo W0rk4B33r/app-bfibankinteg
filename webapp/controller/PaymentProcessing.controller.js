@@ -716,7 +716,7 @@ sap.ui.define([
 			oT_PAYMENT_PROCESSING_H.U_App_Suppliercode = this.oMdlEditRecord.getData().EditRecord.SupplierCode;
 			oT_PAYMENT_PROCESSING_H.U_App_SupplierName = this.oMdlEditRecord.getData().EditRecord.SupplierName;
 			oT_PAYMENT_PROCESSING_H.U_App_TaggingDate = this.getTodaysDate();//this.oMdlEditRecord.getData().EditRecord.DateTagged;
-			oT_PAYMENT_PROCESSING_H.U_App_Status = this.Status;//this.oMdlEditRecord.getData().EditRecord.Status;
+			oT_PAYMENT_PROCESSING_H.U_App_Status = this.sStatus;//this.oMdlEditRecord.getData().EditRecord.Status;
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = this.oMdlEditRecord.getData().EditRecord.Remarks;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= this.sUserCode;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedDate = this.getTodaysDate();

@@ -577,7 +577,7 @@ sap.ui.define([
 		fUpdateDraft: function (iDocEntry) {
 			var oData;
 			var oT_PAYMENT_PROCESSING_H = {};
-			oT_PAYMENT_PROCESSING_H.U_App_DraftNo = DocEntry;
+			oT_PAYMENT_PROCESSING_H.U_App_DraftNo = iDocEntry;
 			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
@@ -737,9 +737,9 @@ sap.ui.define([
 				var sRecordIdentifier = "I";
 				var sInvoiceNo  = this.oMdlAP.getData().allopenAP[d].DocNum;
 				var sInvoiceDate = this.oMdlAP.getData().allopenAP[d].DocDate;
-				var sYear = InvoiceDate.substring(0, 4);
-				var sMonth = InvoiceDate.substring(4, 6);
-				var sDay = InvoiceDate.substring(6, 8);
+				var sYear = sInvoiceDate.substring(0, 4);
+				var sMonth = sInvoiceDate.substring(4, 6);
+				var sDay = sInvoiceDate.substring(6, 8);
 
 				sInvoiceDate =  sMonth + '/' + sDay + '/' + sYear.toString().substr(-2) ;
 
@@ -759,7 +759,7 @@ sap.ui.define([
 				this.oContent.Details = sRecordIdentifier + "~" + sInvoiceNo + "~" + sInvoiceDate + "~" + sDesc
 									   + "~" + sInvoiceAmount.toFixed(2) + "~" + sInvoiceWHTAmount + "~" + sInvoiceVATAmount
 									   + "~" + sInvoiceNetAmount.toFixed(2);
-				 totalAmount = iTotalAmount + sInvoiceAmount ;
+				iTotalAmount = iTotalAmount + sInvoiceAmount ;
 				 this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
 				// this.oContent.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc

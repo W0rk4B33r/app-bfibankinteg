@@ -336,7 +336,7 @@ sap.ui.define([
 		},
 		onExportFile: function (oEvent) {
 			// this.fGetBPInfo(this.oMdlAP.getData().allopenAP[0].CardCode);
-			this.fExportData();
+			this.fExportData("","Y");
 		},
 		onSaveAsDraft: function (oEvent) {
 			AppUI5.fShowBusyIndicator();
@@ -401,8 +401,11 @@ sap.ui.define([
 			oRecord.PaymentInvoices = [];
 			oRecord.CashFlowAssignments = [];
 			var aBatchInsert = [];
+
+			var iIndex = 0;
+			var d = 0;
 			//header
-			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+			for (d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				oRecord.DocType = "rSupplier";
 				oRecord.HandWritten = "tNO";
 				oRecord.Printed = "tNO";
@@ -423,41 +426,78 @@ sap.ui.define([
 				oRecord.DocTypte = "rSupplier";
 				oRecord.DueDate = this.fGetTodaysDate; //"2020-02-06";
 				var iTotal = 0;
-				// for (var i = 0; i < this.oMdlAP.getData().allopenAP.length; i++) {
-				// if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode) {
-				oPaymentInvoices.LineNum = 0;
-				oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[d].DocEntry;
-				oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
-				oPaymentInvoices.AppliedFC = 0.0;
-				oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
-				oPaymentInvoices.DocRate = 0.0;
-				oPaymentInvoices.DocLine = 0;
-				oPaymentInvoices.InvoiceType = "it_PurchaseInvoice";
-				oPaymentInvoices.DiscountPercent = 0.0;
-				oPaymentInvoices.PaidSum = 0.0;
-				oPaymentInvoices.InstallmentId = 1;
-				oPaymentInvoices.WitholdingTaxApplied = 0.0;
-				oPaymentInvoices.WitholdingTaxAppliedFC = 0.0;
-				oPaymentInvoices.WitholdingTaxAppliedSC = 0.0;
-				oPaymentInvoices.LinkDate = null;
-				oPaymentInvoices.DistributionRule = null;
-				oPaymentInvoices.DistributionRule2 = null;
-				oPaymentInvoices.DistributionRule3 = null;
-				oPaymentInvoices.DistributionRule4 = null;
-				oPaymentInvoices.DistributionRule5 = null;
-				oPaymentInvoices.TotalDiscount = 0.0;
-				oPaymentInvoices.TotalDiscountFC = 0.0;
-				oPaymentInvoices.TotalDiscountSC = 0.0;
-				iTotal = iTotal + this.oMdlAP.getData().allopenAP[d].PaymentAmount;
-				oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
+				var iLineNum = 0;
+				for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
+					if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
+					&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
+						iIndex = i;
+						oPaymentInvoices.LineNum = iLineNum;
+						oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[i].DocEntry;
+						oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
+						oPaymentInvoices.AppliedFC = 0.0;
+						oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
+						oPaymentInvoices.DocRate = 0.0;
+						oPaymentInvoices.DocLine = 0;
+						oPaymentInvoices.InvoiceType = "it_PurchaseInvoice";
+						oPaymentInvoices.DiscountPercent = 0.0;
+						oPaymentInvoices.PaidSum = 0.0;
+						oPaymentInvoices.InstallmentId = 1;
+						oPaymentInvoices.WitholdingTaxApplied = 0.0;
+						oPaymentInvoices.WitholdingTaxAppliedFC = 0.0;
+						oPaymentInvoices.WitholdingTaxAppliedSC = 0.0;
+						oPaymentInvoices.LinkDate = null;
+						oPaymentInvoices.DistributionRule = null;
+						oPaymentInvoices.DistributionRule2 = null;
+						oPaymentInvoices.DistributionRule3 = null;
+						oPaymentInvoices.DistributionRule4 = null;
+						oPaymentInvoices.DistributionRule5 = null;
+						oPaymentInvoices.TotalDiscount = 0.0;
+						oPaymentInvoices.TotalDiscountFC = 0.0;
+						oPaymentInvoices.TotalDiscountSC = 0.0;
 
-				Array.prototype.push.apply(oRecord.PaymentInvoices);
+						iTotal = iTotal + this.oMdlAP.getData().allopenAP[i].PaymentAmount;
+
+						oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
+
+						Array.prototype.push.apply(oRecord.PaymentInvoices);
+						iLineNum = iLineNum + 1;
+					}
+				}
+				// oPaymentInvoices.LineNum = 0;
+				// oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[d].DocEntry;
+				// oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
+				// oPaymentInvoices.AppliedFC = 0.0;
+				// oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
+				// oPaymentInvoices.DocRate = 0.0;
+				// oPaymentInvoices.DocLine = 0;
+				// oPaymentInvoices.InvoiceType = "it_PurchaseInvoice";
+				// oPaymentInvoices.DiscountPercent = 0.0;
+				// oPaymentInvoices.PaidSum = 0.0;
+				// oPaymentInvoices.InstallmentId = 1;
+				// oPaymentInvoices.WitholdingTaxApplied = 0.0;
+				// oPaymentInvoices.WitholdingTaxAppliedFC = 0.0;
+				// oPaymentInvoices.WitholdingTaxAppliedSC = 0.0;
+				// oPaymentInvoices.LinkDate = null;
+				// oPaymentInvoices.DistributionRule = null;
+				// oPaymentInvoices.DistributionRule2 = null;
+				// oPaymentInvoices.DistributionRule3 = null;
+				// oPaymentInvoices.DistributionRule4 = null;
+				// oPaymentInvoices.DistributionRule5 = null;
+				// oPaymentInvoices.TotalDiscount = 0.0;
+				// oPaymentInvoices.TotalDiscountFC = 0.0;
+				// oPaymentInvoices.TotalDiscountSC = 0.0;
+				// iTotal = iTotal + this.oMdlAP.getData().allopenAP[d].PaymentAmount;
+				// oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
+
+				// Array.prototype.push.apply(oRecord.PaymentInvoices);
 				oRecord.CashSum = iTotal;
 
 				aBatchInsert.push(JSON.parse(JSON.stringify(({
 					"tableName": "PaymentDrafts",
 					"data": oRecord
 				}))));
+				//iIndex = iIndex + 1;
+				d = d + iIndex;
 				// this.fPostPaymentDraft(oRecord);
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
@@ -486,23 +526,23 @@ sap.ui.define([
 					var sResult = results;
 					var m;
 					var a = {};
-					var DocEntries = [];
+					var aDocEntries = [];
 					do {
 						m = re.exec(sResult);
 						if (m) {
 							a.docentry = m[1];
-							DocEntries.push(a.docentry);
+							aDocEntries.push(a.docentry);
 						}
 					} while (m);
-					for (var i = 0; i < DocEntries.length; i++) {
-						this.fUpdateDraft(DocEntries[i]);
+					for (var i = 0; i < aDocEntries.length; i++) {
+						this.fUpdateDraft(aDocEntries[i]);
 					}
-					this.fSavePostedDraft(DocEntries, false);
-					this.fExportData();
+					this.fSavePostedDraft(aDocEntries, false);
+					this.fExportData(aDocEntries,"N");
 					sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
 					this.fClearFields();
-					this.oMdlAllRecord.refresh();
 					this.fPrepareTable(false);
+					this.oMdlAllRecord.refresh();
 					AppUI5.fHideBusyIndicator();
 				}
 			});
@@ -624,17 +664,14 @@ sap.ui.define([
 					var oResult = JSON.stringify(results).replace("[", "").replace("]", "");
 					this.oMdlBPInfo.setJSON("{\"EditRecord\" : " + oResult + "}");
 					this.getView().setModel(this.oMdlBPInfo, "oMdlBPInfo");
-					// that.fPrepareTable(false);
 					this.fExportData(oResult);
-					//return results;
 				}
 			});
 		},
 		//get bp info----
 
 		//Saving of Posted Draft
-		fSavePostedDraft: function (DocEntry, isDraft) {
-
+		fSavePostedDraft: function (aDocEntries, isDraft) {
 			var sCodeH = AppUI5.generateUDTCode("GetCode");
 			var sDraftNo = AppUI5.generateUDTCode("GetDraftNo");
 			var oT_PAYMENT_EXTRACTING_H = {};
@@ -661,12 +698,19 @@ sap.ui.define([
 				"data": oT_PAYMENT_EXTRACTING_H
 			}];
 			var sCode = "";
+			var sBatchNum = "";
+			var iIndex = 0;
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				sCode = AppUI5.generateUDTCode("GetCode");
 				oT_PAYMENT_EXTRACTING_D.Code = sCode;
 				oT_PAYMENT_EXTRACTING_D.Name = sCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_DocNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
-				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? DocEntry[d] : "");
+				if(sBatchNum !== "" ){
+					if(sBatchNum !== this.oMdlAP.getData().allopenAP[d].BatchNum){
+						iIndex = iIndex + 1;
+					}
+				}
+				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? aDocEntries[iIndex] : "");
 				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo = sDraftNo;
 				oT_PAYMENT_EXTRACTING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.sUserCode;
@@ -676,6 +720,7 @@ sap.ui.define([
 					"tableName": "U_APP_DOP1",
 					"data": oT_PAYMENT_EXTRACTING_D
 				}))));
+				sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
 			$.ajax({
@@ -699,19 +744,26 @@ sap.ui.define([
 					if (isDraft) {
 						MessageToast.show("Saved as Draft!");
 						this.fClearFields();
-						this.oMdlAllRecord.refresh();
 						this.fPrepareTable(false);
+						this.oMdlAllRecord.refresh();
 					}
 				}
 			});
 		},
-		fExportData: function (DraftResults) {
+		fExportData: function (aDocEntries,isDirectExport) {
 
 			this.oRecord= {};
 			this.oRecord.Details= [];
 			this.oContent={};
 			this.dataObject= {};
+			var sBatchNum = "";
+			var iIndex = 0;
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+				if(sBatchNum !== "" ){
+					if(sBatchNum !== this.oMdlAP.getData().allopenAP[d].BatchNum){
+						iIndex = iIndex + 1;
+					}
+				}
 				var iTotalCheck = 1;
 				var sPayeeName = this.oMdlAP.getData().allopenAP[d].CardName;
 				var sAddress = (this.oMdlAP.getData().allopenAP[d].Address === null ? "" :  this.oMdlAP.getData().allopenAP[d].Address);
@@ -727,7 +779,7 @@ sap.ui.define([
 				var sDispatchTo = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;//'4053'; // 
 				var sDispatchCode = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;
 				var sDispatchToName = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTONAME;//'PNB GSC Santiago Branch'; //
-				var sFileRefNo = this.iDocEntry;
+				var sFileRefNo = (isDirectExport ==="Y" ? this.oMdlAP.getData().allopenAP[d].DraftDocEntry : aDocEntries[iIndex]);
 				var sWHTApplicable = "";
 				var sWHTTaxCode = "";
 				var sWHTTaxRate = "";
@@ -769,7 +821,8 @@ sap.ui.define([
 				//  this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
 				 //this.oRecord.Details.push(JSON.parse(JSON.stringify(this.header)),JSON.parse(JSON.stringify(this.Details)));
-			}
+				 sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
+				}
 			this.oMdlFileExport = new JSONModel(this.oRecord);
 			this.getView().setModel(this.oMdlFileExport, "oMdlFileExport");
 			this.fHandleExcelExport(this.oRecord);

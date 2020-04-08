@@ -25,7 +25,21 @@ sap.ui.define([
 			this.getView().setModel(this.oMdlUploading, "oMdlUploading");
 			
 			//get DataBase loggedin
-			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"returnfileuploading");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
 		},
 		FileUpload: function(oEvent){
 			var oFileUploader = this.getView().byId("fileUploader");
@@ -39,11 +53,11 @@ sap.ui.define([
 				var arrTxt = e.currentTarget.result.split("~");
 				var oData = [];
 					var record = {};
-					  	record.CheckAmount = arrTxt[1];//arrTxt[i].substring(9, 17);
+					  	record.CheckAmount = arrTxt[1];
 					  	record.CheckNum = arrTxt[2];
-					  	record.VoucherNum = arrTxt[3];//arrTxt[i].substring(37, 46);
-					  	record.SupplierCode =arrTxt[5];//arrTxt[i].substring(183, 187);
-					  	record.SupplierName = arrTxt[4];//arrTxt[i].substring(178, 182);
+					  	record.VoucherNum = arrTxt[3];
+					  	record.SupplierCode =arrTxt[5];
+					  	record.SupplierName = arrTxt[4];
 					  	record.BankAccount = arrTxt[6];
 					  	record.PaymentDate = arrTxt[7];
 					  	record.CheckDate = arrTxt[8];
@@ -236,14 +250,9 @@ sap.ui.define([
 				// 	withCredentials: true
 				// },
 				error: function (xhr, status, error) {
-					//this.oPage.setBusy(false);
-					if (xhr.status === 402) {
-						sap.m.MessageToast.show("Session End.");
-						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					}else{
-						var Message = xhr.responseJSON["error"].message.value;			
-						sap.m.MessageToast.show(Message);
-					}
+					var Message = xhr.responseJSON["error"].message.value;		
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null");	
+					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
 					this.PostOutgoing(sDocEntry);
@@ -265,7 +274,8 @@ sap.ui.define([
 				type: "POST",
 				contentType: "application/json",
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
+					var Message = xhr.responseJSON["error"].message.value;	
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null");			
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {

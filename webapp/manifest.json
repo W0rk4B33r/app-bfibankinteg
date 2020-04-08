@@ -100,6 +100,13 @@
 					]
 				},
 				{
+					"name": "BatchApprovalProcess",
+					"pattern": "BatchApprovalProcess",
+					"target": [
+						"BatchApprovalProcess"
+					]
+				},
+				{
 					"name": "PaymentFileExtraction",
 					"pattern": "PaymentFileExtraction",
 					"target": [
@@ -139,6 +146,16 @@
 					"viewPath": "com.apptech.app-bankinteg.view",
 					"viewType": "XML",
 					"viewName": "PaymentProcessing",
+					"parent": "Main",
+					"controlId": "pageContainer",
+					"controlAggregation": "pages",
+					"transition": "flip",
+					"viewLevel": 3
+				},
+				"BatchApprovalProcess": {
+					"viewPath": "com.apptech.app-bankinteg.view",
+					"viewType": "XML",
+					"viewName": "BatchApprovalProcess",
 					"parent": "Main",
 					"controlId": "pageContainer",
 					"controlAggregation": "pages",

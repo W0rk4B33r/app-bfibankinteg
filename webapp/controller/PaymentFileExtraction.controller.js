@@ -30,6 +30,19 @@ sap.ui.define([
 			var oModelProd = new JSONModel("model/record.json");
 			this.getView().setModel(oModelProd);
 
+			//getButtons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"paymentfileextraction");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons");
+
 			this.oExport = new JSONModel();
 			// this.oMdlBank.setJSON("{\"allpnbbank\" : " + JSON.stringify(results) + "}");
 			// this.getView().setModel(this.oMdlBank, "oMdlBank");
@@ -150,12 +163,6 @@ sap.ui.define([
 					if (sRecord === "Batch") {
 						this.oMdlBatch.setJSON("{\"allbatch\" : " + JSON.stringify(results) + "}");
 						this.getView().setModel(this.oMdlBatch, "oMdlBatch");
-						// }else if(Record === "AllDrafts"){
-						// 		if (results.length <= 0) {
-						// 			aReturnResult = [];
-						// 		} else {
-						// 			aReturnResult = results;
-						// 		}
 					} else {
 						this.oMdlBank.setJSON("{\"allpnbbank\" : " + JSON.stringify(results) + "}");
 						this.getView().setModel(this.oMdlBank, "oMdlBank");
@@ -201,9 +208,9 @@ sap.ui.define([
 		},
 		fClearFields: function () {
 			try {
-				this.getView().byId("btnSearch").setVisible(true);
-				this.getView().byId("btnPostDraft").setVisible(true);
-				this.getView().byId("btnExport").setVisible(false);
+				// this.getView().byId("btnSearch").setVisible(true);
+				// this.getView().byId("btnPostDraft").setVisible(true);
+				// this.getView().byId("btnExport").setVisible(false);
 
 				this.oMdlPayExtract.getData().EditRecord.DOCNUM = "";
 				this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH = "";
@@ -221,8 +228,8 @@ sap.ui.define([
 				this.getView().byId("DispatchToCode").setEnabled(true);
 				this.getView().byId("PNBAccountNo").setEnabled(true);
 				
-				this.getView().byId("btnCancel").setVisible(false);
-				this.getView().byId("btnSaveAsDraft").setVisible(true);
+				// this.getView().byId("btnCancel").setVisible(false);
+				// this.getView().byId("btnSaveAsDraft").setVisible(true);
 
 				this.oMdlAP.getData().allopenAP.length = 0;
 				this.oMdlAP.refresh();
@@ -298,29 +305,29 @@ sap.ui.define([
 
 				//Disable field in preview mode
 				if (oRowSelected.U_App_Status === 'Draft') {
-					this.getView().byId("btnPostDraft").setVisible(true);
-					this.getView().byId("btnExport").setVisible(false);
-					this.getView().byId("btnSaveAsDraft").setVisible(true);
-					this.getView().byId("btnCancel").setVisible(false);
+					// this.getView().byId("btnPostDraft").setVisible(true);
+					// this.getView().byId("btnExport").setVisible(false);
+					// this.getView().byId("btnSaveAsDraft").setVisible(true);
+					// this.getView().byId("btnCancel").setVisible(false);
 					
 					this.getView().byId("DocumentNo").setEnabled(true);
 					this.getView().byId("PrintingBranch").setEnabled(true);
 					this.getView().byId("DispatchTo").setEnabled(true);
 					this.getView().byId("DispatchToCode").setEnabled(true);
 					this.getView().byId("PNBAccountNo").setEnabled(true);
-					this.getView().byId("btnSearch").setVisible(true);
+					// this.getView().byId("btnSearch").setVisible(true);
 				} else {
-					this.getView().byId("btnPostDraft").setVisible(false);
-					this.getView().byId("btnExport").setVisible(true);
-					this.getView().byId("btnSaveAsDraft").setVisible(false);
-					this.getView().byId("btnCancel").setVisible(true);
+					// this.getView().byId("btnPostDraft").setVisible(false);
+					// this.getView().byId("btnExport").setVisible(true);
+					// this.getView().byId("btnSaveAsDraft").setVisible(false);
+					// this.getView().byId("btnCancel").setVisible(true);
 					
 					this.getView().byId("DocumentNo").setEnabled(false);
 					this.getView().byId("PrintingBranch").setEnabled(false);
 					this.getView().byId("DispatchTo").setEnabled(false);
 					this.getView().byId("DispatchToCode").setEnabled(false);
 					this.getView().byId("PNBAccountNo").setEnabled(false);
-					this.getView().byId("btnSearch").setVisible(false);
+					// this.getView().byId("btnSearch").setVisible(false);
 				}
 			}
 
@@ -368,7 +375,7 @@ sap.ui.define([
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
-				contentType: "multipart/mixed;boundary=a",
+				contentType: "multipart/mixed;boundary=a", 
 				data: sBodyRequest,
 				xhrFields: {
 					withCredentials: true
@@ -382,11 +389,20 @@ sap.ui.define([
 				context: this
 
 			}).done(function (results) {
-				if (results) {
-					MessageToast.show("Cancelled Transaction!");
-					this.fPrepareTable(false);
-					AppUI5.fHideBusyIndicator();
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_ODOP,PaymentDrafts","Cancel Batch","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						MessageToast.show("Cancelled Transaction!");
+						this.fPrepareTable(false);
+						AppUI5.fHideBusyIndicator();
+					}
 				}
+				
 			});
 			
 		},
@@ -521,29 +537,37 @@ sap.ui.define([
 				context: this
 
 			}).done(function (results) {
-				if (results) {
-					var re = /\(([^)]+)\)/g;
-					var sResult = results;
-					var m;
-					var a = {};
-					var aDocEntries = [];
-					do {
-						m = re.exec(sResult);
-						if (m) {
-							a.docentry = m[1];
-							aDocEntries.push(a.docentry);
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("PaymentDrafts","Posts Draft OP","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						var re = /\(([^)]+)\)/g;
+						var sResult = results;
+						var m;
+						var a = {};
+						var aDocEntries = [];
+						do {
+							m = re.exec(sResult);
+							if (m) {
+								a.docentry = m[1];
+								aDocEntries.push(a.docentry);
+							}
+						} while (m);
+						for (var i = 0; i < aDocEntries.length; i++) {
+							this.fUpdateDraft(aDocEntries[i]);
 						}
-					} while (m);
-					for (var i = 0; i < aDocEntries.length; i++) {
-						this.fUpdateDraft(aDocEntries[i]);
-					}
-					this.fSavePostedDraft(aDocEntries, false);
-					this.fExportData(aDocEntries,"N");
-					sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
-					this.fClearFields();
-					this.fPrepareTable(false);
-					this.oMdlAllRecord.refresh();
-					AppUI5.fHideBusyIndicator();
+						this.fSavePostedDraft(aDocEntries, false);
+						this.fExportData(aDocEntries,"N");
+						sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
+						this.fClearFields();
+						this.fPrepareTable(false);
+						this.oMdlAllRecord.refresh();
+						AppUI5.fHideBusyIndicator();
+					}	
 				}
 			});
 		},
@@ -630,7 +654,8 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
+					var Message = xhr.responseJSON["error"].message.value;
+					AppUI5.fErrorLogs("PaymentDrafts","Update Draft Batch Payment","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null");			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
 				},
@@ -672,6 +697,23 @@ sap.ui.define([
 
 		//Saving of Posted Draft
 		fSavePostedDraft: function (aDocEntries, isDraft) {
+			// var aBatchDelete = [];
+			// try {
+			// 	var sDraftNum = this.oMdlPayExtract.getData().EditRecord.DRAFTNO;
+			// 	if (sDraftNum !== 0){
+			// 		var aBatchDelete = [
+			// 			{
+			// 				"tableName": "U_APP_OPPD",
+			// 				"data": sDraftNum
+			// 			}
+			// 		];
+			// 	}
+			// } catch (error) {
+				
+			// }
+
+
+			//this.oMdlPayExtract.getData().EditRecord.DOCENTRY
 			var sCodeH = AppUI5.generateUDTCode("GetCode");
 			var sDraftNo = AppUI5.generateUDTCode("GetDraftNo");
 			var oT_PAYMENT_EXTRACTING_H = {};
@@ -722,7 +764,7 @@ sap.ui.define([
 				}))));
 				sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
 			}
-			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
@@ -740,12 +782,20 @@ sap.ui.define([
 				context: this
 
 			}).done(function (results) {
-				if (results) {
-					if (isDraft) {
-						MessageToast.show("Saved as Draft!");
-						this.fClearFields();
-						this.fPrepareTable(false);
-						this.oMdlAllRecord.refresh();
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_ODOP,U_APP_DOP1","Add Batch Payment","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						if (isDraft) {
+							MessageToast.show("Saved as Draft!");
+							this.fClearFields();
+							this.fPrepareTable(false);
+							this.oMdlAllRecord.refresh();
+						}
 					}
 				}
 			});

@@ -68,7 +68,9 @@ sap.ui.define([
 					AppUI5.fHideBusyIndicator();
 				},
 				context:this,
-				success: function (json) {}
+				success: function (json) {
+					//AppUI5.fPostToActivityLog("","LOGIN","Login Bank Integration",sUserName.getValue(),"Success");
+				}
 			}).done(function (results) {
 				if (results) {
 					sap.m.MessageToast.show("Session ID: " + results.SessionId); 

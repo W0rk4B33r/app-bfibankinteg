@@ -35,6 +35,19 @@ sap.ui.define([
 			this.getView().byId("DateTagged").setDateValue( new Date());
 			//For Status
 			this.sStatus = "";
+
+			//get Buttons
+			this.oMdlButtons = new JSONModel();
+			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"paymentprocessing");
+			var newresult = [];
+				this.oResults.forEach((e)=> {
+					var d = {};
+					d[e.U_ActionDesc] = JSON.parse(e.visible);
+					newresult.push(JSON.parse(JSON.stringify(d)));
+				});
+			var modelresult = JSON.parse("{" + JSON.stringify(newresult).replace(/{/g,"").replace(/}/g,"").replace("[","").replace("]","") + "}");
+			this.oMdlButtons.setJSON("{\"buttons\" : " + JSON.stringify(modelresult) + "}");
+			this.getView().setModel(this.oMdlButtons, "buttons"); 
 			
 			
 			//CREATING MODEL SUPPLIER WITH OPEN AP
@@ -59,7 +72,6 @@ sap.ui.define([
 			this.oMdlAllRecord = new JSONModel();
 			this.tableId = "tblDrafts";
 			this.fPrepareTable(true);
-			
 			
 		},
 		fPrepareTable: function (bIsInit) {
@@ -112,6 +124,7 @@ sap.ui.define([
 			this.oTable.getColumns()[2].setLabel("Supplier Name");
 			this.oTable.getColumns()[2].setFilterProperty("U_App_SupplierName");
 			this.oTable.getColumns()[3].setLabel("Status");
+			this.oTable.getColumns()[3].setFilterProperty("U_App_Status");
 			this.oTable.getColumns()[4].setLabel("Remarks");
 			this.oTable.getColumns()[5].setLabel("Created Date");
 		},
@@ -354,8 +367,8 @@ sap.ui.define([
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 			// this.onClearField();
-			this.getView().byId("btnPrint").setVisible(true);
-			this.getView().byId("btnCancel").setVisible(true);
+			// this.getView().byId("btnPrint").setVisible(true);
+			// this.getView().byId("btnCancel").setVisible(true);
 			if (sStatus === "Draft"){
 				this.getView().byId("DateFrom").setEnabled(true);
 				this.getView().byId("DateTo").setEnabled(true);
@@ -367,7 +380,7 @@ sap.ui.define([
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);
 				this.getView().byId("SupplierCode").setEnabled(false);
-				this.getView().byId("searchID").setVisible(false);
+				// this.getView().byId("searchID").setVisible(false);
 				this.getView().byId("btnSave").setEnabled(false);
 				this.getView().byId("btnDraft").setEnabled(false);
 			}
@@ -450,7 +463,8 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
+					var Message = xhr.responseJSON["error"].message.value;	
+					AppUI5.fErrorLogs(table,"Update Batch","null","null",oMessage,"Update",this.sUserCode,"null");		
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
@@ -506,8 +520,8 @@ sap.ui.define([
 			
 			this.getView().byId("btnSave").setEnabled(true);
 			this.getView().byId("btnDraft").setEnabled(true);
-			this.getView().byId("btnPrint").setVisible(false);
-			this.getView().byId("btnCancel").setVisible(false);
+			// this.getView().byId("btnPrint").setVisible(false);
+			// this.getView().byId("btnCancel").setVisible(false);
 			
 			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
@@ -591,25 +605,6 @@ sap.ui.define([
 			});
 			return HeaderCode;
 		},
-		// deleteExistingH: function(){
-		// 	$.ajax({
-		// 		url: "/destinations/BiotechSL/b1s/v1/U_APP_OPPD('200206140929.60109')",
-		// 		type: "DELETE",
-		// 		contentType: "application/json",
-		// 		error: function (xhr, status, error) {
-		// 			//this.oPage.setBusy(false);
-		// 			sap.m.MessageToast.show("Error");
-		// 		},
-		// 		success: function (json) {
-		// 			//this.oPage.setBusy(false);
-		// 		},
-		// 		context: this
-		// 	}).done(function (results) {
-		// 		if (results) {
-					
-		// 		}
-		// 	});
-		// },
 		onSave: function (oEvent) {
 			var oTable = this.getView().byId("tblDetails");
 			var selectedIndeices=oTable.getSelectedIndices();
@@ -764,22 +759,12 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.sUserCode;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedDate = this.getTodaysDate();
 						
-						// oT_PAYMENT_PROCESSING_D.U_App_UpdatedBy = "";
-						// oT_PAYMENT_PROCESSING_D.U_App_UpdatedBy = "";
-						
-						// oRecord.M_TERMS_TEMPLATE_D.push(JSON.parse(JSON.stringify(oT_TERMS_TEMP)));
-						
 						aBatch.push(JSON.parse(JSON.stringify(({
 							"tableName": "U_APP_PPD1",
 							"data": oT_PAYMENT_PROCESSING_D//AppUI5.generateUDTCode();
 						}))));
 						
 						oInvoice.U_App_BatchNum = BatchCode;
-						// if (this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP'){
-						// 	table = "OPCH";
-						// }else{
-						// 	table = "ODPO";
-						// }
 						aBatchUpdate.push(JSON.parse(JSON.stringify(({
 							"tableName": (this.oMdlAP.getData().allopenAP[iCounter].InvoiceType === 'AP' ? "PurchaseInvoices" : "PurchaseDownPayments"),
 							"data": oInvoice,//AppUI5.generateUDTCode();,
@@ -813,12 +798,20 @@ sap.ui.define([
 				context: this
 
 			}).done(function (results) {
-				if (results) {
-					this.getView().byId("DocumentNo").setValue(BatchCode);
-					this.getView().byId("Status").setValue("Open");
-					this.onClearField();
-					this.oMdlBatch.refresh();
-					that.fPrepareTable(false);
+				if(JSON.stringify(results).search("400 Bad") !== -1) {
+					var oStartIndex = results.search("value") + 10;
+					var oEndIndex = results.indexOf("}") - 8;
+					var oMessage = results.substring(oStartIndex,oEndIndex);
+					AppUI5.fErrorLogs("U_APP_OPPD,U_APP_PPD1","Add Batch","null","null",oMessage,"Insert",this.sUserCode,"null");
+					sap.m.MessageToast.show(oMessage);
+				}else{
+					if (results) {
+						this.getView().byId("DocumentNo").setValue(BatchCode);
+						this.getView().byId("Status").setValue("Open");
+						this.onClearField();
+						this.oMdlBatch.refresh();
+						that.fPrepareTable(false);
+					}
 				}
 			});
 		

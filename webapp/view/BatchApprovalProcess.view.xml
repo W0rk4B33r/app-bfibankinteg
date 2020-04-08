@@ -1,9 +1,11 @@
- <mvc:View controllerName="com.apptech.app-bankinteg.controller.PaymentFileExtraction"
-	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
-	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
+ <mvc:View controllerName="com.apptech.app-bankinteg.controller.BatchApprovalProcess"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" 
+xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:t="sap.ui.table">
 	<App>
 		<pages>
-			<Page title="Payment File Extraction" id="pageTerm">
+			<Page title="For Approval Batches" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
@@ -13,8 +15,7 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="Add" id="btnAddModePE" tooltip="Add" press="onClickAdd" icon="sap-icon://add" visible="{buttons>/buttons/btnAddModePE}"/>
-												<Button text="View" id="btnViewModePE" tooltip="Edit" press="onClickEdit" icon="sap-icon://edit" visible="{buttons>/buttons/btnViewModePE}"/>
+												<Button text="View Batch Details" id="btnViewBatch" tooltip="View" press="onView" visible="{buttons>/buttons/btnViewBatch}"/><!-- icon="sap-icon://edit" -->
 												<ToolbarSpacer/>
 												<SearchField placeholder="Filter" value="" search="filterGlobally" width="15rem"/>
 											</content>
@@ -23,97 +24,79 @@
 								</t:Table>
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
-								<Button text="Save as Draft" id="btnSaveAsDraft" tooltip="Save as Draft" press="onSaveAsDraft" visible="{buttons>/buttons/btnSaveAsDraftPE}"/>
-								<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save" visible="{buttons>/buttons/btnPostDraftPE}"/>
-								<Button text="Export File" id="btnExport" tooltip="Save" press="onExportFile" icon="sap-icon://download" visible="{buttons>/buttons/btnExportPE}"/>
-								<Button text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTrans" visible="{buttons>/buttons/btnCancelPE}"/>
+								<Button text="APPROVE" id="btnApprove" tooltip="Approve" press="onApprove" icon="sap-icon://save" visible="{buttons>/buttons/btnApprove}"/>
+								<Button type="Reject" text="REJECT" id="btnReject" tooltip="Reject" press="onReject" visible="{buttons>/buttons/btnReject}"/>
 								<VBox class="sapUiTinyMargin">
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>
-											<Label text="Batch" width="100%">
+											<Label text="Date From" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="DocumentNo" value="{oMdlPayExtract>/EditRecord/DOCNUM}" showValueHelp="true"
-												valueHelpOnly="true" valueHelpRequest="handleSelectDialogPress">
+											<DatePicker id="DateFrom" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateFrom}" enabled="false">
+													<layoutData>
+														<l:GridData span="L3 M4 S12"/>
+													</layoutData>
+											</DatePicker>
+											<Label text="Date To" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<DatePicker id="DateTo" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateTo}" enabled="false">
+													<layoutData>
+														<l:GridData span="L3 M4 S12"/>
+													</layoutData>
+											</DatePicker>
+											<Label text="Supplier Code" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="SupplierCode" value="{oMdlEditRecord>/EditRecord/SupplierCode}" required="true"  showValueHelp="true" enabled = "false"
+												valueHelpOnly="true" valueHelpRequest="handleValueHelpSupplier">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<Label text="PNB Printing Branch" visible="false" width="100%">
+											<Label text="Supplier Name" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Button text="Search" id="btnSearch" tooltip="Search" press="onClickSearch" icon="sap-icon://search">
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</Button>
-											<Label text="PNB Printing Branch" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<ComboBox id = "PrintingBranch" width="100%" items="{path:'oMdlEditRecord>/PrintingBranch'}"
-												selectedKey = "{oMdlPayExtract>/EditRecord/PRINTINGBRANCH}" selectionChange="onSelectionChangeTranType">
-												<core:Item key="{oMdlEditRecord>Code}" text="{oMdlEditRecord>Code} - {oMdlEditRecord>Desc}"/>
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</ComboBox>
-											<Label text="Dispatch To" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<ComboBox id="DispatchTo" width="100%" items="{path:'oMdlEditRecord>/DistpatchTo'}"
-												selectedKey = "{oMdlPayExtract>/EditRecord/DISTPATCHTO}" selectionChange="onSelectionChangeTranType">
-												<core:Item key="{oMdlEditRecord>Code}" text="{oMdlEditRecord>Code} - {oMdlEditRecord>Desc}"/>
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</ComboBox>
-											<Label text="Dispatch To Code" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<ComboBox id = "DispatchToCode" width="100%" items="{path:'oMdlEditRecord>/DistpatchToCode'}" 
-												selectedKey = "{oMdlPayExtract>/EditRecord/DISTPATCHTOCODE}" selectionChange="onSelectionChangeDispatchTo">
-												<core:Item key="{oMdlEditRecord>Code}" text="{oMdlEditRecord>Code} - {oMdlEditRecord>Desc}"/>
-												<layoutData>
-													<l:GridData span="L3 M4 S12"/>
-												</layoutData>
-											</ComboBox>
-											<Label text="Dispatch To Name" width="100%">
-												<layoutData>
-													<l:GridData span="L3 M2 S12"/>
-												</layoutData>
-											</Label>
-											<Input width="100%" id="DispatchToName" value="{oMdlPayExtract>/EditRecord/DISTPATCHTONAME}" required="true" enabled="false">
+											<Input width="100%" id="SupplierName" value="{oMdlEditRecord>/EditRecord/SupplierName}" required="true" enabled="false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<Label text="PNB Account #" width="100%">
+											<Label text="Tagging Date" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="PNBAccountNo" value="{oMdlPayExtract>/EditRecord/PNBACCOUNTNO}" showValueHelp="true"
-												valueHelpOnly="true" valueHelpRequest="handleValueHelpBank">
+											<DatePicker id="DateTagged" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="" editable="false">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</DatePicker>
+											<Label text="Batch Number" width="100%">
+												<layoutData>
+													<l:GridData span="L3 M2 S12"/>
+												</layoutData>
+											</Label>
+											<Input width="100%" id="DocumentNo" value="{oMdlEditRecord>/EditRecord/DocumentNo}" enabled = "false" showValueHelp="true"
+												valueHelpOnly="true" valueHelpRequest="handleValueHelpBatch">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
 											</Input>
-											<Label text="PNB Account Name" width="100%">
+											<Label text="Status" width="100%">
 												<layoutData>
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="PNBAccountName" value="{oMdlPayExtract>/EditRecord/PNBACCOUNTNAME}" required="true" enabled="false">
+												<Input width="100%" id="Status" value="{oMdlEditRecord>/EditRecord/Status}" enabled = "false">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -123,11 +106,24 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
+											<Button text="Search" id="searchID" tooltip="Search" press="onSearch" icon="sap-icon://search">
+												<layoutData>
+													<l:GridData span="L3 M4 S12"/>
+												</layoutData>
+											</Button>
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
-										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Single" visibleRowCount="6" ariaLabelledBy="title">
+										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Multi" visibleRowCount="6" ariaLabelledBy="title">
 											<t:columns>
+												<t:Column width="5rem">
+													<Label text="Priority"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>Priority'}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+													</t:template>
+												</t:Column>
 												<t:Column width="6rem">
 													<Label text="Invoice Doc. Type"/>
 													<t:template>
@@ -137,7 +133,7 @@
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
-													<Label text="Invoice#"/>
+													<Label text="Invoice #"/>
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>DocNum'}"
@@ -228,7 +224,7 @@
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>OpenSum', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>RemainingBalance', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -257,7 +253,7 @@
 												<l:GridData span="L3 M2 S12"/>
 											</layoutData>
 										</Label>
-										<TextArea id="Remarks" value="" maxLength="254" width="100%" placeholder ="Remarks"/>
+										<TextArea id="Remarks" value="{oMdlEditRecord>/EditRecord/Remarks}" maxLength="254" width="100%" placeholder ="Remarks" enabled="false"/>
 									</f:SimpleForm>
 								</VBox>
 							</IconTabFilter>

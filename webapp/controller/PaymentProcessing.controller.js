@@ -695,6 +695,8 @@ sap.ui.define([
 			var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2);
 			var hour = today.getHours()+''+today.getMinutes();
 			var BatchCode = 'BFI' +date+''+hour+ '_' + result;
+
+			var sTableName = "";
 			
 			
 			//ON EDIT / ON SAVE RECORD OBJECT
@@ -765,8 +767,15 @@ sap.ui.define([
 						}))));
 						
 						oInvoice.U_App_BatchNum = BatchCode;
+						if(this.oMdlAP.getData().allopenAP[iCounter].InvoiceType === 'AP'){
+							sTableName = "PurchaseInvoices";
+						}else if(this.oMdlAP.getData().allopenAP[iCounter].InvoiceType === 'APDP'){
+							sTableName = "PurchaseDownPayments";
+						}else{
+							sTableName = "PurchaseCreditNotes";
+						}
 						aBatchUpdate.push(JSON.parse(JSON.stringify(({
-							"tableName": (this.oMdlAP.getData().allopenAP[iCounter].InvoiceType === 'AP' ? "PurchaseInvoices" : "PurchaseDownPayments"),
+							"tableName": sTableName,
 							"data": oInvoice,//AppUI5.generateUDTCode();,
 							"docEntry": this.oMdlAP.getData().allopenAP[iCounter].DocEntry//AppUI5.generateUDTCode();
 						}))));

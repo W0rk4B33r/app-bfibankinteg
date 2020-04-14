@@ -672,7 +672,7 @@ sap.ui.define([
 						"data": aHeaderCode
 					}
 				];
-				for (d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
+				for (var d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
 					aBatchDelete.push(JSON.parse(JSON.stringify(({
 						"tableName": "U_APP_PPD1",
 						"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
@@ -717,6 +717,7 @@ sap.ui.define([
 			oT_PAYMENT_PROCESSING_H.U_App_Remarks = this.oMdlEditRecord.getData().EditRecord.Remarks;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedBy= this.sUserCode;
 			oT_PAYMENT_PROCESSING_H.U_App_CreatedDate = this.getTodaysDate();
+			oT_PAYMENT_PROCESSING_H.U_App_DraftReference = (this.getView().byId("DocumentNo").getValue() === null ? "" : this.getView().byId("DocumentNo").getValue());
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
 			// oT_PAYMENT_PROCESSING_H.U_App_UpdatedBy = "";
 			
@@ -760,6 +761,7 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_LineNumber = iLineNumDP;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.sUserCode;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedDate = this.getTodaysDate();
+						oT_PAYMENT_PROCESSING_D.U_App_DraftReference = (this.getView().byId("DocumentNo").getValue() === null ? "" : this.getView().byId("DocumentNo").getValue());
 						
 						aBatch.push(JSON.parse(JSON.stringify(({
 							"tableName": "U_APP_PPD1",

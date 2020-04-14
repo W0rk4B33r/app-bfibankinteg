@@ -162,6 +162,7 @@ sap.ui.define([
 		//   AppUI5.createField("App_CreatedDate", "Created Date", "@APP_OPPD", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedBy", "Updated By", "@APP_OPPD", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedDate", "Updated Date", "@APP_OPPD", "db_Alpha", "", 30);
+		//	 AppUI5.createField("App_DraftReference", "Draft Reference", "@APP_OPPD", "db_Alpha", "", 30)
 		//   //Payement Processing Details
 		//   AppUI5.createField("App_DocNum", "Document Number", "@APP_PPD1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_Priority", "Priority", "@APP_PPD1", "db_Alpha", "", 30);
@@ -184,6 +185,7 @@ sap.ui.define([
 		//   AppUI5.createField("App_CreatedDate", "Created Date", "@APP_PPD1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedBy", "Updated By", "@APP_PPD1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedDate", "Updated Date", "@APP_PPD1", "db_Alpha", "", 30);
+		//	 AppUI5.createField("App_DraftReference", "Draft Reference", "@APP_PPD1", "db_Alpha", "", 30)
 		//   // Saved Draft OutGoing Payment
 		//   AppUI5.createField("App_DocEntry", "Document Entry", "@APP_ODOP", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_DocNum", "Batch Number", "@APP_ODOP", "db_Alpha", "", 300);

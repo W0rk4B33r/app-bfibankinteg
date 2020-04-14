@@ -212,6 +212,7 @@ sap.ui.define([
 				// this.getView().byId("btnPostDraft").setVisible(true);
 				// this.getView().byId("btnExport").setVisible(false);
 
+				this.oMdlPayExtract.getData().EditRecord.DRAFTNO = "";
 				this.oMdlPayExtract.getData().EditRecord.DOCNUM = "";
 				this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH = "";
 				this.oMdlPayExtract.getData().EditRecord.DISTPATCHTO = "";
@@ -516,7 +517,8 @@ sap.ui.define([
 				d = d + iIndex;
 				// this.fPostPaymentDraft(oRecord);
 			}
-			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false);
+			var aBatchDelete = [];
+			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
 				url: "https://18.136.35.41:50000/b1s/v1/$batch",
 				type: "POST",
@@ -697,22 +699,29 @@ sap.ui.define([
 
 		//Saving of Posted Draft
 		fSavePostedDraft: function (aDocEntries, isDraft) {
-			// var aBatchDelete = [];
-			// try {
-			// 	var sDraftNum = this.oMdlPayExtract.getData().EditRecord.DRAFTNO;
-			// 	if (sDraftNum !== 0){
-			// 		var aBatchDelete = [
-			// 			{
-			// 				"tableName": "U_APP_OPPD",
-			// 				"data": sDraftNum
-			// 			}
-			// 		];
-			// 	}
-			// } catch (error) {
+			var aBatchDelete = [];
+			var sBatchCode = "";
+			try {
+				var sDraftNum = this.oMdlPayExtract.getData().EditRecord.DRAFTNO;
+				sBatchCode = this.oMdlPayExtract.getData().EditRecord.Code;
+				if (sDraftNum > 0){
+					var aBatchDelete = [
+						{
+							"tableName": "U_APP_ODOP",
+							"data": sBatchCode
+						}
+					];
+					for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+						sBatchCode = this.oMdlAP.getData().allopenAP[d].BatchDetailCode;
+						aBatchDelete.push(JSON.parse(JSON.stringify(({
+							"tableName": "U_APP_DOP1",
+							"data": sBatchCode
+						}))));
+					}
+				}
+			} catch (error) {
 				
-			// }
-
-
+			}
 			//this.oMdlPayExtract.getData().EditRecord.DOCENTRY
 			var sCodeH = AppUI5.generateUDTCode("GetCode");
 			var sDraftNo = AppUI5.generateUDTCode("GetDraftNo");
@@ -731,7 +740,7 @@ sap.ui.define([
 			oT_PAYMENT_EXTRACTING_H.U_App_PNBAccountName = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNAME; //'12398726'; //
 			oT_PAYMENT_EXTRACTING_H.U_App_Remarks = ""; //this.oMdlPayExtract.getData().EditRecord.Remarks;
 			oT_PAYMENT_EXTRACTING_H.U_App_Status = (!isDraft ? "Posted Draft Document" : "Draft");
-			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = sDraftNo;
+			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO: sDraftNo);
 			oT_PAYMENT_EXTRACTING_H.U_App_CreatedBy = this.sUserCode;
 			oT_PAYMENT_EXTRACTING_H.U_App_CreatedDate = this.fGetTodaysDate();
 
@@ -753,7 +762,7 @@ sap.ui.define([
 					}
 				}
 				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? aDocEntries[iIndex] : "");
-				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo = sDraftNo;
+				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo =  (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO: sDraftNo);
 				oT_PAYMENT_EXTRACTING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.sUserCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedDate = this.fGetTodaysDate();
@@ -1110,7 +1119,7 @@ sap.ui.define([
 			var sDate = sToday.getFullYear() + '-' + (sToday.getMonth() + 1) + '-' + sToday.getDate();
 			return sDate;
 		},
-		fPrepareBatchRequestBody: function (oRequestInsert,oRequestUpdate) {
+		fPrepareBatchRequestBody: function (oRequestInsert,oRequestUpdate,oBatchDelete) {
 
 			var sBatchRequest = "";
 
@@ -1141,6 +1150,17 @@ sap.ui.define([
 					sBatchRequest = sBatchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
 				}
 			}else{
+				//DELETE
+				//aBatchDelete
+				if(oBatchDelete.length !== 0){
+					var objectUDTDelete = "";
+					for (var i = 0; i < oBatchDelete.length; i++) { 
+		
+						objectUDTDelete = oBatchDelete[i];
+						sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
+						sBatchRequest = sBatchRequest + "DELETE /b1s/v1/"  + objectUDTDelete.tableName + "('"+ objectUDTDelete.data +"')\n";
+					}
+				}
 				//POST
 				var objectUDT = "";
 				for (var i = 0; i < oRequestInsert.length; i++) {

@@ -251,7 +251,7 @@ sap.ui.define([
 				// },
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;		
-					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null");	
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null",JSON.stringify(oRecord));	
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {
@@ -275,7 +275,7 @@ sap.ui.define([
 				contentType: "application/json",
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;	
-					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null");			
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null","null");			
 					sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {

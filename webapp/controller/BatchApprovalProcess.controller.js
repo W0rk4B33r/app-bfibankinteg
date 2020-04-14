@@ -301,8 +301,9 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
+					var oMessage = xhr.responseJSON["error"].message.value;	
+					AppUI5.fErrorLogs(table,"Update Batch",code,"null",oMessage,"Update",this.sUserCode,"null",Data);		
+					sap.m.MessageToast.show(oMessage);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);

@@ -252,7 +252,7 @@ sap.ui.define([
 			var sBatchNum = "";
 			if (iIndex !== -1) {
 				var oRowSelected = this.oTable.getBinding().getModel().getData().rows[this.oTable.getBinding().aIndices[iIndex]];
-				sDraftNum = oRowSelected.U_App_DraftNo;
+				sDraftNum = (oRowSelected.U_App_DraftNo === null ? null : oRowSelected.U_App_DraftNo)
 
 				sBatchNum = oRowSelected.U_App_DocNum;
 				sBatchNum = sBatchNum.split(',');
@@ -394,7 +394,7 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_ODOP,PaymentDrafts","Cancel Batch","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null");
+					AppUI5.fErrorLogs("U_APP_ODOP,PaymentDrafts","Cancel Batch","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
@@ -474,7 +474,7 @@ sap.ui.define([
 
 						iTotal = iTotal + this.oMdlAP.getData().allopenAP[i].PaymentAmount;
 
-						oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
+						oRecord.PaymentInvoices.push(oPaymentInvoices);
 
 						Array.prototype.push.apply(oRecord.PaymentInvoices);
 						iLineNum = iLineNum + 1;
@@ -515,7 +515,7 @@ sap.ui.define([
 				}))));
 				//iIndex = iIndex + 1;
 				d = d + iIndex;
-				// this.fPostPaymentDraft(oRecord);
+				//this.fPostPaymentDraft(oRecord);
 			}
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
@@ -543,7 +543,7 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("PaymentDrafts","Posts Draft OP","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null");
+					AppUI5.fErrorLogs("PaymentDrafts","Posts Draft OP","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {
@@ -601,8 +601,7 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
+					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {},
 				context: this
@@ -621,12 +620,15 @@ sap.ui.define([
 				contentType: "application/json",
 				async: false,
 				data: JSON.stringify(oRecord),
+				xhrFields: {
+					withCredentials: true
+				},
 				error: function (xhr, status, error) {
 					sap.m.MessageToast.show(error);
 				},
 				success: function (json) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
+					// var Message = xhr.responseJSON["error"].message.value;			
+					// sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
 				},
 				context: this
@@ -657,7 +659,7 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
-					AppUI5.fErrorLogs("PaymentDrafts","Update Draft Batch Payment","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null");			
+					AppUI5.fErrorLogs("PaymentDrafts","Update Draft Batch Payment","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null",oData);			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
 				},
@@ -740,7 +742,7 @@ sap.ui.define([
 			oT_PAYMENT_EXTRACTING_H.U_App_PNBAccountName = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNAME; //'12398726'; //
 			oT_PAYMENT_EXTRACTING_H.U_App_Remarks = ""; //this.oMdlPayExtract.getData().EditRecord.Remarks;
 			oT_PAYMENT_EXTRACTING_H.U_App_Status = (!isDraft ? "Posted Draft Document" : "Draft");
-			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO: sDraftNo);
+			oT_PAYMENT_EXTRACTING_H.U_App_DraftNo = (this.oMdlPayExtract.getData().EditRecord.DRAFTNO === "" ? sDraftNo : this.oMdlPayExtract.getData().EditRecord.DRAFTNO);
 			oT_PAYMENT_EXTRACTING_H.U_App_CreatedBy = this.sUserCode;
 			oT_PAYMENT_EXTRACTING_H.U_App_CreatedDate = this.fGetTodaysDate();
 
@@ -762,7 +764,7 @@ sap.ui.define([
 					}
 				}
 				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? aDocEntries[iIndex] : "");
-				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo =  (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO: sDraftNo);
+				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo =  (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO : sDraftNo);
 				oT_PAYMENT_EXTRACTING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.sUserCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedDate = this.fGetTodaysDate();
@@ -795,7 +797,7 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_ODOP,U_APP_DOP1","Add Batch Payment","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null");
+					AppUI5.fErrorLogs("U_APP_ODOP,U_APP_DOP1","Add Batch Payment","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {

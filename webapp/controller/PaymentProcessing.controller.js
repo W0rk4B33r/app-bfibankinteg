@@ -369,13 +369,22 @@ sap.ui.define([
 			// this.onClearField();
 			// this.getView().byId("btnPrint").setVisible(true);
 			// this.getView().byId("btnCancel").setVisible(true);
-			if (sStatus === "Draft"){
+			if (sStatus === "Draft" || sStatus === "Rejected"){
 				this.getView().byId("DateFrom").setEnabled(true);
 				this.getView().byId("DateTo").setEnabled(true);
 				this.getView().byId("SupplierCode").setEnabled(true);
 				this.getView().byId("searchID").setVisible(true);
 				this.getView().byId("btnSave").setEnabled(true);
 				this.getView().byId("btnDraft").setEnabled(true);
+				this.getView().byId("btnCancel").setEnabled(false);
+			}else if(sStatus === "Approved"){
+				this.getView().byId("DateFrom").setEnabled(false);
+				this.getView().byId("DateTo").setEnabled(false);
+				this.getView().byId("SupplierCode").setEnabled(false);
+				// this.getView().byId("searchID").setVisible(false);
+				this.getView().byId("btnSave").setEnabled(false);
+				this.getView().byId("btnDraft").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(false);
 			}else{
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);
@@ -383,7 +392,9 @@ sap.ui.define([
 				// this.getView().byId("searchID").setVisible(false);
 				this.getView().byId("btnSave").setEnabled(false);
 				this.getView().byId("btnDraft").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(true);
 			}
+
 			
 
 		},
@@ -454,7 +465,7 @@ sap.ui.define([
 		},
 		updateRecords: function(table,code,Data,batchNum){
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/"+table+"('"+code+"')",
+				url: "https://18.136.35.41:50000/b1s/v1/"+table+"('"+ code +"')",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -463,9 +474,10 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;	
-					AppUI5.fErrorLogs(table,"Update Batch","null","null",oMessage,"Update",this.sUserCode,"null");		
-					sap.m.MessageToast.show(Message);
+					var oMessage = xhr.responseJSON["error"].message.value;	
+					AppUI5.fErrorLogs(table,"Update Batch","null","null",oMessage,"Update",this.sUserCode,"null",Data);		
+					sap.m.MessageToast.show(oMessage);
+					//console.error(xhr);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -660,27 +672,30 @@ sap.ui.define([
 		onAddProcess: function (oEvent) {
 			//Get data if existing
 			//header
-			var aHeaderCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
-			//If Newly add Skip Delete
-			if (aHeaderCode !== 0){
-				//details
-				this.CheckIfExisting("CheckIfExistingDetails",this.getView().byId("DocumentNo").getValue());
-				//Compose for Delete
-				var aBatchDelete = [
-					{
-						"tableName": "U_APP_OPPD",
-						"data": aHeaderCode
+			//Skip delete if status is rejected
+			if(this.getView().byId("Status").getValue() !== "Rejected" ){
+				var aHeaderCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
+				//If Newly add Skip Delete
+				if (aHeaderCode !== 0){
+					//details
+					this.CheckIfExisting("CheckIfExistingDetails",this.getView().byId("DocumentNo").getValue());
+					//Compose for Delete
+					var aBatchDelete = [
+						{
+							"tableName": "U_APP_OPPD",
+							"data": aHeaderCode
+						}
+					];
+					for (var d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
+						aBatchDelete.push(JSON.parse(JSON.stringify(({
+							"tableName": "U_APP_PPD1",
+							"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
+						}))));
 					}
-				];
-				for (var d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
-					aBatchDelete.push(JSON.parse(JSON.stringify(({
-						"tableName": "U_APP_PPD1",
-						"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
-					}))));
+				}else{
+					var aBatchDelete = 0
 				}
-			}else{
-				var aBatchDelete = 0
-			}
+			}else{var aBatchDelete = 0}
 			
 			//End delete
 			var that = this;
@@ -813,7 +828,7 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
-					AppUI5.fErrorLogs("U_APP_OPPD,U_APP_PPD1","Add Batch","null","null",oMessage,"Insert",this.sUserCode,"null");
+					AppUI5.fErrorLogs("U_APP_OPPD,U_APP_PPD1","Add Batch","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 				}else{
 					if (results) {

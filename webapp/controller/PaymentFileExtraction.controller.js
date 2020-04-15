@@ -473,8 +473,8 @@ sap.ui.define([
 						oPaymentInvoices.TotalDiscountSC = 0.0;
 
 						iTotal = iTotal + this.oMdlAP.getData().allopenAP[i].PaymentAmount;
-
-						oRecord.PaymentInvoices.push(oPaymentInvoices);
+						//oRecord.PaymentInvoices.push(oPaymentInvoices);
+						oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
 
 						Array.prototype.push.apply(oRecord.PaymentInvoices);
 						iLineNum = iLineNum + 1;
@@ -514,7 +514,9 @@ sap.ui.define([
 					"data": oRecord
 				}))));
 				//iIndex = iIndex + 1;
-				d = d + iIndex;
+				//d = d + iIndex;
+				d = iIndex;
+				oRecord.PaymentInvoices = [];
 				//this.fPostPaymentDraft(oRecord);
 			}
 			var aBatchDelete = [];

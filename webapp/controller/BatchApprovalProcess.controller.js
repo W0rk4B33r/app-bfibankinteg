@@ -18,12 +18,17 @@ sap.ui.define([
 
         onRoutePatternMatched: function (event) {
 			document.title = "BFI BANKINTEG";
+			this.fPrepareTable(false,"");
+			this.oMdlAllRecord.refresh();
 		},
 
 		onInit: function () {
 			//get DataBase loggedin
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");	
-			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");	
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			
+			var route = this.getOwnerComponent().getRouter().getRoute("BatchApprovalProcess");
+     		route.attachPatternMatched(this.onRoutePatternMatched,this);
 			
 			this.oMdlEditRecord = new JSONModel("model/paymentprocessing.json");
 			this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
@@ -135,6 +140,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -159,6 +165,7 @@ sap.ui.define([
 					aReturnResult = [];
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -208,6 +215,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -235,6 +243,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -304,6 +313,7 @@ sap.ui.define([
 					var oMessage = xhr.responseJSON["error"].message.value;	
 					AppUI5.fErrorLogs(table,"Update Batch",code,"null",oMessage,"Update",this.sUserCode,"null",Data);		
 					sap.m.MessageToast.show(oMessage);
+					console.error(oMessage);
 				},
 				success: function (json) {
 					//this.oPage.setBusy(false);
@@ -321,9 +331,13 @@ sap.ui.define([
 				if (results) {
 					if (isApprove === true){
 						sap.m.MessageToast.show("Batch : " + batchNum + " approved!");
+						this.getView().byId("Status").setValue("Approved");
 					}else{
 						sap.m.MessageToast.show("Batch : " + batchNum + " rejected!");
+						this.getView().byId("Status").setValue("Rejected");
 					}
+					this.getView().byId("btnApprove").setEnabled(false);
+					this.getView().byId("btnReject").setEnabled(false);
 					this.fPrepareTable(false);
 					this.oMdlAllRecord.refresh();
 				}

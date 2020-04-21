@@ -27,7 +27,25 @@ sap.ui.define([
 		this.fGetAllMenu();
 
 		this.router = this.getOwnerComponent().getRouter();
-		this.router.navTo("PaymentProcessing");
+		var sSelectedMenu = this.oMdlMenu.getData().navigation[0].key;
+			switch (sSelectedMenu) {
+			case "paymentprocessing":
+				this.router.navTo("PaymentProcessing");
+				break;
+			case "batchapprovalprocess":
+				this.router.navTo("BatchApprovalProcess");
+				break;
+			case "paymentfileextraction":
+				this.router.navTo("PaymentFileExtraction");
+				break;
+			case "returnfileuploading":
+				this.router.navTo("ReturnFileUploading");
+				break;
+
+			default:
+
+			}
+		
 	},
 	  
 		//-------------------------------------------

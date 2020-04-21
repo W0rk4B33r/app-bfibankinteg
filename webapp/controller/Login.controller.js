@@ -73,7 +73,7 @@ sap.ui.define([
 				}
 			}).done(function (results) {
 				if (results) {
-					sap.m.MessageToast.show("Session ID: " + results.SessionId); 
+					sap.m.MessageToast.show("Welcome : " + sUserName.getValue() + "!"); 
 					jQuery.sap.storage.Storage.put("dataBase",sDBCompany.getSelectedItem().getKey());
 					jQuery.sap.storage.Storage.put("userCode",sUserName.getValue());
 					jQuery.sap.storage.Storage.put("isLogin",true);

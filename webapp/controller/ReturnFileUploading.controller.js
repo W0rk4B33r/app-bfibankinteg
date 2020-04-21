@@ -253,6 +253,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;		
 					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null",JSON.stringify(oRecord));	
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {
 					this.PostOutgoing(sDocEntry);
@@ -277,6 +278,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;	
 					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null","null");			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Successfully posted!" );

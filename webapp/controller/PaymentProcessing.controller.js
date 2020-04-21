@@ -18,12 +18,17 @@ sap.ui.define([
 
         onRoutePatternMatched: function (event) {
 			document.title = "BFI BANKINTEG";
+			this.fPrepareTable(false,"");
+			this.oMdlAllRecord.refresh();
 		},
 
 		onInit: function () {
 			//get DataBase loggedin
 			this.sDataBase = jQuery.sap.storage.Storage.get("dataBase");	
-			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");	
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+
+			var route = this.getOwnerComponent().getRouter().getRoute("PaymentProcessing");
+     		route.attachPatternMatched(this.onRoutePatternMatched,this);
 			
 			this.oMdlEditRecord = new JSONModel("model/paymentprocessing.json");
 			this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
@@ -141,6 +146,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -165,6 +171,7 @@ sap.ui.define([
 					aReturnResult = [];
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -192,6 +199,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -366,7 +374,7 @@ sap.ui.define([
 			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Record Code : " + BatchNum + " [EDIT]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
-			// this.onClearField();
+			// this.onCleaClearField();
 			// this.getView().byId("btnPrint").setVisible(true);
 			// this.getView().byId("btnCancel").setVisible(true);
 			if (sStatus === "Draft" || sStatus === "Rejected"){
@@ -426,6 +434,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -453,6 +462,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -477,6 +487,7 @@ sap.ui.define([
 					var oMessage = xhr.responseJSON["error"].message.value;	
 					AppUI5.fErrorLogs(table,"Update Batch","null","null",oMessage,"Update",this.sUserCode,"null",Data);		
 					sap.m.MessageToast.show(oMessage);
+					console.error(Message);
 					//console.error(xhr);
 				},
 				success: function (json) {
@@ -570,6 +581,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {
 				},
@@ -595,6 +607,7 @@ sap.ui.define([
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -758,7 +771,7 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.Code = iCode;
 						oT_PAYMENT_PROCESSING_D.Name = iCode;
 						oT_PAYMENT_PROCESSING_D.U_App_DocNum =  BatchCode;//this.oMdlEditRecord.getData().allopenAP[d].DocumentNo;
-						oT_PAYMENT_PROCESSING_D.U_App_Priority = "";
+						oT_PAYMENT_PROCESSING_D.U_App_Priority = this.oMdlAP.getData().allopenAP[iCounter].Priority;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDocType = this.oMdlAP.getData().allopenAP[iCounter].InvoiceType;
 						oT_PAYMENT_PROCESSING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[iCounter].DocNum;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceNo = this.oMdlAP.getData().allopenAP[iCounter].DocEntry;
@@ -817,6 +830,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
@@ -830,6 +844,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("U_APP_OPPD,U_APP_PPD1","Add Batch","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
+					console.error(oMessage);
 				}else{
 					if (results) {
 						this.getView().byId("DocumentNo").setValue(BatchCode);

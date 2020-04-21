@@ -20,6 +20,13 @@ sap.ui.define([
 	return Controller.extend("com.apptech.app-bankinteg.controller.PaymentFileExtraction", {
 		onRoutePatternMatched: function (event) {
 			document.title = "BFI BANKINTEG";
+			//refresh main table
+			this.fPrepareTable(false,"");
+			this.oMdlAllRecord.refresh();
+
+			//refresh batch list
+			this.fGetRecords("getAllSavedBatch", "Batch");
+			this.oMdlBatch.refresh();
 		},
 
 		onInit: function () {
@@ -29,6 +36,9 @@ sap.ui.define([
 
 			var oModelProd = new JSONModel("model/record.json");
 			this.getView().setModel(oModelProd);
+
+			var route = this.getOwnerComponent().getRouter().getRoute("PaymentFileExtraction");
+     		route.attachPatternMatched(this.onRoutePatternMatched,this);
 
 			//getButtons
 			this.oMdlButtons = new JSONModel();
@@ -147,7 +157,7 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					MessageToast.show(error);
+					//MessageToast.show(error);
 					if (xhr.status === 400) {
 						sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
 						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
@@ -155,6 +165,7 @@ sap.ui.define([
 						var Message = xhr.responseJSON["error"].message.value;			
 						sap.m.MessageToast.show(Message);
 					}
+					console.error(xhr.responseJSON["error"].message.value);
 				},
 				success: function (json) {},
 				context: this
@@ -190,6 +201,7 @@ sap.ui.define([
 						var Message = xhr.responseJSON["error"].message.value;			
 						sap.m.MessageToast.show(Message);
 					}
+					console.error(xhr.responseJSON["error"].message.value);
 				},
 				success: function (json) {},
 				context: this
@@ -270,7 +282,7 @@ sap.ui.define([
 						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 					},
 					error: function (xhr, status, error) {
-						MessageToast.show(error);
+						//MessageToast.show(error);
 						if (xhr.status === 400) {
 							sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
 							sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
@@ -278,6 +290,7 @@ sap.ui.define([
 							var Message = xhr.responseJSON["error"].message.value;			
 							sap.m.MessageToast.show(Message);
 						}
+						console.error(xhr.responseJSON["error"].message.value);
 					},
 					success: function (json) {},
 					context: this
@@ -299,7 +312,7 @@ sap.ui.define([
 					value4 = "",
 					dbName = "SBODEMOAU_SL";
 				value1 = sBatchNum;
-				value2 = sDraftNum;
+				value2 = "'" + sDraftNum + "'"
 				queryTag = "getBatchData";
 				this.fGetSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
 				this.oMdlAP.refresh();
@@ -385,6 +398,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -396,6 +410,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("U_APP_ODOP,PaymentDrafts","Cancel Batch","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
+					console.error(oMessage);
 				}else{
 					if (results) {
 						MessageToast.show("Cancelled Transaction!");
@@ -533,6 +548,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(xhr.responseJSON["error"].message.value);
 				},
 				success: function (json) {
 					jQuery.sap.log.debug(json);
@@ -547,6 +563,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("PaymentDrafts","Posts Draft OP","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
+					console.error(oMessage);
 				}else{
 					if (results) {
 						var re = /\(([^)]+)\)/g;
@@ -578,7 +595,7 @@ sap.ui.define([
 		onClickSearch: function (oEvent) {
 			var queryTag = "",
 				value1 = "",
-				value2 = 0,
+				value2 = "'0'",
 				value3 = "",
 				value4 = "",
 				dbName = "SBODEMOAU_SL";
@@ -603,7 +620,10 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -626,7 +646,10 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					sap.m.MessageToast.show(error);
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {
 					// var Message = xhr.responseJSON["error"].message.value;			
@@ -661,9 +684,10 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;
-					AppUI5.fErrorLogs("PaymentDrafts","Update Draft Batch Payment","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null",oData);			
+					AppUI5.fErrorLogs("PaymentDrafts","Update Draft Batch Payment","null","null",Message,"Bank Integ Payemnt Extraction",this.sUserCode,"null",oData);			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -687,6 +711,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -790,6 +815,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
+					console.error(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -799,15 +825,18 @@ sap.ui.define([
 					var oStartIndex = results.search("value") + 10;
 					var oEndIndex = results.indexOf("}") - 8;
 					var oMessage = results.substring(oStartIndex,oEndIndex);
+
+					// var trimmedString = sBodyRequest.substring(0, 254);
 					AppUI5.fErrorLogs("U_APP_ODOP,U_APP_DOP1","Add Batch Payment","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
+					console.error(oMessage);
 				}else{
 					if (results) {
 						if (isDraft) {
 							MessageToast.show("Saved as Draft!");
-							this.fClearFields();
 							this.fPrepareTable(false);
 							this.oMdlAllRecord.refresh();
+							this.fClearFields();
 						}
 					}
 				}
@@ -871,11 +900,39 @@ sap.ui.define([
 										+ "~" + sVATApplicable + "~" + sWHTDateBaseAmount;
 				this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
+				// for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
+				// 	if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[i].Priority
+				// 		&& this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
+				// 		&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
+						
+				// 		var sInvoiceDate = this.oMdlAP.getData().allopenAP[i].DocDate;
+				// 		var sYear = sInvoiceDate.substring(0, 4);
+				// 		var sMonth = sInvoiceDate.substring(4, 6);
+				// 		var sDay = sInvoiceDate.substring(6, 8);
+		
+				// 		sInvoiceDate =  sMonth + '/' + sDay + '/' + sYear.toString().substr(-2) ;
+
+						
+				// 		this.oContent.Details = "I" + "~"
+				// 								+ this.oMdlAP.getData().allopenAP[i].DocNum + "~" 
+				// 								+ sInvoiceDate + "~" 
+				// 								+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
+				// 								+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
+				// 								+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
+				// 					   			+ "~" + this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2);
+				// 		iTotalAmount = iTotalAmount + sInvoiceAmount ;
+				// 		this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
+
+				// 	}
+				// }
+				
+				//NDC 04/17/2020
 				this.oContent.Details = sRecordIdentifier + "~" + sInvoiceNo + "~" + sInvoiceDate + "~" + sDesc
 									   + "~" + sInvoiceAmount.toFixed(2) + "~" + sInvoiceWHTAmount + "~" + sInvoiceVATAmount
 									   + "~" + sInvoiceNetAmount.toFixed(2);
-				iTotalAmount = iTotalAmount + sInvoiceAmount ;
-				 this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
+						iTotalAmount = iTotalAmount + sInvoiceAmount ;
+						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
+
 
 				// this.oContent.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc
 				// 					   + "~" + InvoiceAmount + "~" + InvoiceWHTAmount + "~" + InvoiceVATAmount

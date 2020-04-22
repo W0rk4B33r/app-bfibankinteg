@@ -77,7 +77,7 @@ sap.ui.define([
 					jQuery.sap.storage.Storage.put("dataBase",sDBCompany.getSelectedItem().getKey());
 					jQuery.sap.storage.Storage.put("userCode",sUserName.getValue());
 					jQuery.sap.storage.Storage.put("isLogin",true);
-					sap.ui.core.UIComponent.getRouterFor(this).navTo("PaymentProcessing");
+					sap.ui.core.UIComponent.getRouterFor(this).navTo("Main");
 					AppUI5.fHideBusyIndicator();
 				}
 			});

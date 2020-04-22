@@ -850,7 +850,8 @@ sap.ui.define([
 			this.dataObject= {};
 			var sBatchNum = "";
 			var iIndex = 0;
-			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+			var iIndex2 = 0;
+			for (var d = iIndex2; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				if(sBatchNum !== "" ){
 					if(sBatchNum !== this.oMdlAP.getData().allopenAP[d].BatchNum){
 						iIndex = iIndex + 1;
@@ -893,55 +894,62 @@ sap.ui.define([
 				var sInvoiceVATAmount = "";
 				var sInvoiceNetAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
 
-				this.oContent.Details = "D" + "~" + sInvoiceAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
+				for (var ii = d; ii < this.oMdlAP.getData().allopenAP.length; ii++) {
+					if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[ii].Priority
+						&& this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[ii].CardCode
+						&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[ii].DocDueDate) {
+							iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[ii].DocTotal;
+					}	
+				}	
+				this.oContent.Details = "D" + "~" + iTotalAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
 										+ "~" + sTIN + "~" + sZipCode + "~" + sPayeeCode + "~" + sPNBAccountNo	+ "~" + sDate + "~" + sPrintingBranch
 										+ "~" + sDispatchMode + "~" + sDispatchTo + "~" + sDispatchCode + "~" + sDispatchToName 
 										+ "~" + sFileRefNo + "~" + sWHTApplicable + "~" + sWHTTaxCode + "~" + sWHTTaxRate 
 										+ "~" + sVATApplicable + "~" + sWHTDateBaseAmount;
 				this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
-				// for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
-				// 	if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[i].Priority
-				// 		&& this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
-				// 		&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
+				for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
+					if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[i].Priority
+						&& this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
+						&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
 						
-				// 		var sInvoiceDate = this.oMdlAP.getData().allopenAP[i].DocDate;
-				// 		var sYear = sInvoiceDate.substring(0, 4);
-				// 		var sMonth = sInvoiceDate.substring(4, 6);
-				// 		var sDay = sInvoiceDate.substring(6, 8);
+						var sInvDate = this.oMdlAP.getData().allopenAP[i].DocDate;
+						// var sYear = sInvoiceDate.substring(0, 4);
+						// var sMonth = sInvoiceDate.substring(4, 6);
+						// var sDay = sInvoiceDate.substring(6, 8);
 		
-				// 		sInvoiceDate =  sMonth + '/' + sDay + '/' + sYear.toString().substr(-2) ;
+						sInvDate =  sInvDate.substring(4, 6) + '/' + sInvDate.substring(6, 8) + '/' + sInvDate.substring(0, 4).toString().substr(-2) ;
 
 						
-				// 		this.oContent.Details = "I" + "~"
-				// 								+ this.oMdlAP.getData().allopenAP[i].DocNum + "~" 
-				// 								+ sInvoiceDate + "~" 
-				// 								+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
-				// 								+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
-				// 								+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
-				// 					   			+ "~" + this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2);
+						this.oContent.Details = "I" + "~"
+												+ this.oMdlAP.getData().allopenAP[i].DocNum + "~" 
+												+ sInvDate + "~" 
+												+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
+												+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
+												+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
+									   			+ "~" + this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2);
+						// iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[i].DocTotal;
+						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
+						iIndex2 = i;	
+					}
+				}
+
+				// this.oContent.Details = "D" + "~" + iTotalAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
+				// 						+ "~" + sTIN + "~" + sZipCode + "~" + sPayeeCode + "~" + sPNBAccountNo	+ "~" + sDate + "~" + sPrintingBranch
+				// 						+ "~" + sDispatchMode + "~" + sDispatchTo + "~" + sDispatchCode + "~" + sDispatchToName 
+				// 						+ "~" + sFileRefNo + "~" + sWHTApplicable + "~" + sWHTTaxCode + "~" + sWHTTaxRate 
+				// 						+ "~" + sVATApplicable + "~" + sWHTDateBaseAmount;
+				// this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
+				
+				// //NDC 04/17/2020
+				// this.oContent.Details = sRecordIdentifier + "~" + sInvoiceNo + "~" + sInvoiceDate + "~" + sDesc
+				// 					   + "~" + sInvoiceAmount.toFixed(2) + "~" + sInvoiceWHTAmount + "~" + sInvoiceVATAmount
+				// 					   + "~" + sInvoiceNetAmount.toFixed(2);
 				// 		iTotalAmount = iTotalAmount + sInvoiceAmount ;
 				// 		this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 
-				// 	}
-				// }
-				
-				//NDC 04/17/2020
-				this.oContent.Details = sRecordIdentifier + "~" + sInvoiceNo + "~" + sInvoiceDate + "~" + sDesc
-									   + "~" + sInvoiceAmount.toFixed(2) + "~" + sInvoiceWHTAmount + "~" + sInvoiceVATAmount
-									   + "~" + sInvoiceNetAmount.toFixed(2);
-						iTotalAmount = iTotalAmount + sInvoiceAmount ;
-						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
-
-
-				// this.oContent.Details = RecordIdentifier + "~" + InvoiceNo + "~" + InvoiceDate + "~" + Desc
-				// 					   + "~" + InvoiceAmount + "~" + InvoiceWHTAmount + "~" + InvoiceVATAmount
-				// 					   + "~" + InvoiceNetAmount;
-				//  totalAmount = totalAmount + InvoiceAmount ;
-				//  this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
-
-				 //this.oRecord.Details.push(JSON.parse(JSON.stringify(this.header)),JSON.parse(JSON.stringify(this.Details)));
 				 sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
+				 d = iIndex2;
 				}
 			this.oMdlFileExport = new JSONModel(this.oRecord);
 			this.getView().setModel(this.oMdlFileExport, "oMdlFileExport");

@@ -14,10 +14,15 @@ sap.ui.define([
   
 	return Controller.extend("com.apptech.app-bankinteg.controller.Main", {
   
+	onRoutePatternMatched: function (event) {
+		this.onInit();
+	},
+
+
 	onInit: function () {
 		//PLACE HOLDER OF PROJECT OBJECT
 		this.sDatabase = jQuery.sap.storage.Storage.get("dataBase");	
-		this.sUserCode = jQuery.sap.storage.Storage.get("userCode");	
+		this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
 		
 		//this.getView().byId("userCode").setText(this.userCode);
 		

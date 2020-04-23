@@ -791,7 +791,7 @@ sap.ui.define([
 					}
 				}
 				oT_PAYMENT_EXTRACTING_D.U_App_DocEntry = (!isDraft ? aDocEntries[iIndex] : "");
-				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo =  (!isDraft ? this.oMdlPayExtract.getData().EditRecord.DRAFTNO : sDraftNo);
+				oT_PAYMENT_EXTRACTING_D.U_App_DraftNo =  (this.oMdlPayExtract.getData().EditRecord.DRAFTNO === "" ? sDraftNo : this.oMdlPayExtract.getData().EditRecord.DRAFTNO);
 				oT_PAYMENT_EXTRACTING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[d].DocNum;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedBy = this.sUserCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_CreatedDate = this.fGetTodaysDate();

@@ -14,19 +14,15 @@ sap.ui.define([
   
 	return Controller.extend("com.apptech.app-bankinteg.controller.Main", {
   
-	onRoutePatternMatched: function (event) {
-		this.onInit();
-	},
-
-
 	onInit: function () {
 		//PLACE HOLDER OF PROJECT OBJECT
 		this.sDatabase = jQuery.sap.storage.Storage.get("dataBase");	
 		this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
-		
-		//this.getView().byId("userCode").setText(this.userCode);
-		
-		//this.oMdlMenu = new JSONModel("model/menus.json");
+		//set user Name
+		this.getView().byId("userCode").setText(this.sUserCode);
+
+		this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+    	this._oRouter.attachRouteMatched(this.handleRouteMatched, this);
 		//get Menu/s
 		this.oMdlMenu = new JSONModel();
 		this.fGetAllMenu();
@@ -52,7 +48,16 @@ sap.ui.define([
 			}
 		
 	},
-	  
+		  
+		handleRouteMatched : function (evt) {
+			this.sDatabase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			
+			this.getView().byId("userCode").setText(this.sUserCode);
+			this.fGetAllMenu();
+
+			this.router = this.getOwnerComponent().getRouter();
+		},
 		//-------------------------------------------
 		onRoutePatternMatched: function (event) {
 			var key = event.getParameter("name");
@@ -62,6 +67,10 @@ sap.ui.define([
 		onAfterShow: function (router) {
 			router.navTo("PaymentProcessing");
 		},
+
+		onBeforeShow: function(evt) {
+			sap.m.MessageToast.show("Test");
+		 },
 
 		onSelect: function (event) {
 			this.router = this.getOwnerComponent().getRouter();
@@ -127,8 +136,8 @@ sap.ui.define([
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
+					// var Message = xhr.responseJSON["error"].message.value;			
+					// sap.m.MessageToast.show(Message);
 				},
 				success: function (json) {},
 				context: this
@@ -151,6 +160,7 @@ sap.ui.define([
 				success: function (json) {
 					sap.m.MessageToast.show("Session End"); 
 					jQuery.sap.storage.Storage.clear();	
+					//location.reload();
 					sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);		
 				}
 			});

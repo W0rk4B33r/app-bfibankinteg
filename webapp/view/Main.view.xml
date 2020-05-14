@@ -6,17 +6,17 @@ xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt">
 		<tnt:header>
 			<!--homeIcon="./css/apptechlogo.PNG"-->
 			<f:ShellBar title="BFI BANKINTEGRATION" class="myShellBar" secondTitle="" showMenuButton="true" homeIconPressed="onIconPress"  showCopilot="false"
-				showNotifications="true" menuButtonPressed="onMenuButtonPress" showProductSwitcher="false" notificationsNumber="2">
+				menuButtonPressed="onMenuButtonPress" showProductSwitcher="false" >
 				<f:additionalContent>
-					<Button text="Admin" icon="sap-icon://customer"  type="Transparent" press="handleOpen">
+					<Button id="userCode" icon="sap-icon://customer"  type="Transparent" press="handleOpen">
 						<layoutData>
 							<OverflowToolbarLayoutData priority="NeverOverflow" />
 						</layoutData>
 					</Button>
 				</f:additionalContent>
-				<f:searchManager>
+				<!-- <f:searchManager>
 					<f:SearchManager/>
-				</f:searchManager>
+				</f:searchManager> -->
 			</f:ShellBar>
 		</tnt:header>
 		<tnt:sideContent>

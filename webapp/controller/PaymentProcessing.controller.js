@@ -550,13 +550,25 @@ sap.ui.define([
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 		},
-		onAdd: function (oEvent) {
+		fVAlidate: function(){
 			//Check if ther is selected line items
+			if (this.getView().byId("SupplierCode").getValue() === "") {
+				MessageToast.show("Please choose Supplier!");
+				return false;
+			}	
 			var oTable = this.getView().byId("tblDetails");
 			var selectedIndeices=oTable.getSelectedIndices();
 			if(selectedIndeices.length === 0){
 				sap.m.MessageToast.show("Please select line item/s!");
-				return;
+				return false;
+			}
+			return true;
+		},
+		onAdd: function (oEvent) {
+			this.getView().byId("btnDraft").setEnabled(false);
+			if(!this.fVAlidate()){
+				this.getView().byId("btnDraft").setEnabled(true);
+				return false;
 			}
 			AppUI5.fShowBusyIndicator(4000);
 			this.sStatus = "Draft";
@@ -564,6 +576,7 @@ sap.ui.define([
 			//this.deleteIfExisting();
 			this.onAddProcess();
 			AppUI5.fHideBusyIndicator();
+			this.getView().byId("btnDraft").setEnabled(true);
 		},
 		
 		deleteIfExisting: function(){
@@ -631,17 +644,16 @@ sap.ui.define([
 			return HeaderCode;
 		},
 		onSave: function (oEvent) {
-			var oTable = this.getView().byId("tblDetails");
-			var selectedIndeices=oTable.getSelectedIndices();
-			if(selectedIndeices.length === 0){
-				sap.m.MessageToast.show("Please select line item/s!");
-				return;
+			this.getView().byId("btnSave").setEnabled(false);
+			if(!this.fVAlidate){
+				this.getView().byId("btnSave").setEnabled(true);
+				return false;
 			}
 			AppUI5.fShowBusyIndicator(4000);
 			this.sStatus = "Saved";
-			//this.deleteIfExisting();
 			this.onAddProcess();
 			AppUI5.fHideBusyIndicator();
+			this.getView().byId("btnSave").setEnabled(true);
 		},
 		onDeleteRow: function(oEvent){
 			var oTable = this.getView().byId("tblDetails");
@@ -827,10 +839,10 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
-					AppUI5.fHideBusyIndicator();
-					console.error(Message);
+					// var Message = xhr.responseJSON["error"].message.value;			
+					// sap.m.MessageToast.show(Message);
+					// AppUI5.fHideBusyIndicator();
+					// console.error(Message);
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
@@ -852,6 +864,7 @@ sap.ui.define([
 						this.onClearField();
 						this.oMdlBatch.refresh();
 						that.fPrepareTable(false);
+						this.oMdlAllRecord.refresh();
 					}
 				}
 			});

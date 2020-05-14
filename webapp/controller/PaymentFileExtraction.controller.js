@@ -21,7 +21,7 @@ sap.ui.define([
 		onRoutePatternMatched: function (event) {
 			document.title = "BFI BANKINTEG";
 			//refresh main table
-			this.fPrepareTable(false,"");
+			this.fPrepareTable(false);
 			this.oMdlAllRecord.refresh();
 
 			//refresh batch list
@@ -54,6 +54,7 @@ sap.ui.define([
 			this.getView().setModel(this.oMdlButtons, "buttons");
 
 			this.oExport = new JSONModel();
+			this.oMdlLineNum = new JSONModel();
 			// this.oMdlBank.setJSON("{\"allpnbbank\" : " + JSON.stringify(results) + "}");
 			// this.getView().setModel(this.oMdlBank, "oMdlBank");
 
@@ -425,7 +426,7 @@ sap.ui.define([
 		onPostDraftOP: function (oEvent) {
 			AppUI5.fShowBusyIndicator();
 			if (!this.fCheckIfBlankField()) {
-				return;
+				return false;
 			}
 			var oRecord = {};
 			var oPaymentInvoices = {};
@@ -459,18 +460,26 @@ sap.ui.define([
 				oRecord.DueDate = this.fGetTodaysDate; //"2020-02-06";
 				var iTotal = 0;
 				var iLineNum = 0;
+				var sInvType = "";
 				for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
 					if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
 					&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
+						if(this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP'){
+							sInvType = "it_PurchaseInvoice";
+						}else if(this.oMdlAP.getData().allopenAP[d].InvoiceType === 'APDP'){
+							sInvType = "it_PurchaseDownPayment";
+						}else{
+							sInvType = "it_PurchaseCreditNote";
+						}
 						iIndex = i;
-						oPaymentInvoices.LineNum = iLineNum;
+						oPaymentInvoices.LineNum = 0;
 						oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[i].DocEntry;
 						oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
 						oPaymentInvoices.AppliedFC = 0.0;
 						oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
 						oPaymentInvoices.DocRate = 0.0;
 						oPaymentInvoices.DocLine = 0;
-						oPaymentInvoices.InvoiceType = "it_PurchaseInvoice";
+						oPaymentInvoices.InvoiceType = sInvType;
 						oPaymentInvoices.DiscountPercent = 0.0;
 						oPaymentInvoices.PaidSum = 0.0;
 						oPaymentInvoices.InstallmentId = 1;
@@ -492,7 +501,7 @@ sap.ui.define([
 						oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
 
 						Array.prototype.push.apply(oRecord.PaymentInvoices);
-						iLineNum = iLineNum + 1;
+						//iLineNum = iLineNum + 1;
 					}
 				}
 				// oPaymentInvoices.LineNum = 0;
@@ -584,9 +593,13 @@ sap.ui.define([
 						this.fSavePostedDraft(aDocEntries, false);
 						this.fExportData(aDocEntries,"N");
 						sap.m.MessageToast.show("Successfully posted Draft Outgoing Payment!");
-						this.fClearFields();
-						this.fPrepareTable(false);
+						// if(this.oMdlAllRecord.getData() === {}){
+						// 	this.fPrepareTable(true)
+						// }else{this.fPrepareTable(false)}
+						// // this.fPrepareTable(this.oMdlAllRecord.getData() === {} ? true : false);
+						this.fPrepareTable(false)
 						this.oMdlAllRecord.refresh();
+						this.fClearFields();
 						AppUI5.fHideBusyIndicator();
 					}	
 				}

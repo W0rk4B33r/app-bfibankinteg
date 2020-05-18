@@ -459,8 +459,10 @@ sap.ui.define([
 				oRecord.DocTypte = "rSupplier";
 				oRecord.DueDate = this.fGetTodaysDate; //"2020-02-06";
 				var iTotal = 0;
-				var iLineNum = 0;
+				var iDocEntry_ = 0;
+				var iSumApplied = 0;
 				var sInvType = "";
+				var iCounter = 0;
 				for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
 					if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
 					&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
@@ -472,63 +474,48 @@ sap.ui.define([
 							sInvType = "it_PurchaseCreditNote";
 						}
 						iIndex = i;
-						oPaymentInvoices.LineNum = 0;
-						oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[i].DocEntry;
-						oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
-						oPaymentInvoices.AppliedFC = 0.0;
-						oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
-						oPaymentInvoices.DocRate = 0.0;
-						oPaymentInvoices.DocLine = 0;
-						oPaymentInvoices.InvoiceType = sInvType;
-						oPaymentInvoices.DiscountPercent = 0.0;
-						oPaymentInvoices.PaidSum = 0.0;
-						oPaymentInvoices.InstallmentId = 1;
-						oPaymentInvoices.WitholdingTaxApplied = 0.0;
-						oPaymentInvoices.WitholdingTaxAppliedFC = 0.0;
-						oPaymentInvoices.WitholdingTaxAppliedSC = 0.0;
-						oPaymentInvoices.LinkDate = null;
-						oPaymentInvoices.DistributionRule = null;
-						oPaymentInvoices.DistributionRule2 = null;
-						oPaymentInvoices.DistributionRule3 = null;
-						oPaymentInvoices.DistributionRule4 = null;
-						oPaymentInvoices.DistributionRule5 = null;
-						oPaymentInvoices.TotalDiscount = 0.0;
-						oPaymentInvoices.TotalDiscountFC = 0.0;
-						oPaymentInvoices.TotalDiscountSC = 0.0;
+						iSumApplied = this.oMdlAP.getData().allopenAP[i].DocTotal;
+						if (iDocEntry_ === this.oMdlAP.getData().allopenAP[i].DocEntry){
+							oRecord.PaymentInvoices[iCounter - 1].SumApplied = iTotal + (Math.round(iSumApplied * 100) / 100);
+							// oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
+							// Array.prototype.push.apply(oRecord.PaymentInvoices);
+							iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
+							
+						}else{
+							
+							oPaymentInvoices.LineNum = 0;
+							oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[i].DocEntry;
+							oPaymentInvoices.SumApplied = (Math.round(iSumApplied * 100) / 100); //55.0;
+							oPaymentInvoices.AppliedFC = 0.0;
+							//oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
+							oPaymentInvoices.DocRate = 0.0;
+							oPaymentInvoices.DocLine = 0;
+							oPaymentInvoices.InvoiceType = sInvType;
+							oPaymentInvoices.DiscountPercent = 0.0;
+							oPaymentInvoices.PaidSum = 0.0;
+							oPaymentInvoices.InstallmentId = 1;
+							oPaymentInvoices.LinkDate = null;
+							oPaymentInvoices.DistributionRule = null;
+							oPaymentInvoices.DistributionRule2 = null;
+							oPaymentInvoices.DistributionRule3 = null;
+							oPaymentInvoices.DistributionRule4 = null;
+							oPaymentInvoices.DistributionRule5 = null;
+							oPaymentInvoices.TotalDiscount = 0.0;
+							oPaymentInvoices.TotalDiscountFC = 0.0;
+							oPaymentInvoices.TotalDiscountSC = 0.0;
 
-						iTotal = iTotal + this.oMdlAP.getData().allopenAP[i].PaymentAmount;
-						//oRecord.PaymentInvoices.push(oPaymentInvoices);
-						oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
+							iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
+							//oRecord.PaymentInvoices.push(oPaymentInvoices);
+							oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
 
-						Array.prototype.push.apply(oRecord.PaymentInvoices);
-						//iLineNum = iLineNum + 1;
+							Array.prototype.push.apply(oRecord.PaymentInvoices);
+							
+							iDocEntry_ = this.oMdlAP.getData().allopenAP[i].DocEntry;
+							iCounter = iCounter + 1;
+						}
+						
 					}
 				}
-				// oPaymentInvoices.LineNum = 0;
-				// oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[d].DocEntry;
-				// oPaymentInvoices.SumApplied = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
-				// oPaymentInvoices.AppliedFC = 0.0;
-				// oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[d].PaymentAmount; //55.0;
-				// oPaymentInvoices.DocRate = 0.0;
-				// oPaymentInvoices.DocLine = 0;
-				// oPaymentInvoices.InvoiceType = "it_PurchaseInvoice";
-				// oPaymentInvoices.DiscountPercent = 0.0;
-				// oPaymentInvoices.PaidSum = 0.0;
-				// oPaymentInvoices.InstallmentId = 1;
-				// oPaymentInvoices.WitholdingTaxApplied = 0.0;
-				// oPaymentInvoices.WitholdingTaxAppliedFC = 0.0;
-				// oPaymentInvoices.WitholdingTaxAppliedSC = 0.0;
-				// oPaymentInvoices.LinkDate = null;
-				// oPaymentInvoices.DistributionRule = null;
-				// oPaymentInvoices.DistributionRule2 = null;
-				// oPaymentInvoices.DistributionRule3 = null;
-				// oPaymentInvoices.DistributionRule4 = null;
-				// oPaymentInvoices.DistributionRule5 = null;
-				// oPaymentInvoices.TotalDiscount = 0.0;
-				// oPaymentInvoices.TotalDiscountFC = 0.0;
-				// oPaymentInvoices.TotalDiscountSC = 0.0;
-				// iTotal = iTotal + this.oMdlAP.getData().allopenAP[d].PaymentAmount;
-				// oRecord.PaymentInvoices.push(JSON.stringify(oPaymentInvoices));
 
 				// Array.prototype.push.apply(oRecord.PaymentInvoices);
 				oRecord.CashSum = iTotal;
@@ -537,11 +524,8 @@ sap.ui.define([
 					"tableName": "PaymentDrafts",
 					"data": oRecord
 				}))));
-				//iIndex = iIndex + 1;
-				//d = d + iIndex;
 				d = iIndex;
 				oRecord.PaymentInvoices = [];
-				//this.fPostPaymentDraft(oRecord);
 			}
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);

@@ -184,14 +184,14 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="12rem">
+												<!-- <t:Column width="12rem">
 													<Label text="Description"/>
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>Dscription'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
-												</t:Column>
+												</t:Column> -->
 												<t:Column width="8rem">
 													<Label text="Supplier Code"/>
 													<t:template>
@@ -220,7 +220,7 @@
 													<Label text="Invoice Total"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -228,7 +228,7 @@
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>OpenSum', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -236,7 +236,7 @@
 													<Label text="Payment Amount"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>

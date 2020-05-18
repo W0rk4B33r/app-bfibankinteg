@@ -114,7 +114,7 @@ xmlns:f="sap.ui.layout.form"
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
-										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Multi" visibleRowCount="6" ariaLabelledBy="title">
+										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Single" visibleRowCount="6" ariaLabelledBy="title">
 											<t:columns>
 												<t:Column width="5rem">
 													<Label text="Priority"/>
@@ -180,14 +180,14 @@ xmlns:f="sap.ui.layout.form"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="12rem">
+												<!-- <t:Column width="12rem">
 													<Label text="Description"/>
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>Dscription'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
-												</t:Column>
+												</t:Column> -->
 												<t:Column width="8rem">
 													<Label text="Supplier Code"/>
 													<t:template>
@@ -216,7 +216,7 @@ xmlns:f="sap.ui.layout.form"
 													<Label text="Invoice Total"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -231,9 +231,9 @@ xmlns:f="sap.ui.layout.form"
 												<t:Column width="5rem">
 													<Label text="Payment Amount"/>
 													<t:template>
-														<Input
-															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
-															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+														<Input 
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															textAlign="End" fieldWidth="80%" width="100%"/>
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">

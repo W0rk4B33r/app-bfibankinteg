@@ -246,12 +246,12 @@ sap.ui.define([
 				type: "PATCH",
 				contentType: "application/json",
 				data: JSON.stringify(oRecord), //If batch, body data should not be JSON.stringified
-				// xhrFields: {
-				// 	withCredentials: true
-				// },
+				xhrFields: {
+					withCredentials: true
+				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;		
-					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null",JSON.stringify(oRecord));	
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",Message,"Bank Integ Payment Uploading",this.sUserCode,"null",JSON.stringify(oRecord));	
 					sap.m.MessageToast.show(Message);
 					console.error(Message);
 				},

@@ -802,7 +802,10 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedBy= this.sUserCode;
 						oT_PAYMENT_PROCESSING_D.U_App_CreatedDate = this.getTodaysDate();
 						oT_PAYMENT_PROCESSING_D.U_App_DraftReference = (this.getView().byId("DocumentNo").getValue() === null ? "" : this.getView().byId("DocumentNo").getValue());
-						
+						oT_PAYMENT_PROCESSING_D.U_App_WTax = this.oMdlAP.getData().allopenAP[iCounter].WTaxAmount;
+						oT_PAYMENT_PROCESSING_D.U_App_Tax = this.oMdlAP.getData().allopenAP[iCounter].TaxAmount;
+						oT_PAYMENT_PROCESSING_D.U_App_WTaxRate = this.oMdlAP.getData().allopenAP[iCounter].Rate;
+						oT_PAYMENT_PROCESSING_D.U_App_TaxCode = this.oMdlAP.getData().allopenAP[iCounter].TaxCode;
 						aBatch.push(JSON.parse(JSON.stringify(({
 							"tableName": "U_APP_PPD1",
 							"data": oT_PAYMENT_PROCESSING_D//AppUI5.generateUDTCode();

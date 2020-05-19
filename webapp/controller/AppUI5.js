@@ -422,7 +422,7 @@ sap.ui.define([
 		fErrorLogs: function (sTableAffected,sOperation,sKey1,sKey2,sErrorDesc,sProcess,sProcessBy,sKey3,sRequest) {
 			//var returnValue = 0;
 			var oDate = this.getTodaysDate();
-			var sCode = this.generateUDTCode("GetLogCode");
+			var sCode = this.generateUDTCode("GetCode");
 			var sBodyRequest = {};
 			sBodyRequest.Code = sCode,
 			sBodyRequest.Name = sCode,

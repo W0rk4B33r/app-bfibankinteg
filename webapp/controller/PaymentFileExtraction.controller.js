@@ -449,9 +449,9 @@ sap.ui.define([
 				oRecord.CashAccount = null;
 				oRecord.DocCurrency = this.oMdlAP.getData().allopenAP[d].DocCur;
 
-				oRecord.CheckAccount = 161020;
+				//oRecord.CheckAccount = 161020;
 				oRecord.Remarks = null;
-				oRecord.Series = 15;
+				oRecord.Series = 18;
 				oRecord.TransactionCode = "";
 				oRecord.PaymentType = "bopt_None";
 				oRecord.TransferRealAmount = 0.0;

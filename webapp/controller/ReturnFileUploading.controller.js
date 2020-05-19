@@ -42,6 +42,8 @@ sap.ui.define([
 			this.getView().setModel(this.oMdlButtons, "buttons");
 		},
 		FileUpload: function(oEvent){
+			this.oMdlUploading.getData().Uploading.length = 0;
+
 			var oFileUploader = this.getView().byId("fileUploader");
 			var domRef = oFileUploader.getFocusDomRef();
 			var file = domRef.files[0];
@@ -79,12 +81,18 @@ sap.ui.define([
 			oRecord.PaymentChecks = [];
 			oRecord.PaymentInvoices = [];
 			oRecord.CashFlowAssignments = [];
+			var todayDate =new Date(Date.parse(this.oMdlUploading.getData().Uploading[0].PaymentDate));
+			var year = todayDate.getFullYear();
+			var month = todayDate.getMonth() + 1;
+			var date = todayDate.getDate();
+			var stringDate = `${year}-${month.toString().padStart(2,"0")}-${date.toString().padStart(2,"0")}`;
+
 			//header
 				// oRecord.DocNum = 512;
 				// oRecord.DocType = "rSupplier";
 				// oRecord.HandWritten = "tNO";
 				// oRecord.Printed = "tNO";
-				 oRecord.DocDate = new Date(Date.parse(this.oMdlUploading.getData().Uploading[0].PaymentDate));
+				 oRecord.DocDate = stringDate;
 				// oRecord.CardCode = this.oMdlUploading.getData().allopenAP[0].CardCode;
 				// oRecord.CardName = this.oMdlUploading.getData().allopenAP[0].CardName;
 				// oRecord.Address = null;
@@ -171,16 +179,23 @@ sap.ui.define([
 				sDocEntry = this.oMdlUploading.getData().Uploading[0].RefNum.replace(" ","");
 				for (var d = 0; d < this.oMdlUploading.getData().Uploading.length; d++) {
 					// //check details
+					var todayDate =new Date(Date.parse(this.oMdlUploading.getData().Uploading[d].CheckDate));
+					var year = todayDate.getFullYear();
+					var month = todayDate.getMonth() + 1;
+					var date = todayDate.getDate();
+					var stringDate = `${year}-${month.toString().padStart(2,"0")}-${date.toString().padStart(2,"0")}`;
+
 					oPaymentChecks.LineNum = 0;
-					oPaymentChecks.DueDate = new Date(Date.parse(this.oMdlUploading.getData().Uploading[d].CheckDate));//this.oMdlUploading.getData().Uploading[d].CheckDate;// "2020-02-06";
+					oPaymentChecks.DueDate = stringDate;
+					//new Date(Date.parse(this.oMdlUploading.getData().Uploading[d].CheckDate));//this.oMdlUploading.getData().Uploading[d].CheckDate;// "2020-02-06";
 					oPaymentChecks.CheckNumber = this.oMdlUploading.getData().Uploading[d].CheckNum; //1234;
 					oPaymentChecks.BankCode = "PNB";
-					oPaymentChecks.Branch = "123-0129";//"803-279";
+					//oPaymentChecks.Branch = "123-0129";//"803-279";
 					oPaymentChecks.AccounttNum = this.oMdlUploading.getData().Uploading[d].BankAccount;//"23058023";
 					oPaymentChecks.Details = null;
 					oPaymentChecks.Trnsfrable = "tNO";
 					oPaymentChecks.CheckSum = this.oMdlUploading.getData().Uploading[d].CheckAmount;//319.0;
-					oPaymentChecks.Currency = "AUD";
+					oPaymentChecks.Currency = "PHP";
 					oPaymentChecks.CountryCode = "PH";
 					oPaymentChecks.CheckAbsEntry = null;
 					//oPaymentChecks.CheckAccount =this.oMdlUploading.getData().Uploading[d].PaymentDate;// "161020";
@@ -274,20 +289,25 @@ sap.ui.define([
 				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts("+ sDocEntry + ")/SaveDraftToDocument",
 				type: "POST",
 				contentType: "application/json",
+				xhrFields: {
+					withCredentials: true
+				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;	
-					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",oMessage,"Bank Integ Payment Uploading",this.sUserCode,"null","null");			
+					AppUI5.fErrorLogs("PaymentDrafts","Post Outgoing","null","null",Message,"Bank Integ Payment Uploading",this.sUserCode,"null","null");			
 					sap.m.MessageToast.show(Message);
 					console.error(Message);
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Successfully posted!" );
+					this.oMdlUploading.getData().Uploading.length = 0;
 				},
 				context: this
 
 			}).done(function (results) {
 				if (results) {
 					sap.m.MessageToast.show("Successfully posted! " );
+					this.oMdlUploading.getData().Uploading.length = 0;
 				}
 			});
 		}

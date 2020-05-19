@@ -82,6 +82,12 @@ sap.ui.define([
 				}
 			});
 		},
+		//---- If Session is 30 mins Already 
+		// hidePanelAgain: function (passedthis) {
+        //     MessageToast.show("Timed Out");
+        //     jQuery.sap.storage.Storage.clear();
+        //     sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+        // },
 		//GET ALL Database
 		fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];

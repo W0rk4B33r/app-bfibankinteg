@@ -474,11 +474,9 @@ sap.ui.define([
 							sInvType = "it_PurchaseCreditNote";
 						}
 						iIndex = i;
-						iSumApplied = this.oMdlAP.getData().allopenAP[i].DocTotal;
+						iSumApplied = this.oMdlAP.getData().allopenAP[i].DocTotal - this.oMdlAP.getData().allopenAP[i].WTaxAmount;
 						if (iDocEntry_ === this.oMdlAP.getData().allopenAP[i].DocEntry){
 							oRecord.PaymentInvoices[iCounter - 1].SumApplied = iTotal + (Math.round(iSumApplied * 100) / 100);
-							// oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
-							// Array.prototype.push.apply(oRecord.PaymentInvoices);
 							iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
 							
 						}else{
@@ -495,7 +493,7 @@ sap.ui.define([
 							oPaymentInvoices.PaidSum = 0.0;
 							oPaymentInvoices.InstallmentId = 1;
 							oPaymentInvoices.LinkDate = null;
-							oPaymentInvoices.DistributionRule = null;
+							oPaymentInvoices.DistributionRule = null;	
 							oPaymentInvoices.DistributionRule2 = null;
 							oPaymentInvoices.DistributionRule3 = null;
 							oPaymentInvoices.DistributionRule4 = null;

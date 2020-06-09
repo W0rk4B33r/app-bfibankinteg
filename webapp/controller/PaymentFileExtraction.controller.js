@@ -893,7 +893,7 @@ sap.ui.define([
 					if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[ii].Priority
 						&& this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[ii].CardCode
 						&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[ii].DocDueDate) {
-							iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[ii].DocTotal;
+							iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[ii].DocTotal - this.oMdlAP.getData().allopenAP[ii].WTaxAmount;
 					}	
 				}	
 				this.oContent.Details = "D" + "~" + iTotalAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
@@ -922,7 +922,7 @@ sap.ui.define([
 												+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
 												+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
 												+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
-									   			+ "~" + this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2);
+									   			+ "~" + (this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) - this.oMdlAP.getData().allopenAP[i].WTaxAmount.toFixed(2));
 						// iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[i].DocTotal;
 						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 						iIndex2 = i;	

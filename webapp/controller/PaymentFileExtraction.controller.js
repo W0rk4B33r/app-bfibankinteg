@@ -464,7 +464,8 @@ sap.ui.define([
 				var sInvType = "";
 				var iCounter = 0;
 				for (var i = d; i < this.oMdlAP.getData().allopenAP.length; i++) {
-					if (this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
+					if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[i].Priority
+					&&this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
 					&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
 						if(this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP'){
 							sInvType = "it_PurchaseInvoice";
@@ -483,7 +484,7 @@ sap.ui.define([
 							
 							oPaymentInvoices.LineNum = 0;
 							oPaymentInvoices.DocEntry = this.oMdlAP.getData().allopenAP[i].DocEntry;
-							oPaymentInvoices.SumApplied = (Math.round(iSumApplied * 100) / 100); //55.0;
+							oPaymentInvoices.SumApplied = (Math.round(iSumApplied * 100) / 100); //2 decimal places
 							oPaymentInvoices.AppliedFC = 0.0;
 							//oPaymentInvoices.AppliedSys = this.oMdlAP.getData().allopenAP[i].PaymentAmount; //55.0;
 							oPaymentInvoices.DocRate = 0.0;
@@ -774,6 +775,9 @@ sap.ui.define([
 			}];
 			var sCode = "";
 			var sBatchNum = "";
+			var sSupplier = "";
+			var sCheckDate = "";
+			var sPriority = "";
 			var iIndex = 0;
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 				sCode = AppUI5.generateUDTCode("GetCode");
@@ -781,7 +785,9 @@ sap.ui.define([
 				oT_PAYMENT_EXTRACTING_D.Name = sCode;
 				oT_PAYMENT_EXTRACTING_D.U_App_DocNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
 				if(sBatchNum !== "" ){
-					if(sBatchNum !== this.oMdlAP.getData().allopenAP[d].BatchNum){
+					if(sPriority !== this.oMdlAP.getData().allopenAP[d].Priority
+						|| sSupplier !== this.oMdlAP.getData().allopenAP[d].CardCode
+						|| sCheckDate !== this.oMdlAP.getData().allopenAP[d].DocDueDate){
 						iIndex = iIndex + 1;
 					}
 				}
@@ -796,6 +802,9 @@ sap.ui.define([
 					"data": oT_PAYMENT_EXTRACTING_D
 				}))));
 				sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
+				sSupplier = this.oMdlAP.getData().allopenAP[d].CardCode;
+				sCheckDate = this.oMdlAP.getData().allopenAP[d].DocDueDate;
+				sPriority = this.oMdlAP.getData().allopenAP[d].Priority;
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
@@ -843,12 +852,16 @@ sap.ui.define([
 			this.oRecord.Details= [];
 			this.oContent={};
 			this.dataObject= {};
-			var sBatchNum = "";
+			var sSupplier = "";
+			var sCheckDate = "";
+			var sPriority = "";
 			var iIndex = 0;
 			var iIndex2 = 0;
 			for (var d = iIndex2; d < this.oMdlAP.getData().allopenAP.length; d++) {
-				if(sBatchNum !== "" ){
-					if(sBatchNum !== this.oMdlAP.getData().allopenAP[d].BatchNum){
+				if(sSupplier !== ""){
+					if(sPriority !== this.oMdlAP.getData().allopenAP[d].Priority 
+						||sSupplier !== this.oMdlAP.getData().allopenAP[d].CardCode
+						|| sCheckDate !== this.oMdlAP.getData().allopenAP[d].DocDueDate){
 						iIndex = iIndex + 1;
 					}
 				}
@@ -942,8 +955,9 @@ sap.ui.define([
 				// 					   + "~" + sInvoiceNetAmount.toFixed(2);
 				// 		iTotalAmount = iTotalAmount + sInvoiceAmount ;
 				// 		this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
-
-				 sBatchNum = this.oMdlAP.getData().allopenAP[d].BatchNum;
+				sSupplier = this.oMdlAP.getData().allopenAP[d].CardCode;
+				sCheckDate = this.oMdlAP.getData().allopenAP[d].DocDueDate;
+				sPriority = this.oMdlAP.getData().allopenAP[d].Priority;
 				 d = iIndex2;
 				}
 			this.oMdlFileExport = new JSONModel(this.oRecord);
@@ -971,54 +985,6 @@ sap.ui.define([
 			}
 			return true;
 		},
-		//Saving of Posted Draft
-		//Batch Fragment
-		// handleValueHelpBatch: function () {
-		// 	if (!this._oValueHelpDialogs) {
-		// 		Fragment.load({
-		// 			name: "com.apptech-experts.BFI_BANKINTEG.view.fragments.BatchDialogFragment",
-		// 			controller: this
-		// 		}).then(function (oValueHelpDialogs) {
-		// 			this._oValueHelpDialogs = oValueHelpDialogs;
-		// 			this.getView().addDependent(this._oValueHelpDialogs);
-		// 			this._configValueHelpDialogs();
-		// 			this._oValueHelpDialogs.open();
-		// 		}.bind(this));
-		// 	} else {
-		// 		this._configValueHelpDialogs();
-		// 		this._oValueHelpDialogs.open();
-		// 	}
-		// },
-		// _configValueHelpDialogs: function () {
-		// 	var sInputValue = this.byId("DocumentNo").getValue(),
-		// 		oModel = this.getView().getModel("oMdlBatch"),
-		// 		aList = oModel.getProperty("/allbatch");
-
-		// 	aList.forEach(function (oRecord) {
-		// 		oRecord.selected = (oRecord.U_App_DocNum === sInputValue);
-		// 	});
-		// },
-		// handleSearchBatch: function(oEvent) {
-		// 	var sValue = oEvent.getParameter("value");
-		// 	var oFilter = new Filter("U_App_DocNum", FilterOperator.Contains, sValue);
-		// 	var oBinding = oEvent.getSource().getBinding("items");
-		// 	oBinding.filter([oFilter]);
-		// },
-		// handleValueHelpCloseBatch: function (oEvent) {
-		// 	var aContexts = oEvent.getParameter("selectedContexts");
-		// 	var BatchDetails = {};
-		// 	if (aContexts && aContexts.length) {
-		// 		BatchDetails = aContexts.map(function (oContext) {
-		// 			var oBatch = {};
-		// 			oBatch.U_App_DocNum = oContext.getObject().U_App_DocNum;
-		// 			oBatch.U_App_SupplierName = oContext.getObject().U_App_SupplierName;
-		// 			return oBatch;
-		// 		});
-		// 	}
-		// 	oEvent.getSource().getBinding("items").filter([]);
-		// 	this.getView().byId("DocumentNo").setValue(BatchDetails[0].U_App_DocNum);
-		// 	this.oMdlEditRecord.refresh();
-		// },
 		onExit: function () {
 			if (this._oDialog) {
 				this._oDialog.destroy();

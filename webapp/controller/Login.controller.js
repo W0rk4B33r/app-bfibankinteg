@@ -73,7 +73,7 @@ sap.ui.define([
 				}
 			}).done(function (results) {
 				if (results) {
-					// this.onLoadUDTandUDF();
+					this.onLoadUDTandUDF();
 					sap.m.MessageToast.show("Welcome : " + sUserName.getValue() + "!"); 
 					jQuery.sap.storage.Storage.put("dataBase",sDBCompany.getSelectedItem().getKey());
 					jQuery.sap.storage.Storage.put("userCode",sUserName.getValue());
@@ -169,7 +169,12 @@ sap.ui.define([
 		//   AppUI5.createField("App_CreatedDate", "Created Date", "@APP_PPD1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedBy", "Updated By", "@APP_PPD1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedDate", "Updated Date", "@APP_PPD1", "db_Alpha", "", 30);
-		// 	 AppUI5.createField("App_DraftReference", "Draft Reference", "@APP_PPD1", "db_Alpha", "", 30)
+		// 	AppUI5.createField("App_DraftReference", "Draft Reference", "@APP_PPD1", "db_Alpha", "", 30)
+		// AppUI5.createField("App_WTax", "WTaxAmount", "@APP_PPD1", "db_Alpha", "", 30)
+		// 	AppUI5.createField("App_WTaxRate", "WTax Rate", "@APP_PPD1", "db_Alpha", "", 30)
+		// 	AppUI5.createField("App_Tax", "Tax", "@APP_PPD1", "db_Alpha", "", 30)
+		// 	AppUI5.createField("App_TaxCode", "Tax Code", "@APP_PPD1", "db_Alpha", "", 30)
+
 		//   // Saved Draft OutGoing Payment
 		//   AppUI5.createField("App_DocEntry", "Document Entry", "@APP_ODOP", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_DocNum", "Batch Number", "@APP_ODOP", "db_Alpha", "", 200);
@@ -198,7 +203,7 @@ sap.ui.define([
 		//   AppUI5.createField("App_UpdatedBy", "Updated By", "@APP_DOP1", "db_Alpha", "", 30);
 		//   AppUI5.createField("App_UpdatedDate", "Updated Date", "@APP_DOP1", "db_Alpha", "", 30);
 		//   //Add App_BatchNum in A/R invoice once tagged batch
-		//   AppUI5.createField("App_BatchNum", "Batch Number", "OPCH", "db_Alpha", "", 30);
+		//   //AppUI5.createField("App_BatchNum", "Batch Number", "OPCH", "db_Alpha", "", 30);
 		//   //Add App_BatchNum in A/P Downpayment once tagged batch
 		//   AppUI5.createField("App_BatchNum", "Batch Number", "ODPO", "db_Alpha", "", 30);
 
@@ -211,11 +216,11 @@ sap.ui.define([
 		// AppUI5.createField("App_Process", "Process", "@APP_ACTIVITYLOGS", "db_Alpha", "", 50);
 		// AppUI5.createField("App_ProcessBy", "Process By", "@APP_ACTIVITYLOGS", "db_Alpha", "", 30);
 		// AppUI5.createField("App_ProcessDate", "Process Date", "@APP_ACTIVITYLOGS", "db_Alpha", "", 30);
-		// AppUI5.createField("App_NEWVAL", "New Values", "@APP_ACTIVITYLOGS", "db_Memo", "" );
-		// AppUI5.createField("App_OLDVAL", "Old Values", "@APP_ACTIVITYLOGS", "db_Memo", "");
+		//   AppUI5.createField("APP_NEWVAL", "New Values", "@APP_ACTIVITYLOGS", "db_Memo", "" );
+		// AppUI5.createField("APP_OLDVAL", "Old Values", "@APP_ACTIVITYLOGS", "db_Memo", "");
 		// AppUI5.createField("App_Status", "Status", "@APP_ACTIVITYLOGS", "db_Alpha", "", 100);
 
-		//error Log
+		// //error Log
 		// AppUI5.createField("TableAffected", "Table Affected", "@APP_ERRORLOGS", "db_Alpha", "", 50);
 		// AppUI5.createField("Operation", "Operation", "@APP_ERRORLOGS", "db_Alpha", "", 50);
 		// AppUI5.createField("Key1", "Key1", "@APP_ERRORLOGS", "db_Alpha", "", 30);

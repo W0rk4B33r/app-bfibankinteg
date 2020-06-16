@@ -102,9 +102,9 @@ sap.ui.define([
 					//for (var d = 0; d < this.oMdlUploading.getData().Uploading.length; d++) {
 						// //check details
 						var stodayDate =new Date(Date.parse(this.oMdlUploading.getData().Uploading[d].CheckDate));
-						var syear = todayDate.getFullYear();
-						var smonth = todayDate.getMonth() + 1;
-						var sdate = todayDate.getDate();
+						var syear = stodayDate.getFullYear();
+						var smonth = stodayDate.getMonth() + 1;
+						var sdate = stodayDate.getDate();
 						var sStringDate = `${syear}-${smonth.toString().padStart(2,"0")}-${sdate.toString().padStart(2,"0")}`;
 
 						oPaymentChecks.LineNum = 0;

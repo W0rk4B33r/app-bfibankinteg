@@ -1,0 +1,21 @@
+This is a text file!!
+
+
+
+version: "3"
+
+services:
+  app-bankinteg:
+    build:
+      context: ./app-bfibankinteg
+      dockerfile: Dockerfile
+    container_name: app-bfibankinteg
+    restart: unless-stopped
+    volumes:
+      - ./app-bfibankinteg:/usr/scr/app
+      - app-bfibankinteg_node_modules:/usr/src/app/node_modules
+    ports:
+      - 8081:80
+
+volumes:
+  app-bfibankinteg_node_modules:

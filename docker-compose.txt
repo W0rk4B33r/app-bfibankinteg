@@ -9,7 +9,7 @@ services:
     build:
       context: ./app-bfibankinteg
       dockerfile: Dockerfile
-    container_name: app-bfibankinteg
+    container_name: app-bfibankinteg-dev
     restart: unless-stopped
     volumes:
       - ./app-bfibankinteg:/usr/scr/app

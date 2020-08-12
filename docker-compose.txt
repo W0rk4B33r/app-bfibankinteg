@@ -1,6 +1,7 @@
 This is a text file!!
 
 
+# dev
 
 version: "3"
 
@@ -13,9 +14,50 @@ services:
     restart: unless-stopped
     volumes:
       - ./app-bfibankinteg:/usr/scr/app
-      - app-bfibankinteg_node_modules:/usr/src/app/node_modules
+      - app-bfibankinteg_dev_node_modules:/usr/src/app/node_modules
     ports:
       - 8081:80
 
 volumes:
-  app-bfibankinteg_node_modules:
+  app-bfibankinteg_dev_node_modules:
+
+
+# sqa
+
+version: "3"
+
+services:
+  app-bankinteg:
+    build:
+      context: ./app-bfibankinteg
+      dockerfile: Dockerfile
+    container_name: app-bfibankinteg-sqa
+    restart: unless-stopped
+    volumes:
+      - ./app-bfibankinteg:/usr/scr/app
+      - app-bfibankinteg_sqa_node_modules:/usr/src/app/node_modules
+    ports:
+      - 8091:80
+
+volumes:
+  app-bfibankinteg_sqa_node_modules:
+
+# uat
+
+version: "3"
+
+services:
+  app-bankinteg:
+    build:
+      context: ./app-bfibankinteg
+      dockerfile: Dockerfile
+    container_name: app-bfibankinteg-uat
+    restart: unless-stopped
+    volumes:
+      - ./app-bfibankinteg:/usr/scr/app
+      - app-bfibankinteg_uat_node_modules:/usr/src/app/node_modules
+    ports:
+      - 9001:80
+
+volumes:
+  app-bfibankinteg_uat_node_modules:

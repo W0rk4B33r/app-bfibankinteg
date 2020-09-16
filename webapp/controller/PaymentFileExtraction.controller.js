@@ -935,7 +935,7 @@ sap.ui.define([
 												+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
 												+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
 												+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
-									   			+ "~" + (this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) - this.oMdlAP.getData().allopenAP[i].WTaxAmount.toFixed(2));
+									   			+ "~" + (this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) - (this.oMdlAP.getData().allopenAP[i].WTaxAmount === "0" ? "0" : this.oMdlAP.getData().allopenAP[i].WTaxAmount.toFixed(2)));
 						// iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[i].DocTotal;
 						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 						iIndex2 = i;	

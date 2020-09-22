@@ -3,7 +3,13 @@
 			"title": "Invoice Tagging",
 			"icon": "sap-icon://manager-insight",
 			"key": "paymentprocessing"
-		}, {
+		},
+		{
+			"title": "Batch Approval Process",
+			"icon": "sap-icon://manager-insight",
+			"key": "batchapprovalprocess"
+		},
+		{
 			"title": "Payment File Extraction",
 			"icon": "sap-icon://manager-insight",
 			"key": "paymentfileextration"

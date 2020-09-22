@@ -1,5 +1,5 @@
  <mvc:View controllerName="com.apptech.app-bankinteg.controller.PaymentFileExtraction"
-	mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:t="sap.ui.table">
 	<App>
 		<pages>
@@ -13,8 +13,8 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="Add" tooltip="Add" press="onAdd" icon="sap-icon://add"/>
-												<Button text="View" tooltip="Edit" press="onEdit" icon="sap-icon://edit"/>
+												<Button text="Add" id="btnAddModePE" tooltip="Add" press="onClickAdd" icon="sap-icon://add" visible="{buttons>/buttons/btnAddModePE}"/>
+												<Button text="View" id="btnViewModePE" tooltip="Edit" press="onClickEdit" icon="sap-icon://edit" visible="{buttons>/buttons/btnViewModePE}"/>
 												<ToolbarSpacer/>
 												<SearchField placeholder="Filter" value="" search="filterGlobally" width="15rem"/>
 											</content>
@@ -23,10 +23,10 @@
 								</t:Table>
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
-								<Button text="Save as Draft" id="btnSaveAsDraft" tooltip="Save as Draft" press="onSaveAsDraft"/>
-								<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save"/>
-								<Button text="Export File" id="btnExport" tooltip="Save" press="onExportFile" icon="sap-icon://download"/>
-								<Button text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTrans"/>
+								<Button text="Save as Draft" id="btnSaveAsDraft" tooltip="Save as Draft" press="onSaveAsDraft" visible="{buttons>/buttons/btnSaveAsDraftPE}"/>
+								<Button text="Post Outgoing Payment Draft" id="btnPostDraft" tooltip="Save" press="onPostDraftOP" icon="sap-icon://save" visible="{buttons>/buttons/btnPostDraftPE}"/>
+								<Button text="Export File" id="btnExport" tooltip="Save" press="onExportFile" icon="sap-icon://download" visible="{buttons>/buttons/btnExportPE}"/>
+								<Button text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTrans" visible="{buttons>/buttons/btnCancelPE}"/>
 								<VBox class="sapUiTinyMargin">
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>
@@ -46,7 +46,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Button text="Search" id="btnSearch" tooltip="Search" press="onSearch" icon="sap-icon://search">
+											<Button text="Search" id="btnSearch" tooltip="Search" press="onClickSearch" icon="sap-icon://search">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
 												</layoutData>
@@ -184,14 +184,14 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="12rem">
+												<!-- <t:Column width="12rem">
 													<Label text="Description"/>
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>Dscription'}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
-												</t:Column>
+												</t:Column> -->
 												<t:Column width="8rem">
 													<Label text="Supplier Code"/>
 													<t:template>
@@ -220,7 +220,7 @@
 													<Label text="Invoice Total"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -228,7 +228,7 @@
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>OpenSum', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -236,7 +236,7 @@
 													<Label text="Payment Amount"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>

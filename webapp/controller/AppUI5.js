@@ -7,8 +7,9 @@ sap.ui.define([
 	"sap/m/Popover",
 	"sap/m/Button",
 	"sap/m/library",
-	"sap/m/MessageToast"
-], function (jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast) {
+	"sap/m/MessageToast",
+	"sap/ui/core/BusyIndicator"
+], function (jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast,BusyIndicator) {
 	"use strict";
 	return ("com.apptech.app-bankinteg.controller.AppUI5",{
 
@@ -125,9 +126,10 @@ sap.ui.define([
 			var generatedCode = "";
 
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
 				type: "GET",
 				dataType: "json",
+				async: false,
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
@@ -156,10 +158,11 @@ sap.ui.define([
 			var docNum = 0;
 
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_RE_GETDOCNUM&tableName=" +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_RE_GETDOCNUM&tableName=" +
 					sTableName,
 				type: "GET",
 				dataType: "json",
+				async: false,
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
@@ -222,7 +225,7 @@ sap.ui.define([
 			var returnValue = 0;
 			var res = {} ;
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/PostData.xsjs?dbName=APP_RE",
+				url: "https://18.136.35.41:4300/app_xsjs/PostData.xsjs?dbName=APP_RE",
 				type: "POST",
 				async: false,
 				data: JSON.stringify(oPostData),
@@ -248,7 +251,7 @@ sap.ui.define([
 		},
 
 		getAllByColumn: function (tableName, columnName, columnValue) {
-			var getAllByColumnURL = "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" +
+			var getAllByColumnURL = "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" +
 				tableName + "&colName=" + columnName + "&colValue=" + columnValue;
 			$.ajax({
 				url: getAllByColumnURL,
@@ -280,13 +283,13 @@ sap.ui.define([
 			var generateNumberURL = "";
 			switch (sDocType) {
 			case "Quote":
-				generateNumberURL = "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Quote";
+				generateNumberURL = "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Quote";
 				break;
 			case "Reservation":
-				generateNumberURL = "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Reservation";
+				generateNumberURL = "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Reservation";
 				break;
 			case "Contract":
-				generateNumberURL = "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Contract";
+				generateNumberURL = "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Contract";
 				break;
 			}
 			var returnCode = [];
@@ -318,7 +321,7 @@ sap.ui.define([
 		getAllDataByKeyAJAX: function (sTableName, sKeyCode, sQueryType) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYKEY&tableName=" + sTableName +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYKEY&tableName=" + sTableName +
 					"&keyCode=" + sKeyCode + "&queryType=" + sQueryType,
 				type: "GET",
 				xhrFields: {
@@ -343,7 +346,7 @@ sap.ui.define([
 
 		getHANAData: function (sModule, sQueryType, sKey, sKey2) {
 			var aReturnResult = [];
-			var sURL = "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_" + sModule + "&queryType=" + sQueryType +
+			var sURL = "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_" + sModule + "&queryType=" + sQueryType +
 				"&colValue=" + sKey + "&colValue=" + sKey2;
 			$.ajax({
 				url: sURL,
@@ -371,7 +374,7 @@ sap.ui.define([
 		getAllDataByColAJAX: function (sTableName, sColName, sColValue, sQueryType) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "http://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" + sTableName +
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" + sTableName +
 					"&colName=" + sColName + "&colValue=" + sColValue + "&queryType=" + sQueryType,
 				type: "GET",
 				async: false,
@@ -391,6 +394,73 @@ sap.ui.define([
 				}
 			});
 			return aReturnResult;
+		},
+		fGetButtons: function(sDatabase,sUserCode,sModule){
+			var aReturnResult = [];
+			$.ajax({
+				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getButtons" +
+				"&VALUE1="+ sUserCode +"&VALUE2="+ sModule +"&VALUE3=&VALUE4=",
+				type: "GET",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+				},
+				success: function (json) {},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					aReturnResult = results;
+				}
+			});
+			return aReturnResult;
+		},
+		fErrorLogs: function (sTableAffected,sOperation,sKey1,sKey2,sErrorDesc,sProcess,sProcessBy,sKey3,sRequest) {
+			//var returnValue = 0;
+			var oDate = this.getTodaysDate();
+			var sCode = this.generateUDTCode("GetCode");
+			var sBodyRequest = {};
+			sBodyRequest.Code = sCode,
+			sBodyRequest.Name = sCode,
+			sBodyRequest.U_TableAffected = sTableAffected,
+			sBodyRequest.U_Operation = sOperation,
+			sBodyRequest.U_Key1 = sKey1,
+			sBodyRequest.U_Key2 = sKey2,
+			sBodyRequest.U_ErrorDesc = sErrorDesc,
+			sBodyRequest.U_Process = sProcess,
+			sBodyRequest.U_ProcessBy = sProcessBy,
+			sBodyRequest.U_ProcessDate = oDate,
+			sBodyRequest.U_Key3 = sKey3
+			sBodyRequest.U_INPUTBODY = sRequest
+
+			$.ajax({
+				url: "https://18.136.35.41:50000/b1s/v1/U_APP_ERRORLOGS",
+				type: "POST",
+				contentType: "multipart/mixed;boundary=a",
+				data: JSON.stringify(sBodyRequest),
+				xhrFields: {
+					withCredentials: true
+				},
+				error: function (xhr, status, error) {
+					// var Message = xhr.responseJSON["error"].message.value;			
+					// sap.m.MessageToast.show(Message);
+					// AppUI5.fHideBusyIndicator();
+				},
+				success: function (json) {
+					//sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
+				},
+				context: this
+
+			}).done(function (results) {
+				if (results) {
+					//
+				}
+			});
+			//return returnValue;
 		},
 
 		renameKey: function (obj, old_key, new_key) {
@@ -414,6 +484,26 @@ sap.ui.define([
 		},
 		selectedDatabase: function(db){
 			return this.sDBCompany;
+		},
+		//NDC 03/24/2020
+		//added busy indicator
+		fHideBusyIndicator : function() {
+			BusyIndicator.hide();
+		},
+
+		fShowBusyIndicator : function (iDuration, iDelay) {
+			BusyIndicator.show(iDelay);
+
+			if (iDuration && iDuration > 0) {
+				if (this._sTimeoutId) {
+					clearTimeout(this._sTimeoutId);
+					this._sTimeoutId = null;
+				}
+
+				this._sTimeoutId = setTimeout(function() {
+					this.fHideBusyIndicator();
+				}.bind(this), iDuration);
+			}
 		}
 		
 

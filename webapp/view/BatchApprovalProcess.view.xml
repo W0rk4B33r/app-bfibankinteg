@@ -1,11 +1,11 @@
- <mvc:View controllerName="com.apptech.app-bankinteg.controller.PaymentProcessing"
+ <mvc:View controllerName="com.apptech.app-bankinteg.controller.BatchApprovalProcess"
 	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:uxap="sap.uxap" 
-	xmlns:f="sap.ui.layout.form"
+xmlns:f="sap.ui.layout.form"
 	xmlns:l="sap.ui.layout" xmlns:tnt="sap.tnt" xmlns:html="http://www.w3.org/1999/xhtml" 
 	xmlns:t="sap.ui.table">
 	<App>
 		<pages>
-			<Page title="Invoice Tagging" id="pageTerm">
+			<Page title="For Approval Batches" id="pageTerm">
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
@@ -15,8 +15,7 @@
 									<t:extension>
 										<Toolbar>
 											<content>
-												<Button text="Add" id="btnAddMode" tooltip="Add" press="onAddMode" icon="sap-icon://add"  visible="{buttons>/buttons/btnAddMode}"/>
-												<Button text="View" id="btnViewMode" tooltip="View" press="onView" icon="sap-icon://edit" visible="{buttons>/buttons/btnViewMode}"/> <!--btnViewMode-->
+												<Button text="View Batch Details" id="btnViewBatch" tooltip="View" press="onView" visible="{buttons>/buttons/btnViewBatch}"/><!-- icon="sap-icon://edit" -->
 												<ToolbarSpacer/>
 												<SearchField placeholder="Filter" value="" search="filterGlobally" width="15rem"/>
 											</content>
@@ -25,10 +24,8 @@
 								</t:Table>
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
-								<Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save" visible="{buttons>/buttons/btnPrint}"/>
-								<Button text="ADD DRAFT" id="btnDraft" tooltip="Save as Draft" press="onAdd" visible="{buttons>/buttons/btnDraft}"/>
-								<Button text="SAVE" id="btnSave" tooltip="Save" press="onSave" icon="sap-icon://save" visible="{buttons>/buttons/btnSave}"/>
-								<Button type="Reject" text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTransaction" visible="{buttons>/buttons/btnCancel}"/>
+								<Button text="APPROVE" id="btnApprove" tooltip="Approve" press="onApprove" icon="sap-icon://save" visible="{buttons>/buttons/btnApprove}"/>
+								<Button type="Reject" text="REJECT" id="btnReject" tooltip="Reject" press="onReject" visible="{buttons>/buttons/btnReject}"/>
 								<VBox class="sapUiTinyMargin">
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form0" width="100%">
 										<f:content>
@@ -37,7 +34,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="DateFrom" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateFrom}" required="true">
+											<DatePicker id="DateFrom" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateFrom}" enabled="false">
 													<layoutData>
 														<l:GridData span="L3 M4 S12"/>
 													</layoutData>
@@ -47,7 +44,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<DatePicker id="DateTo" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateTo}" required="true">
+											<DatePicker id="DateTo" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{oMdlEditRecord>/EditRecord/DateTo}" enabled="false">
 													<layoutData>
 														<l:GridData span="L3 M4 S12"/>
 													</layoutData>
@@ -57,7 +54,7 @@
 													<l:GridData span="L3 M2 S12"/>
 												</layoutData>
 											</Label>
-											<Input width="100%" id="SupplierCode" value="{oMdlEditRecord>/EditRecord/SupplierCode}" required="true"  showValueHelp="true"
+											<Input width="100%" id="SupplierCode" value="{oMdlEditRecord>/EditRecord/SupplierCode}" required="true"  showValueHelp="true" enabled = "false"
 												valueHelpOnly="true" valueHelpRequest="handleValueHelpSupplier">
 												<layoutData>
 													<l:GridData span="L3 M4 S12"/>
@@ -117,14 +114,14 @@
 										</f:content>
 									</f:SimpleForm>
 									<f:SimpleForm editable="true" layout="ResponsiveGridLayout" id="form01" width="100%">
-										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Multi" visibleRowCount="6" ariaLabelledBy="title">
+										<t:Table id="tblDetails" rows="{oMdlAP>/allopenAP}" selectionMode="Single" visibleRowCount="6" ariaLabelledBy="title">
 											<t:columns>
 												<t:Column width="5rem">
 													<Label text="Priority"/>
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>Priority'}"
-															textAlign="End" fieldWidth="80%" width="100%"/>
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">
@@ -248,13 +245,6 @@
 													</t:template>
 												</t:Column>
 											</t:columns>
-												<t:extension>
-													<Toolbar>
-														<content>
-															<Button text="Delete Row/s" id="btnDeleteRow" tooltip="Delete Row/s" press="onDeleteRow"  enabled="true" icon="sap-icon://delete" visible="{buttons>/buttons/btnDeleteRow}"/>
-														</content>
-													</Toolbar>
-												</t:extension>
 										</t:Table>
 									</f:SimpleForm>
 									<f:SimpleForm>
@@ -263,7 +253,7 @@
 												<l:GridData span="L3 M2 S12"/>
 											</layoutData>
 										</Label>
-										<TextArea id="Remarks" value="{oMdlEditRecord>/EditRecord/Remarks}" maxLength="254" width="100%" placeholder ="Remarks"/>
+										<TextArea id="Remarks" value="{oMdlEditRecord>/EditRecord/Remarks}" maxLength="254" width="100%" placeholder ="Remarks" enabled="false"/>
 									</f:SimpleForm>
 								</VBox>
 							</IconTabFilter>

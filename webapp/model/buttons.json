@@ -1,0 +1,13 @@
+{
+    "buttons": {
+        "btnAddMode": false,
+        "btnViewMode": false,
+        "btnPrint": false,
+        "btnDraft": false,
+        "btnSave": false,
+        "btnCancel": false,
+        "btnDeleteRow": false   
+    }
+   
+
+}

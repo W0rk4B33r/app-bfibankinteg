@@ -149,7 +149,7 @@ sap.ui.define([
 		fGetRecords: function (queryTag, sRecord) {
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -185,7 +185,7 @@ sap.ui.define([
 		fGetTableData: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -274,7 +274,7 @@ sap.ui.define([
 
 				//AJAX selected Key
 				$.ajax({
-					url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
+					url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
 						"&VALUE1=" + sDraftNum + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
@@ -388,7 +388,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,aBatchUpdate);
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a", 
 				data: sBodyRequest,
@@ -529,7 +529,7 @@ sap.ui.define([
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -607,7 +607,7 @@ sap.ui.define([
 		//search------------
 		fGetSearchDataDet: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=" + value1 + "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				async: false,
@@ -633,7 +633,7 @@ sap.ui.define([
 		fPostPaymentDraft: function (oRecord) {
 			$.ajax({
 
-				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts",
+				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts",
 				type: "POST",
 				contentType: "application/json",
 				async: false,
@@ -670,7 +670,7 @@ sap.ui.define([
 			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
+				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -697,7 +697,7 @@ sap.ui.define([
 		fGetBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
+				url: "https://18.141.110.57:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
 					CardCode + "'",
 				type: "GET",
 				xhrFields: {
@@ -808,7 +808,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,

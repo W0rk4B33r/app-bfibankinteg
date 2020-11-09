@@ -127,7 +127,7 @@ sap.ui.define([
 		},
 		fGetAllMenu: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -150,7 +150,7 @@ sap.ui.define([
 		},
 		onLogout: function (){ 
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/Logout",
+				url: "https://18.141.110.57:50000/b1s/v1/Logout",
 				type: "POST",
 				error: function (xhr, status, error) {
 				var Message = xhr.responseJSON["error"].message.value;			

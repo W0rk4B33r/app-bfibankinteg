@@ -1,79 +1,83 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
 	"jquery.sap.global",
-	  "sap/ui/Device",
-	  "sap/ui/core/Fragment",
-	  "sap/ui/model/json/JSONModel",
-	  "sap/m/Popover",
-	  "sap/m/Button",
-	  "sap/m/library",
-	  "sap/m/MessageToast",
-	  "com/apptech/app-bankinteg/controller/AppUI5"
-  ], function(Controller, jQuery, Device, Fragment, JSONModel, Popover, Button, library, MessageToast, AppUI5) {
-	"use strict";
+	"sap/ui/Device",
+	"sap/ui/core/Fragment",
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/model/json/JSONModel",
+	"sap/m/Popover",
+	"sap/m/Button",
+	"sap/m/library",
+	"sap/m/MessageToast",
+	"com/apptech/app-bankinteg/controller/AppUI5"
+], function(jQuery, Device, Fragment, Controller, JSONModel, Popover, Button, mobileLibrary, MessageToast,AppUI5) {
+"use strict";
   
 	return Controller.extend("com.apptech.app-bankinteg.controller.Main", {
   
-	  onInit: function () {
-			  //this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
-			  // this.model.setData(this.data);
-			  // this.getView().setModel(this.model);
-			  //PLACE HOLDER OF PROJECT OBJECT
-			  this.DB = sap.ui.getCore().getModel("Database");
-			  this.userCode = jQuery.sap.storage.Storage.get("userCode");	
-			  
-			  //this.getView().byId("userCode").setText(this.userCode);
-			  
-			  this.oMdlMenu = new JSONModel("model/menus.json");
-			  this.getView().setModel(this.oMdlMenu);
-  
-			  this.router = this.getOwnerComponent().getRouter();
-			  this.router.navTo("Dashboard");
-	  },
-	  
-	  //-------------------------------------------
-		  onRoutePatternMatched: function (event) {
-			  var key = event.getParameter("name");
-			  this.byId("childViewSegmentedButton").setSelectedKey(key);
-		  },
-  
-		  onAfterShow: function (router) {
-			  router.navTo("Dashboard");
-		  },
-  
-		  onSelect: function (event) {
-			  this.router = this.getOwnerComponent().getRouter();
-			  this.router.navTo(event.getParameter("key"));
-		  },
-  
-	  //-------------------------------------------
-	  
-	  onMenuButtonPress: function () {
-			  var toolPage = this.byId("toolPage");
-			  toolPage.setSideExpanded(!toolPage.getSideExpanded());
-		  },
-  
-		  onIconPress: function (oEvent) {
-			  this.router.navTo("Dashboard");
-		  },
-  
-		  onItemSelect: function (oEvent) {
-			  var sSelectedMenu = oEvent.getSource().getProperty("selectedKey");
-			  switch (sSelectedMenu) {
-			  case "paymentprocessing":
-				  this.router.navTo("PaymentProcessing");
-				  break;
-			  case "paymentfileextration":
-				  this.router.navTo("PaymentFileExtraction");
-				  break;
-			  case "returnfileuploading":
-				  this.router.navTo("ReturnFileUploading");
-				  break;
-  
-			  default:
-  
-			  }
-	  },
+	onInit: function () {
+		//PLACE HOLDER OF PROJECT OBJECT
+		this.sDatabase = jQuery.sap.storage.Storage.get("dataBase");	
+		this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+		//set user Name
+		this.getView().byId("userCode").setText(this.sUserCode);
+
+		this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+    	this._oRouter.attachRouteMatched(this.handleRouteMatched, this);
+		//get Menu/s
+		this.oMdlMenu = new JSONModel();
+		this.fGetAllMenu();
+
+		this.router = this.getOwnerComponent().getRouter();
+		var sSelectedMenu = this.oMdlMenu.getData().navigation[0].key;
+			switch (sSelectedMenu) {
+			case "paymentprocessing":
+				this.router.navTo("PaymentProcessing");
+				break;
+			case "batchapprovalprocess":
+				this.router.navTo("BatchApprovalProcess");
+				break;
+			case "paymentfileextraction":
+				this.router.navTo("PaymentFileExtraction");
+				break;
+			case "returnfileuploading":
+				this.router.navTo("ReturnFileUploading");
+				break;
+
+			default:
+
+			}
+		
+	},
+		  
+		handleRouteMatched : function (evt) {
+			this.sDatabase = jQuery.sap.storage.Storage.get("dataBase");	
+			this.sUserCode = jQuery.sap.storage.Storage.get("userCode");
+			
+			this.getView().byId("userCode").setText(this.sUserCode);
+			this.fGetAllMenu();
+
+			this.router = this.getOwnerComponent().getRouter();
+		},
+		//-------------------------------------------
+		onRoutePatternMatched: function (event) {
+			var key = event.getParameter("name");
+			this.byId("childViewSegmentedButton").setSelectedKey(key);
+		},
+
+		onAfterShow: function (router) {
+			router.navTo("PaymentProcessing");
+		},
+
+		onBeforeShow: function(evt) {
+			sap.m.MessageToast.show("Test");
+		 },
+
+		onSelect: function (event) {
+			this.router = this.getOwnerComponent().getRouter();
+			this.router.navTo(event.getParameter("key"));
+		},
+
+		//-------------------------------------------
 	  
 		onMenuButtonPress: function () {
 			var toolPage = this.byId("toolPage");
@@ -276,4 +280,3 @@ sap.ui.define([
 		}
 	});
   });
-  

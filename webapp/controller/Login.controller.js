@@ -55,7 +55,7 @@ sap.ui.define([
 			oLoginCredentials.UserName = sUserName.getValue();//"manager";
 			oLoginCredentials.Password = sPassword.getValue();//"1234";
 			$.ajax({
-				url: "https://18.136.35.41:50000/b1s/v1/Login",
+				url: "https://18.141.110.57:50000/b1s/v1/Login",
 				data: JSON.stringify(oLoginCredentials),
 				type: "POST",
 				crossDomain: true,
@@ -93,7 +93,7 @@ sap.ui.define([
 		fGetAllRecords: function(queryTag){
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBankIntegration&QUERYTAG="+ queryTag +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=SBODEMOAU_SL&procName=spAppBankIntegration&QUERYTAG="+ queryTag +
 				"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,

@@ -123,7 +123,7 @@ sap.ui.define([
 		},
 		fGetAllMenu: function(){
 			$.ajax({
-				url: "https://18.136.35.41:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
+				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,

@@ -34,7 +34,7 @@ sap.ui.define([
 
 			var stringTableInfo = JSON.stringify(tableInfo);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/UserTablesMD",
+				url: "https://sl.biotechfarms.net/b1s/v1/UserTablesMD",
 				data: stringTableInfo,
 				type: "POST",
 				async: false,
@@ -86,7 +86,7 @@ sap.ui.define([
 			var dataString = JSON.stringify(oFieldInfo);
 
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/UserFieldsMD",
+				url: "https://sl.biotechfarms.net/b1s/v1/UserFieldsMD",
 				data: dataString,
 				type: "POST",
 				async: false,
@@ -126,7 +126,7 @@ sap.ui.define([
 			var generatedCode = "";
 
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_GENERATENUMBER&DocType="+ docType,
 				type: "GET",
 				dataType: "json",
 				async: false,
@@ -158,7 +158,7 @@ sap.ui.define([
 			var docNum = 0;
 
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_RE_GETDOCNUM&tableName=" +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ jQuery.sap.storage.Storage.get("dataBase") +"&procName=SPAPP_RE_GETDOCNUM&tableName=" +
 					sTableName,
 				type: "GET",
 				dataType: "json",
@@ -225,7 +225,7 @@ sap.ui.define([
 			var returnValue = 0;
 			var res = {} ;
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/PostData.xsjs?dbName=APP_RE",
+				url: "https://xs.biotechfarms.net/app_xsjs/PostData.xsjs?dbName=APP_RE",
 				type: "POST",
 				async: false,
 				data: JSON.stringify(oPostData),
@@ -251,7 +251,7 @@ sap.ui.define([
 		},
 
 		getAllByColumn: function (tableName, columnName, columnValue) {
-			var getAllByColumnURL = "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" +
+			var getAllByColumnURL = "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" +
 				tableName + "&colName=" + columnName + "&colValue=" + columnValue;
 			$.ajax({
 				url: getAllByColumnURL,
@@ -283,13 +283,13 @@ sap.ui.define([
 			var generateNumberURL = "";
 			switch (sDocType) {
 			case "Quote":
-				generateNumberURL = "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Quote";
+				generateNumberURL = "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Quote";
 				break;
 			case "Reservation":
-				generateNumberURL = "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Reservation";
+				generateNumberURL = "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Reservation";
 				break;
 			case "Contract":
-				generateNumberURL = "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Contract";
+				generateNumberURL = "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GENERATENUMBER&DocType=Contract";
 				break;
 			}
 			var returnCode = [];
@@ -321,7 +321,7 @@ sap.ui.define([
 		getAllDataByKeyAJAX: function (sTableName, sKeyCode, sQueryType) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYKEY&tableName=" + sTableName +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYKEY&tableName=" + sTableName +
 					"&keyCode=" + sKeyCode + "&queryType=" + sQueryType,
 				type: "GET",
 				xhrFields: {
@@ -346,7 +346,7 @@ sap.ui.define([
 
 		getHANAData: function (sModule, sQueryType, sKey, sKey2) {
 			var aReturnResult = [];
-			var sURL = "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_" + sModule + "&queryType=" + sQueryType +
+			var sURL = "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_" + sModule + "&queryType=" + sQueryType +
 				"&colValue=" + sKey + "&colValue=" + sKey2;
 			$.ajax({
 				url: sURL,
@@ -374,7 +374,7 @@ sap.ui.define([
 		getAllDataByColAJAX: function (sTableName, sColName, sColValue, sQueryType) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" + sTableName +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=APP_RE&procName=SPAPP_RE_GETALLDATA_BYCOL&tableName=" + sTableName +
 					"&colName=" + sColName + "&colValue=" + sColValue + "&queryType=" + sQueryType,
 				type: "GET",
 				async: false,
@@ -398,7 +398,7 @@ sap.ui.define([
 		fGetButtons: function(sDatabase,sUserCode,sModule){
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getButtons" +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getButtons" +
 				"&VALUE1="+ sUserCode +"&VALUE2="+ sModule +"&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -438,7 +438,7 @@ sap.ui.define([
 			sBodyRequest.U_INPUTBODY = sRequest
 
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/U_APP_ERRORLOGS",
+				url: "https://sl.biotechfarms.net/b1s/v1/U_APP_ERRORLOGS",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: JSON.stringify(sBodyRequest),

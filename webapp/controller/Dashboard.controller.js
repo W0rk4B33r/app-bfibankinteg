@@ -21,7 +21,7 @@ sap.ui.define([
         
         this.oMdlDataCount = new sap.ui.model.json.JSONModel();
         $.ajax({
-          url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getStatusCount&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+          url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getStatusCount&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
           type: "GET",
           async: false,
           dataType: "json",

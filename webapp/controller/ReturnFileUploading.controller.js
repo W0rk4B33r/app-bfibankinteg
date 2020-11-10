@@ -135,7 +135,7 @@ sap.ui.define([
 		fUpdatePaymentDraft: function(oRecord,sDocEntry,iIndex){
 			$.ajax({
 
-				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts("+ sDocEntry + ")",
+				url: "https://sl.biotechfarms.net/b1s/v1/PaymentDrafts("+ sDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				data: JSON.stringify(oRecord), //If batch, body data should not be JSON.stringified
@@ -164,7 +164,7 @@ sap.ui.define([
 		PostOutgoing: function(sDocEntry,iIndex){
 			$.ajax({
 
-				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts("+ sDocEntry + ")/SaveDraftToDocument",
+				url: "https://sl.biotechfarms.net/b1s/v1/PaymentDrafts("+ sDocEntry + ")/SaveDraftToDocument",
 				type: "POST",
 				contentType: "application/json",
 				xhrFields: {

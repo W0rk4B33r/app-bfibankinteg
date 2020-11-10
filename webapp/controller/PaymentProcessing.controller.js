@@ -136,7 +136,7 @@ sap.ui.define([
 		//GET ALL BATCHCODE
 		fGetAllBatch: function(){
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -160,7 +160,7 @@ sap.ui.define([
 		fGetAllRecord: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -189,7 +189,7 @@ sap.ui.define([
 		//CREATING MODEL SUPPLIER WITH OPEN AP
 		fGetAllSupplier: function(){
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBPwithOpenAP&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
@@ -421,7 +421,7 @@ sap.ui.define([
 		getSearchDataHead: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			//get all open AP base on parameters
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -449,7 +449,7 @@ sap.ui.define([
 		getSearchDataDet: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			this.oMdlAP = new sap.ui.model.json.JSONModel();
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
@@ -473,7 +473,7 @@ sap.ui.define([
 		},
 		updateRecords: function(table,code,Data,batchNum){
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/"+table+"('"+ code +"')",
+				url: "https://sl.biotechfarms.net/b1s/v1/"+table+"('"+ code +"')",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -579,7 +579,7 @@ sap.ui.define([
 		
 		deleteIfExisting: function(){
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
 				+ "&VALUE1=" + 	this.getView().byId("DocumentNo").getValue() + "&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				contentType: "application/json",
@@ -607,7 +607,7 @@ sap.ui.define([
 		CheckIfExisting: function(queryTag,value1){
 			var HeaderCode = "";
 			$.ajax({
-				url: "https://18.141.110.57:4300/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
@@ -832,7 +832,7 @@ sap.ui.define([
 			//ajax call to SL
 			$.ajax({
 
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,

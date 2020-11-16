@@ -25,7 +25,8 @@
 								</t:Table>
 							</IconTabFilter>
 							<IconTabFilter id="tab2" text="Add / Edit" key="tab2">
-								<Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save" visible="{buttons>/buttons/btnPrint}"/>
+								<!-- <Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save" visible="{buttons>/buttons/btnPrint}"/> -->
+								<Button text="PRINT" id="btnPrint" tooltip="Save" press="onPrint" icon="sap-icon://save" visible="false"/>
 								<Button text="ADD DRAFT" id="btnDraft" tooltip="Save as Draft" press="onAdd" visible="{buttons>/buttons/btnDraft}"/>
 								<Button text="SAVE" id="btnSave" tooltip="Save" press="onSave" icon="sap-icon://save" visible="{buttons>/buttons/btnSave}"/>
 								<Button type="Reject" text="Cancel Transaction" id="btnCancel" tooltip="Cancel Transaction" press="onCancelTransaction" visible="{buttons>/buttons/btnCancel}"/>

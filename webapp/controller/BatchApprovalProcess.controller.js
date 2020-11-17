@@ -280,7 +280,7 @@ sap.ui.define([
 			
 		},
 		//Reject Process
-		onReject: function(oEvent){
+		onReject: async function(oEvent){
 			AppUI5.fShowBusyIndicator(4000);
 			var table= "";
 			var code = "";
@@ -296,7 +296,7 @@ sap.ui.define([
 			oT_PAYMENT_PROCESSING_H.U_App_UpdatedDate = this.getTodaysDate();
 			Data = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 			
-			this.updateRecords(table, code, Data,batchNum,false);
+			await this.updateRecords(table, code, Data,batchNum,false);
 			AppUI5.fHideBusyIndicator();
 		},
 		updateRecords: function(table,code,Data,batchNum,isApprove){

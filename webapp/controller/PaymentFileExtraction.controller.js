@@ -222,8 +222,8 @@ sap.ui.define([
 		fClearFields: function () {
 			try {
 				// this.getView().byId("btnSearch").setVisible(true);
-				// this.getView().byId("btnPostDraft").setVisible(true);
-				// this.getView().byId("btnExport").setVisible(false);
+				this.getView().byId("btnPostDraft").setEnabled(true);
+				this.getView().byId("btnExport").setEnabled(false);
 
 				this.oMdlPayExtract.getData().EditRecord.DRAFTNO = "";
 				this.oMdlPayExtract.getData().EditRecord.DOCNUM = "";
@@ -242,8 +242,8 @@ sap.ui.define([
 				this.getView().byId("DispatchToCode").setEnabled(true);
 				this.getView().byId("PNBAccountNo").setEnabled(true);
 				
-				// this.getView().byId("btnCancel").setVisible(false);
-				// this.getView().byId("btnSaveAsDraft").setVisible(true);
+				this.getView().byId("btnCancel").setEnabled(false);
+				this.getView().byId("btnSaveAsDraft").setEnabled(true);
 
 				this.oMdlAP.getData().allopenAP.length = 0;
 				this.oMdlAP.refresh();
@@ -320,10 +320,10 @@ sap.ui.define([
 
 				//Disable field in preview mode
 				if (oRowSelected.U_App_Status === 'Draft') {
-					// this.getView().byId("btnPostDraft").setVisible(true);
-					// this.getView().byId("btnExport").setVisible(false);
-					// this.getView().byId("btnSaveAsDraft").setVisible(true);
-					// this.getView().byId("btnCancel").setVisible(false);
+					this.getView().byId("btnPostDraft").setEnabled(true);
+					this.getView().byId("btnExport").setEnabled(false);
+					this.getView().byId("btnSaveAsDraft").setEnabled(true);
+					this.getView().byId("btnCancel").setEnabled(false);
 					
 					this.getView().byId("DocumentNo").setEnabled(true);
 					this.getView().byId("PrintingBranch").setEnabled(true);
@@ -332,10 +332,10 @@ sap.ui.define([
 					this.getView().byId("PNBAccountNo").setEnabled(true);
 					// this.getView().byId("btnSearch").setVisible(true);
 				} else {
-					// this.getView().byId("btnPostDraft").setVisible(false);
-					// this.getView().byId("btnExport").setVisible(true);
-					// this.getView().byId("btnSaveAsDraft").setVisible(false);
-					// this.getView().byId("btnCancel").setVisible(true);
+					this.getView().byId("btnPostDraft").setEnabled(false);
+					this.getView().byId("btnExport").setEnabled(true);
+					this.getView().byId("btnSaveAsDraft").setEnabled(false);
+					this.getView().byId("btnCancel").setEnabled(true);
 					
 					this.getView().byId("DocumentNo").setEnabled(false);
 					this.getView().byId("PrintingBranch").setEnabled(false);
@@ -370,6 +370,8 @@ sap.ui.define([
 			var oT_PAYMENT_EXTRACTING_H = {};
 			var oT_PAYMENT_EXTRACTING_D = {};
 
+			// var sDraftNum = this.oMdlPayExtract.getData().EditRecord.DRAFTNO;
+			// AppUI5.fHideBusyIndicator();
 			oT_PAYMENT_EXTRACTING_H.U_App_Status ="Cancelled";
 			var aBatchUpdate = [];
 			var aBatchInsert = [{
@@ -411,6 +413,7 @@ sap.ui.define([
 					var oMessage = results.substring(oStartIndex,oEndIndex);
 					AppUI5.fErrorLogs("U_APP_ODOP,PaymentDrafts","Cancel Batch","null","null",oMessage,"Bank Integ Payment Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
+					AppUI5.fHideBusyIndicator();
 					console.error(oMessage);
 				}else{
 					if (results) {
@@ -467,9 +470,9 @@ sap.ui.define([
 					if (this.oMdlAP.getData().allopenAP[d].Priority === this.oMdlAP.getData().allopenAP[i].Priority
 					&&this.oMdlAP.getData().allopenAP[d].CardCode === this.oMdlAP.getData().allopenAP[i].CardCode
 					&& this.oMdlAP.getData().allopenAP[d].DocDueDate === this.oMdlAP.getData().allopenAP[i].DocDueDate) {
-						if(this.oMdlAP.getData().allopenAP[d].InvoiceType === 'AP'){
+						if(this.oMdlAP.getData().allopenAP[i].InvoiceType === 'AP'){
 							sInvType = "it_PurchaseInvoice";
-						}else if(this.oMdlAP.getData().allopenAP[d].InvoiceType === 'APDP'){
+						}else if(this.oMdlAP.getData().allopenAP[i].InvoiceType === 'APDP'){
 							sInvType = "it_PurchaseDownPayment";
 						}else{
 							sInvType = "it_PurchaseCreditNote";

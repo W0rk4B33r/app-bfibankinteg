@@ -32,6 +32,9 @@ sap.ui.define([
 			
 			this.oMdlEditRecord = new JSONModel("model/paymentprocessing.json");
 			this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
+
+			this.oMdlAP = new JSONModel("model/paymentprocessing.json");
+			this.getView().setModel(this.oMdlAP, "oMdlAP");
 			//document status
 			this.oMdlDocStat = new JSONModel("model/documentstatus.json");
 			this.getView().setModel(this.oMdlDocStat, "oMdlDocStat");
@@ -379,10 +382,11 @@ sap.ui.define([
 				this.getView().byId("DateFrom").setEnabled(true);
 				this.getView().byId("DateTo").setEnabled(true);
 				this.getView().byId("SupplierCode").setEnabled(true);
-				this.getView().byId("searchID").setVisible(true);
+				//this.getView().byId("searchID").setVisible(true);
 				this.getView().byId("btnSave").setEnabled(true);
 				this.getView().byId("btnDraft").setEnabled(true);
 				this.getView().byId("btnCancel").setEnabled(false);
+				this.getView().byId("btnDeleteRow").setEnabled(true);
 			}else if(sStatus === "Approved"){
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);
@@ -395,10 +399,14 @@ sap.ui.define([
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);
 				this.getView().byId("SupplierCode").setEnabled(false);
-				// this.getView().byId("searchID").setVisible(false);
+				this.getView().byId("searchID").setVisible(false);
 				this.getView().byId("btnSave").setEnabled(false);
 				this.getView().byId("btnDraft").setEnabled(false);
 				this.getView().byId("btnCancel").setEnabled(true);
+				this.getView().byId("btnDeleteRow").setEnabled(false);
+				this.getView().byId("Remarks").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(false);
+
 			}
 
 			
@@ -447,7 +455,7 @@ sap.ui.define([
 		},
 		
 		getSearchDataDet: function(dbName,procName,queryTag,value1,value2,value3,value4){
-			this.oMdlAP = new sap.ui.model.json.JSONModel();
+			//this.oMdlAP = new sap.ui.model.json.JSONModel();
 			$.ajax({
 				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",

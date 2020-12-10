@@ -9,7 +9,7 @@ xmlns:f="sap.ui.layout.form"
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<IconTabFilter id="tab1" text="Records" count="0" key="tab1">
+							<IconTabFilter id="tab1" text="Transaction" count="0" key="tab1">
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>

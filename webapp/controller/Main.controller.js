@@ -161,7 +161,8 @@ sap.ui.define([
 					sap.m.MessageToast.show("Session End"); 
 					jQuery.sap.storage.Storage.clear();	
 					//location.reload();
-					sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);		
+					//sap.ui.core.UIComponent.getRouterFor(this).navTo("Login", null, true);
+					window.location.replace("/index.html");		
 				}
 			});
 		},

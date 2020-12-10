@@ -11,6 +11,30 @@
 		"DocumentNo" : 0,
 		"Status" : ""
 		}
+	],
+	"allopenAP": [
+		{
+		"PriorityEnable": false,
+		"Code" : "",
+		"BatchNum" : "",
+		"DocDate" : "",
+		"DocDueDate" : "",
+		"DocNum" : 0,
+		"DocEntry" : 0,
+		"NumAtCard" : 0,
+		"DocType" : "",
+		"Comments" : "",
+		"Dscription" : "",
+		"CardCode" : "",
+		"CardName" : "",
+		"DocTotal" : 0,
+		"DocCur" : "",
+		"OpenSum" : 0,
+		"PaymentAmount" : 0,
+		"CRANo" : 0,
+		"InvoiceType" : "",
+		"WTaxAmount" : 0,
+		"TaxAmount" : 0
+		}
 	]
-
 }

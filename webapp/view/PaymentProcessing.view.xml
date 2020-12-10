@@ -9,7 +9,7 @@
 				<content>
 					<IconTabBar id="idIconTabBarInlineMode" headerMode="Inline" upperCase="true" expandable="false" class="sapUiResponsiveContentPadding">
 						<items>
-							<IconTabFilter id="tab1" text="Records" count="0" key="tab1">
+							<IconTabFilter id="tab1" text="Transaction" count="0" key="tab1">
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>
@@ -123,9 +123,9 @@
 												<t:Column width="5rem">
 													<Label text="Priority"/>
 													<t:template>
-														<Input
+														<Input id="Priority"
 															value="{ path:'oMdlAP>Priority'}"
-															textAlign="End" fieldWidth="80%" width="100%"/>
+															textAlign="End" fieldWidth="80%" width="100%" enabled="{oMdlAP>PriorityEnable}"/>
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">

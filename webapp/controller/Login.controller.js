@@ -46,7 +46,7 @@ sap.ui.define([
 			}
 		},
 		onLogin: function (oEvent) {
-			AppUI5.fShowBusyIndicator(4000);
+			AppUI5.fShowBusyIndicator(10000);
 			var sUserName = this.getView().byId("Username");
 			var sPassword = this.getView().byId("Password");
 			var sDBCompany = this.getView().byId("selectDatabase");

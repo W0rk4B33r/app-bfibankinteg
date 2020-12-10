@@ -372,7 +372,7 @@ sap.ui.define([
 			this.getSearchDataHead(dbName, "spAppBankIntegration", "getHeaderDat", value1, value2, value3, value4);
 			this.getSearchDataDet(dbName, "spAppBankIntegration", "getBatch_Data", value1, value2, value3, value4);
 			
-			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Record Code : " + BatchNum + " [EDIT]");
+			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION Code : " + BatchNum + " [EDIT]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 			// this.onCleaClearField();
@@ -552,7 +552,7 @@ sap.ui.define([
 			// this.getView().byId("btnPrint").setVisible(false);
 			// this.getView().byId("btnCancel").setVisible(false);
 			
-			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
+			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION [ADD]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 		},

@@ -248,7 +248,7 @@ sap.ui.define([
 				this.oMdlAP.getData().allopenAP.length = 0;
 				this.oMdlAP.refresh();
 
-				this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("RECORD [ADD]");
+				this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION [ADD]");
 				var tab = this.getView().byId("idIconTabBarInlineMode");
 				tab.setSelectedKey("tab2");
 
@@ -302,7 +302,7 @@ sap.ui.define([
 					var oResult = JSON.stringify(results).replace("[", "").replace("]", "");
 					this.oMdlPayExtract.setJSON("{\"EditRecord\" : " + oResult + "}");
 					this.getView().setModel(this.oMdlPayExtract, "oMdlPayExtract");
-					this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Record Code : " + this.oMdlPayExtract.getData().EditRecord
+					this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION Code : " + this.oMdlPayExtract.getData().EditRecord
 						.DOCENTRY + " [EDIT]");
 				});
 

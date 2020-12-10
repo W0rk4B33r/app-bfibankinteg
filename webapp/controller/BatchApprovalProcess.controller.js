@@ -195,7 +195,7 @@ sap.ui.define([
 			this.getSearchDataHead(dbName, "spAppBankIntegration", "getHeaderDat", value1, value2, value3, value4);
 			this.getSearchDataDet(dbName, "spAppBankIntegration", "getBatch_Data", value1, value2, value3, value4);
 			
-			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("Record Code : " + BatchNum + " [EDIT]");
+			this.getView().byId("idIconTabBarInlineMode").getItems()[1].setText("TRANSACTION Code : " + BatchNum + " [EDIT]");
 			var tab = this.getView().byId("idIconTabBarInlineMode");
 			tab.setSelectedKey("tab2");
 		},

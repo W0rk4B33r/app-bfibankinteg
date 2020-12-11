@@ -237,7 +237,7 @@
 													<t:template>
 														<Input 
 															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
-															textAlign="End" fieldWidth="80%" width="100%"/>
+															textAlign="End" fieldWidth="80%" width="100%" change="onChangePayment"/>
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">

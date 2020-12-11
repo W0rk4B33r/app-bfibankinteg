@@ -361,12 +361,12 @@ sap.ui.define([
 			this.fExportData("","Y");
 		},
 		onSaveAsDraft: function (oEvent) {
-			AppUI5.fShowBusyIndicator();
+			AppUI5.fShowBusyIndicator(10000);
 			this.fSavePostedDraft("", true);
 			AppUI5.fHideBusyIndicator();
 		},
 		onCancelTrans: function(oEvent){
-			AppUI5.fShowBusyIndicator();
+			AppUI5.fShowBusyIndicator(10000);
 			var oT_PAYMENT_EXTRACTING_H = {};
 			var oT_PAYMENT_EXTRACTING_D = {};
 
@@ -427,8 +427,9 @@ sap.ui.define([
 			
 		},
 		onPostDraftOP: function (oEvent) {
-			AppUI5.fShowBusyIndicator();
+			AppUI5.fShowBusyIndicator(10000);
 			if (!this.fCheckIfBlankField()) {
+				//AppUI5.fHideBusyIndicator();
 				return false;
 			}
 			var oRecord = {};
@@ -540,8 +541,8 @@ sap.ui.define([
 					withCredentials: true
 				},
 				error: function (xhr, status, error) {
-					var Message = xhr.responseJSON["error"].message.value;			
-					sap.m.MessageToast.show(Message);
+					// var Message = xhr.responseJSON["error"].message.value;			
+					// sap.m.MessageToast.show(Message);
 					AppUI5.fHideBusyIndicator();
 					console.error(xhr.responseJSON["error"].message.value);
 				},
@@ -559,6 +560,7 @@ sap.ui.define([
 					AppUI5.fErrorLogs("PaymentDrafts","Posts Draft OP","null","null",oMessage,"Bank Integ Payemnt Extraction",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 					console.error(oMessage);
+					AppUI5.fHideBusyIndicator();
 				}else{
 					if (results) {
 						var re = /\(([^)]+)\)/g;

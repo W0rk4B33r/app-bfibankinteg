@@ -395,6 +395,17 @@ sap.ui.define([
 				this.getView().byId("btnSave").setEnabled(false);
 				this.getView().byId("btnDraft").setEnabled(false);
 				this.getView().byId("btnCancel").setEnabled(false);
+			}else if(sStatus === "Saved"){
+				this.getView().byId("DateFrom").setEnabled(false);
+				this.getView().byId("DateTo").setEnabled(false);
+				this.getView().byId("SupplierCode").setEnabled(false);
+				this.getView().byId("searchID").setVisible(false);
+				this.getView().byId("btnSave").setEnabled(false);
+				this.getView().byId("btnDraft").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(true);
+				this.getView().byId("btnDeleteRow").setEnabled(false);
+				this.getView().byId("Remarks").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(true);
 			}else{
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);
@@ -422,9 +433,12 @@ sap.ui.define([
 			 dbName = "SBODEMOAU_SL";
 			//get all open AP base on parameters
 			this.getSearchDataDet(dbName, "spAppBankIntegration", queryTag, value1, value2, value3, value4);
-		}
+		},
 		//search------------
-		,
+		onChangePayment: function(){
+			// var testing = this.getView().byId("BAmount").getValue();
+			// console.log(testing);
+		},
 		//Generic selecting of data
 		getSearchDataHead: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			//get all open AP base on parameters
@@ -576,7 +590,7 @@ sap.ui.define([
 				this.getView().byId("btnDraft").setEnabled(true);
 				return false;
 			}
-			AppUI5.fShowBusyIndicator(4000);
+			AppUI5.fShowBusyIndicator(10000);
 			this.sStatus = "Draft";
 			//Check if Existing
 			//this.deleteIfExisting();
@@ -655,7 +669,7 @@ sap.ui.define([
 				this.getView().byId("btnSave").setEnabled(true);
 				return false;
 			}
-			AppUI5.fShowBusyIndicator(4000);
+			AppUI5.fShowBusyIndicator(10000);
 			this.sStatus = "Saved";
 			this.onAddProcess();
 			AppUI5.fHideBusyIndicator();
@@ -786,6 +800,10 @@ sap.ui.define([
 					if (iRow === iCounter) {
 						var iLineNumDP = iCounter + 1;
 						iCode = AppUI5.generateUDTCode("GetCode");
+						if(this.CheckIfExisting("CheckIfExistingInvoice",this.oMdlAP.getData().allopenAP[iCounter].DocNum)>0){
+							sap.m.MessageToast.show("Invoice" + this.oMdlAP.getData().allopenAP[iCounter].DocNum + "already added in batch!");
+							return;
+						}
 						oT_PAYMENT_PROCESSING_D.Code = iCode;
 						oT_PAYMENT_PROCESSING_D.Name = iCode;
 						oT_PAYMENT_PROCESSING_D.U_App_DocNum =  BatchCode;//this.oMdlEditRecord.getData().allopenAP[d].DocumentNo;
@@ -801,6 +819,10 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_Desc = this.oMdlAP.getData().allopenAP[iCounter].Dscription;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceCur = this.oMdlAP.getData().allopenAP[iCounter].DocCur;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceTotal = this.oMdlAP.getData().allopenAP[iCounter].DocTotal;
+						if(this.oMdlAP.getData().allopenAP[iCounter].DocTotal > this.oMdlAP.getData().allopenAP[iCounter].PaymentAmount){
+							sap.m.MessageToast.show("Amount is greater than Invoice Amount!");
+							return;
+						}
 						oT_PAYMENT_PROCESSING_D.U_App_RemainingBal = this.oMdlAP.getData().allopenAP[iCounter].RemainingBalance;
 						oT_PAYMENT_PROCESSING_D.U_App_PaymentAmount = this.oMdlAP.getData().allopenAP[iCounter].PaymentAmount;
 						oT_PAYMENT_PROCESSING_D.U_App_CRANo = this.oMdlAP.getData().allopenAP[iCounter].CRANo;
@@ -852,6 +874,7 @@ sap.ui.define([
 					// sap.m.MessageToast.show(Message);
 					// AppUI5.fHideBusyIndicator();
 					// console.error(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
@@ -866,6 +889,7 @@ sap.ui.define([
 					AppUI5.fErrorLogs("U_APP_OPPD,U_APP_PPD1","Add Batch","null","null",oMessage,"Insert",this.sUserCode,"null",sBodyRequest);
 					sap.m.MessageToast.show(oMessage);
 					console.error(oMessage);
+					AppUI5.fHideBusyIndicator();
 				}else{
 					if (results) {
 						this.getView().byId("DocumentNo").setValue(BatchCode);

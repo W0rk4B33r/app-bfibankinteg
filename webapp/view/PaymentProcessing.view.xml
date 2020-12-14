@@ -136,7 +136,7 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="6rem">
+												<t:Column width="7rem">
 													<Label text="Invoice #"/>
 													<t:template>
 														<Input
@@ -200,7 +200,7 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="8rem">
+												<t:Column width="9rem">
 													<Label text="Supplier Name"/>
 													<t:template>
 														<Input
@@ -216,7 +216,7 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="6rem">
+												<t:Column width="7rem">
 													<Label text="Invoice Total"/>
 													<t:template>
 														<Input
@@ -224,7 +224,7 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="5rem">
+												<t:Column width="7rem">
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
@@ -232,7 +232,7 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="5rem">
+												<t:Column width="7rem">
 													<Label text="Payment Amount"/>
 													<t:template>
 														<Input 

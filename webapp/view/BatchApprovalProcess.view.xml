@@ -132,7 +132,7 @@ xmlns:f="sap.ui.layout.form"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="6rem">
+												<t:Column width="7rem">
 													<Label text="Invoice #"/>
 													<t:template>
 														<Input
@@ -212,7 +212,7 @@ xmlns:f="sap.ui.layout.form"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="6rem">
+												<t:Column width="7rem">
 													<Label text="Invoice Total"/>
 													<t:template>
 														<Input
@@ -220,7 +220,7 @@ xmlns:f="sap.ui.layout.form"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="5rem">
+												<t:Column width="7rem">
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
@@ -228,7 +228,7 @@ xmlns:f="sap.ui.layout.form"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="5rem">
+												<t:Column width="7rem">
 													<Label text="Payment Amount"/>
 													<t:template>
 														<Input 

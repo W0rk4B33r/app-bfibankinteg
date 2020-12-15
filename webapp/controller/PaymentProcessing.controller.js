@@ -595,14 +595,13 @@ sap.ui.define([
 			//Check if Existing
 			//this.deleteIfExisting();
 			this.onAddProcess();
-			AppUI5.fHideBusyIndicator();
 			this.getView().byId("btnDraft").setEnabled(true);
 		},
 		
-		deleteIfExisting: function(){
+		deleteIfExisting: function(oDetailsCode,Type){
 			$.ajax({
 				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExist"
-				+ "&VALUE1=" + 	this.getView().byId("DocumentNo").getValue() + "&VALUE2=&VALUE3=&VALUE4=",
+				+ "&VALUE1=" + 	oDetailsCode + "&VALUE2="+ Type +"&VALUE3=&VALUE4=",
 				type: "GET",
 				contentType: "application/json",
 				async: false,
@@ -641,6 +640,7 @@ sap.ui.define([
 					var Message = xhr.responseJSON["error"].message.value;			
 					sap.m.MessageToast.show(Message);
 					console.error(Message);
+					AppUI5.fHideBusyIndicator();
 				},
 				success: function (json) {},
 				context: this
@@ -669,7 +669,7 @@ sap.ui.define([
 				this.getView().byId("btnSave").setEnabled(true);
 				return false;
 			}
-			AppUI5.fShowBusyIndicator(10000);
+			AppUI5.fShowBusyIndicator(15000);
 			this.sStatus = "Saved";
 			this.onAddProcess();
 			AppUI5.fHideBusyIndicator();
@@ -722,31 +722,35 @@ sap.ui.define([
 				var aHeaderCode = this.CheckIfExisting("CheckIfExistingHeader",this.getView().byId("DocumentNo").getValue());
 				//If Newly add Skip Delete
 				if (aHeaderCode !== 0){
+					this.deleteIfExisting(this.oMdlEditRecord.getData().EditRecord.Code,"Header");
 					//details
 					this.CheckIfExisting("CheckIfExistingDetails",this.getView().byId("DocumentNo").getValue());
-					//Compose for Delete
-					var aBatchDelete = [
-						{
-							"tableName": "U_APP_OPPD",
-							"data": aHeaderCode
-						}
-					];
+					
+					// //Compose for Delete
+					// var aBatchDelete = [
+					// 	{
+					// 		"tableName": "U_APP_OPPD",
+					// 		"data": aHeaderCode
+					// 	}
+					// ];
 					for (var d = 0; d < this.oMdlExistingDetails.getData().ExistingDetails.length; d++) {
-						aBatchDelete.push(JSON.parse(JSON.stringify(({
-							"tableName": "U_APP_PPD1",
-							"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
-						}))));
+						this.deleteIfExisting(this.oMdlExistingDetails.getData().ExistingDetails[d].Code,"Details");
+						// aBatchDelete.push(JSON.parse(JSON.stringify(({
+						// 	"tableName": "U_APP_PPD1",
+						// 	"data": this.oMdlExistingDetails.getData().ExistingDetails[d].Code
+						// }))));
+						var aBatchDelete = 0;
 					}
 				}else{
-					var aBatchDelete = 0
+					var aBatchDelete = 0;
 				}
-			}else{var aBatchDelete = 0}
+			}else{var aBatchDelete = 0;}
 			
 			//End delete
 			var that = this;
 			var CodeH = AppUI5.generateUDTCode("GetCode");
 			// var DocNum = AppUI5.generateUDTCode("GetDocNum");
-			var LastBatch = AppUI5.generateUDTCode("GetLastBatchOfDay");
+			var LastBatch = AppUI5.generateUDTCode("GetLastBatchOfDay");// - (aHeaderCode === 0 ? 0 : 1)
 			// if (LastBatch ==="0"){LastBatch =1;}
 			var pad = "000";
 			var result = (pad+LastBatch).slice(-pad.length);

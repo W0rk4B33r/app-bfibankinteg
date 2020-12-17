@@ -135,6 +135,44 @@ sap.ui.define([
 			this.oTable.getColumns()[3].setFilterProperty("U_App_Status");
 			this.oTable.getColumns()[4].setLabel("Remarks");
 			this.oTable.getColumns()[5].setLabel("Created Date");
+			this.oTable.getColumns()[5].setFilterProperty("U_App_CreatedDate");
+		},
+
+		filterGlobally : function(oEvent) {
+			var sQuery = oEvent.getParameter("query");
+			this._oGlobalFilter = null;
+
+			if (sQuery) {
+				this._oGlobalFilter = new Filter([
+					new Filter("U_App_DocNum", FilterOperator.Contains, sQuery),
+					new Filter("U_App_Suppliercode", FilterOperator.Contains, sQuery),
+					new Filter("U_App_SupplierName", FilterOperator.Contains, sQuery),
+					new Filter("U_App_Status", FilterOperator.Contains, sQuery),
+					new Filter("U_App_CreatedDate", FilterOperator.Contains, sQuery)
+				], false);
+			}
+
+			this._filter();
+    	},
+		_filter : function() {
+			var oFilter = null;
+
+			if (this._oGlobalFilter) {
+				oFilter = this._oGlobalFilter;
+			}
+
+			this.byId("tblDrafts").getBinding("rows").filter(oFilter, "Application");
+		},
+		clearAllFilters: function (oEvent) {
+			var oTable = this.getView().byId("tblDrafts");
+	
+			this._oGlobalFilter = null;
+			this._filter();
+	
+			var aColumns = oTable.getColumns();
+			for (var i = 0; i < aColumns.length; i++) {
+				oTable.filter(aColumns[i], null);
+			}
 		},
 		//GET ALL BATCHCODE
 		fGetAllBatch: function(){

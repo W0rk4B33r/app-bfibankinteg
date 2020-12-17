@@ -143,6 +143,43 @@ sap.ui.define([
 			this.oTable.getColumns()[1].setLabel("Draft No.");
 			this.oTable.getColumns()[2].setLabel("Status");
 			this.oTable.getColumns()[3].setLabel("Created Date");
+			this.oTable.getColumns()[3].setFilterProperty("U_App_CreatedDate");
+		},
+
+		filterGlobally : function(oEvent) {
+			var sQuery = oEvent.getParameter("query");
+			this._oGlobalFilter = null;
+
+			if (sQuery) {
+				this._oGlobalFilter = new Filter([
+					new Filter("U_App_DocNum", FilterOperator.Contains, sQuery),
+					new Filter("U_App_DraftNo", FilterOperator.Contains, sQuery),
+					new Filter("U_App_Status", FilterOperator.Contains, sQuery),
+					new Filter("U_App_CreatedDate", FilterOperator.Contains, sQuery)
+				], false);
+			}
+
+			this._filter();
+    	},
+		_filter : function() {
+			var oFilter = null;
+
+			if (this._oGlobalFilter) {
+				oFilter = this._oGlobalFilter;
+			}
+
+			this.byId("tblDrafts").getBinding("rows").filter(oFilter, "Application");
+		},
+		clearAllFilters: function (oEvent) {
+			var oTable = this.getView().byId("tblDrafts");
+	
+			this._oGlobalFilter = null;
+			this._filter();
+	
+			var aColumns = oTable.getColumns();
+			for (var i = 0; i < aColumns.length; i++) {
+				oTable.filter(aColumns[i], null);
+			}
 		},
 
 		//GET ALL BATCHCODE
@@ -734,19 +771,21 @@ sap.ui.define([
 			try {
 				var sDraftNum = this.oMdlPayExtract.getData().EditRecord.DRAFTNO;
 				sBatchCode = this.oMdlPayExtract.getData().EditRecord.Code;
+				this.deleteIfExisting(sBatchCode,"Header");
 				if (sDraftNum > 0){
-					var aBatchDelete = [
-						{
-							"tableName": "U_APP_ODOP",
-							"data": sBatchCode
-						}
-					];
+					// var aBatchDelete = [
+					// 	{
+					// 		"tableName": "U_APP_ODOP",
+					// 		"data": sBatchCode
+					// 	}
+					// ];
 					for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
 						sBatchCode = this.oMdlAP.getData().allopenAP[d].BatchDetailCode;
-						aBatchDelete.push(JSON.parse(JSON.stringify(({
-							"tableName": "U_APP_DOP1",
-							"data": sBatchCode
-						}))));
+						this.deleteIfExisting(sBatchCode,"Details");
+						// aBatchDelete.push(JSON.parse(JSON.stringify(({
+						// 	"tableName": "U_APP_DOP1",
+						// 	"data": sBatchCode
+						// }))));
 					}
 				}
 			} catch (error) {
@@ -851,6 +890,33 @@ sap.ui.define([
 				}
 			});
 		},
+		deleteIfExisting: function(oDetailsCode,Type){
+			$.ajax({
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExistPE"
+				+ "&VALUE1=" + 	oDetailsCode + "&VALUE2="+ Type +"&VALUE3=&VALUE4=",
+				type: "GET",
+				contentType: "application/json",
+				async: false,
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+				},
+				error: function (xhr, status, error) {
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
+					AppUI5.fHideBusyIndicator();
+					console.error(Message);
+				},
+				success: function (json) {
+				},
+				context: this
+			}).done(function (results) {
+				if (results) {
+					
+				}
+			});
+			
+		},
 		fExportData: function (aDocEntries,isDirectExport) {
 
 			this.oRecord= {};
@@ -879,10 +945,10 @@ sap.ui.define([
 				var sPayeeCode =this.oMdlAP.getData().allopenAP[d].CardCode;//results.CardCode;
 				var sPNBAccountNo = this.oMdlPayExtract.getData().EditRecord.PNBACCOUNTNO;//'RBA'; //
 				var sToday = new Date();
-				var sDate = ("0" + sToday.getDate()).slice(-2) + '/' + ("0" + (sToday.getMonth() + 1)).slice(-2) + '/' +  sToday.getFullYear().toString().substr(-2);
+				var sDate =  ("0" + sToday.getDate()).slice(-2) + '/' + ("0" + (sToday.getMonth() + 1)).slice(-2) + '/' +  sToday.getFullYear().toString().substr(-2);
 				var sPrintingBranch = this.oMdlPayExtract.getData().EditRecord.PRINTINGBRANCH;//'4053'; //
 				var sDispatchMode= "O";
-				var sDispatchTo = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;//'4053'; // 
+				var sDispatchTo = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTO;//'4053'; // 
 				var sDispatchCode = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;
 				var sDispatchToName = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTONAME;//'PNB GSC Santiago Branch'; //
 				var sFileRefNo = (isDirectExport ==="Y" ? this.oMdlAP.getData().allopenAP[d].DraftDocEntry : aDocEntries[iIndex]);
@@ -901,6 +967,13 @@ sap.ui.define([
 
 				sInvoiceDate =  sMonth + '/' + sDay + '/' + sYear.toString().substr(-2) ;
 
+				var sDocDueDate = this.oMdlAP.getData().allopenAP[d].DocDueDate;
+				var s_Year = sDocDueDate.substring(0, 4);
+				var s_Month = sDocDueDate.substring(4, 6);
+				var s_Day = sDocDueDate.substring(6, 8);
+
+				sDocDueDate =  s_Year + '/' + s_Month + '/' + s_Day.toString().substr(-2) ;
+
 				var sDesc = this.oMdlAP.getData().allopenAP[d].Dscription;
 				var sInvoiceAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
 				var sInvoiceWHTAmount = "";
@@ -915,7 +988,7 @@ sap.ui.define([
 					}	
 				}	
 				this.oContent.Details = "D" + "~" + iTotalAmount.toFixed(2) + "~" + sPayeeName  + "~" + sAddress  + "~" + sAddress2
-										+ "~" + sTIN + "~" + sZipCode + "~" + sPayeeCode + "~" + sPNBAccountNo	+ "~" + sDate + "~" + sPrintingBranch
+										+ "~" + sTIN + "~" + sZipCode + "~" + sPayeeCode + "~" + sPNBAccountNo	+ "~" + sDocDueDate + "~" + sPrintingBranch
 										+ "~" + sDispatchMode + "~" + sDispatchTo + "~" + sDispatchCode + "~" + sDispatchToName 
 										+ "~" + sFileRefNo + "~" + sWHTApplicable + "~" + sWHTTaxCode + "~" + sWHTTaxRate 
 										+ "~" + sVATApplicable + "~" + sWHTDateBaseAmount;

@@ -131,6 +131,7 @@ sap.ui.define([
 		//   AppUI5.createTable("APP_ACTIVITYLOGS", "Activity Log", "bott_NoObject");
 		// //ERROR LOG
 		//   AppUI5.createTable("APP_ERRORLOGS", "Error Log", "bott_NoObject");
+		// AppUI5.createTable("APP_INTRCMPY_LOGS", "Intercompany Logs", "bott_NoObject");
 
 		//   //create udf
 		//   //Payement Processing Header
@@ -231,6 +232,14 @@ sap.ui.define([
 		// AppUI5.createField("ProcessBy", "Process By", "@APP_ERRORLOGS", "db_Alpha", "", 30);
 		// AppUI5.createField("ProcessDate", "Process Date", "@APP_ERRORLOGS", "db_Alpha", "", 30);
 		// AppUI5.createField("INPUTBODY", "INPUT BODY", "@APP_ERRORLOGS", "db_Memo", "");
+
+		// ////InterCompany Logs
+		// AppUI5.createField("PODocEntry ", "PO DocEntry", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 20);
+		// AppUI5.createField("CreatedDate ", "Created Date", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 31);
+		// AppUI5.createField("SyncStatus ", "Sync Status", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 15);
+		// AppUI5.createField("LastSyncErr ", "Last Sync Error", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 200);
+		// AppUI5.createField("UpdatedDate ", "Updated Date", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 31);
+		// AppUI5.createField("PODocNum  ", "PODocNum ", "@APP_INTRCMPY_LOGS", "db_Alpha", "", 15);
 		}
 		
 	});

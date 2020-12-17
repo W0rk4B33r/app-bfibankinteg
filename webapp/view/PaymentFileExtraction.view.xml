@@ -228,7 +228,7 @@
 													<Label text="Remaining Balance"/>
 													<t:template>
 														<Input
-															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															value="{ path:'oMdlAP>PaymentAmount', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
@@ -237,6 +237,14 @@
 													<t:template>
 														<Input
 															value="{ path:'oMdlAP>DocTotal', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
+															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+													</t:template>
+												</t:Column>
+												<t:Column width="7rem">
+													<Label text="Check Amount"/>
+													<t:template>
+														<Input
+															value="{ path:'oMdlAP>CheckSum', type: 'sap.ui.model.type.Float', formatOptions: {maxFractionDigits: 2, minFractionDigits: 2}}"
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>

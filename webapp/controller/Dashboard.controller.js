@@ -21,12 +21,12 @@ sap.ui.define([
         
         this.oMdlDataCount = new sap.ui.model.json.JSONModel();
         $.ajax({
-          url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getStatusCount&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+          url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.dataBase +"&procName=spAppBankIntegration&QUERYTAG=getStatusCount&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
           type: "GET",
           async: false,
           dataType: "json",
           beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+            xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
           },
           error: function (xhr, status, error) {
             MessageToast.show(error);

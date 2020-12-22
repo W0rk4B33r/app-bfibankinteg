@@ -127,13 +127,13 @@ sap.ui.define([
 		},
 		fGetAllMenu: function(){
 			$.ajax({
-				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
+				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDatabase +"&procName=spAppBankIntegration&QUERYTAG=getAllMenu" +
 				"&VALUE1="+ this.sUserCode +"&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
 				},
 				error: function (xhr, status, error) {
 					// var Message = xhr.responseJSON["error"].message.value;			
@@ -150,7 +150,7 @@ sap.ui.define([
 		},
 		onLogout: function (){ 
 			$.ajax({
-				url: "https://sl.biotechfarms.net/b1s/v1/Logout",
+				url: "https://18.138.78.210:50000/b1s/v1/Logout",
 				type: "POST",
 				error: function (xhr, status, error) {
 				var Message = xhr.responseJSON["error"].message.value;			

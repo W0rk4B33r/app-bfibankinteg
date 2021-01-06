@@ -952,10 +952,10 @@ sap.ui.define([
 				var sDispatchCode = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTOCODE;
 				var sDispatchToName = this.oMdlPayExtract.getData().EditRecord.DISTPATCHTONAME;//'PNB GSC Santiago Branch'; //
 				var sFileRefNo = (isDirectExport ==="Y" ? this.oMdlAP.getData().allopenAP[d].DraftDocEntry : aDocEntries[iIndex]);
-				var sWHTApplicable = "";
+				var sWHTApplicable = "N";
 				var sWHTTaxCode = "";
 				var sWHTTaxRate = "";
-				var sVATApplicable  = "";
+				var sVATApplicable  = "N";
 				var sWHTDateBaseAmount = "";
 				var iTotalAmount = 0;
 				var sRecordIdentifier = "I";
@@ -972,7 +972,8 @@ sap.ui.define([
 				var s_Month = sDocDueDate.substring(4, 6);
 				var s_Day = sDocDueDate.substring(6, 8);
 
-				sDocDueDate =  s_Year + '/' + s_Month + '/' + s_Day.toString().substr(-2) ;
+				// sDocDueDate =  s_Year + '/' + s_Month + '/' + s_Day.toString().substr(-2) ;
+				sDocDueDate = s_Day.toString().substr(-2) + '/' + s_Month + '/' +  s_Year.toString().substr(-2)  ;
 
 				var sDesc = this.oMdlAP.getData().allopenAP[d].Dscription;
 				var sInvoiceAmount = this.oMdlAP.getData().allopenAP[d].DocTotal;
@@ -1013,7 +1014,7 @@ sap.ui.define([
 												+ this.oMdlAP.getData().allopenAP[i].Dscription + "~" 
 												+ this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) + "~" 
 												+ sInvoiceWHTAmount + "~" + sInvoiceVATAmount
-									   			+ "~" + (this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) - (this.oMdlAP.getData().allopenAP[i].WTaxAmount));
+									   			+ "~" + ((this.oMdlAP.getData().allopenAP[i].DocTotal.toFixed(2) - (this.oMdlAP.getData().allopenAP[i].WTaxAmount))).toFixed(2);
 						// iTotalAmount = iTotalAmount + this.oMdlAP.getData().allopenAP[i].DocTotal;
 						this.oRecord.Details.push(JSON.parse(JSON.stringify(this.oContent)));
 						iIndex2 = i;	

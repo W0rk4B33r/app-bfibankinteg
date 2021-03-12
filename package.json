@@ -23,7 +23,7 @@
                 "@openui5/sap.uxap": "^1.73.2",
                 "@openui5/themelib_sap_belize": "^1.73.2",
                 "@openui5/themelib_sap_fiori_3": "^1.73.2",
-                "jspdf": "^1.5.3",
+                "jspdf": "^2.3.1",
                 "jspdf-autotable": "^3.5.3",
                 "servicelayercontext": "^1.0.0",
                 "shx": "^0.3.2"

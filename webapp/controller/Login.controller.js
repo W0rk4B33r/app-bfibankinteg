@@ -56,7 +56,7 @@ sap.ui.define([
 			oLoginCredentials.UserName = sUserName.getValue();//"manager";
 			oLoginCredentials.Password = sPassword.getValue();//"1234";
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/Login",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/Login",
 				data: JSON.stringify(oLoginCredentials),
 				type: "POST",
 				crossDomain: true,

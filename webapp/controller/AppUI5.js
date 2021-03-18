@@ -34,7 +34,7 @@ sap.ui.define([
 
 			var stringTableInfo = JSON.stringify(tableInfo);
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/UserTablesMD",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/UserTablesMD",
 				data: stringTableInfo,
 				type: "POST",
 				async: false,
@@ -86,7 +86,7 @@ sap.ui.define([
 			var dataString = JSON.stringify(oFieldInfo);
 
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/UserFieldsMD",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/UserFieldsMD",
 				data: dataString,
 				type: "POST",
 				async: false,
@@ -438,7 +438,7 @@ sap.ui.define([
 			sBodyRequest.U_INPUTBODY = sRequest
 
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/U_APP_ERRORLOGS",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/U_APP_ERRORLOGS",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: JSON.stringify(sBodyRequest),

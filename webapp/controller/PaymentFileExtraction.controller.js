@@ -256,6 +256,66 @@ sap.ui.define([
 		onClickAdd: function (oEvent) {
 			this.fClearFields();
 		},
+		//--Clear filter
+		fClear: function(){
+			this.getView().byId("AsOfDate").setValue("");	
+		},
+		fGenerateSummary: function (){
+		
+				var oDate = "2021-01-06";//this.getView().byId("AsOfDate").getValue();
+
+				//AJAX selected Key
+				$.ajax({
+					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSummary" +
+						"&VALUE1=" + oDate + "&VALUE2=&VALUE3=&VALUE4=",
+					type: "GET",
+					async: false,
+					dataType: "json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					},
+					error: function (xhr, status, error) {
+						var Message = xhr.responseJSON["error"].message.value;			
+						sap.m.MessageToast.show(Message);
+						console.error(xhr.responseJSON["error"].message.value);
+					},
+					success: function (json) {},
+					context: this
+				}).done(function (results) {
+					if (results) {
+						// this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(results) + "}");
+						// this.getView().setModel(this.oMdlAP, "oMdlAP");
+						var oDetails = [];
+						var oRecord = [
+							['Payee Name' , 'Payee Site Name', 'Payee Number','Payess Address1','Payee City'
+							,'Payment Amount ','Currency','Payment Date','Maturity Date','Payment Due Date'
+							,'Dispatch Bank','Dispatch Mode','Dispatch To','Printing Bank Branch','Output Filename']
+						];
+						for (var d = 0; d < results.length; d++) {
+							oDetails = [
+								results[d].U_App_SupplierName,
+								results[d].U_App_Suppliercode,
+								results[d].PayeeNumber,
+								results[d].Street , 
+								results[d].Street,
+								results[d].PaymentAmount,
+								results[d].Currency , 
+								results[d].U_App_CreatedDate,
+								results[d].U_App_CreatedDate,
+								results[d].U_App_CreatedDate , 
+								results[d].U_App_DispatchCode,
+								results[d].DispatchMode,
+								results[d].U_App_DistPatchTo , 
+								results[d].U_App_PNBPrntBrnch,
+								results[d].OutputFilename
+							];
+							oRecord.push(JSON.parse(JSON.stringify(oDetails)));
+						}
+						var FileName = "Summary" +  oDate;
+						this.fHandleExcelExportSummary(oRecord,FileName,"xls");
+					}
+				});
+		},
 		fClearFields: function () {
 			try {
 				// this.getView().byId("btnSearch").setVisible(true);
@@ -321,13 +381,15 @@ sap.ui.define([
 					},
 					error: function (xhr, status, error) {
 						//MessageToast.show(error);
-						if (xhr.status === 400) {
-							sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-							sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-						} else {
-							var Message = xhr.responseJSON["error"].message.value;			
-							sap.m.MessageToast.show(Message);
-						}
+						// if (xhr.status === 400) {
+						// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
+						// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+						// } else {
+						// 	var Message = xhr.responseJSON["error"].message.value;			
+						// 	sap.m.MessageToast.show(Message);
+						// }
+						var Message = xhr.responseJSON["error"].message.value;			
+						sap.m.MessageToast.show(Message);
 						console.error(xhr.responseJSON["error"].message.value);
 					},
 					success: function (json) {},
@@ -427,7 +489,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,aBatchUpdate);
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/$batch",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a", 
 				data: sBodyRequest,
@@ -570,9 +632,10 @@ sap.ui.define([
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/$batch",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
+				aysnc: false,
 				data: sBodyRequest,
 				xhrFields: {
 					withCredentials: true
@@ -675,7 +738,7 @@ sap.ui.define([
 		fPostPaymentDraft: function (oRecord) {
 			$.ajax({
 
-				url: "https://18.138.78.210:50000/b1s/v1/PaymentDrafts",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/PaymentDrafts",
 				type: "POST",
 				contentType: "application/json",
 				async: false,
@@ -712,7 +775,7 @@ sap.ui.define([
 			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -739,7 +802,7 @@ sap.ui.define([
 		fGetBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
 					CardCode + "'",
 				type: "GET",
 				xhrFields: {
@@ -852,7 +915,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.138.78.210:50000/b1s/v1/$batch",
+				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -1340,6 +1403,15 @@ sap.ui.define([
 			// }).then(function () {
 			// 	oExport.destroy();
 			// });
+		},
+		fHandleExcelExportSummary: function (oRecord,sFileName,sFileType) {
+			var wb = XLSX.utils.book_new();
+			wb.SheetNames.push(sFileName);
+			var ws_data = oRecord;
+			var ws = XLSX.utils.aoa_to_sheet(ws_data);
+			wb.Sheets[sFileName] = ws;
+			var wbout = XLSX.write(wb, {bookType:sFileType,  type: 'binary'});
+			saveAs(new Blob([fExportFile(wbout)],{type:"application/octet-stream"}), sFileName +"."+sFileType);
 		}
 
 	});
@@ -1349,5 +1421,11 @@ sap.ui.define([
 			type: "text/plain;charset=utf-8"
 		});
 		saveAs(blob, fileName);
+	}
+	function fExportFile(s) {
+		var buf = new ArrayBuffer(s.length);
+		var view = new Uint8Array(buf);
+		for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+		return buf;
 	}
 });

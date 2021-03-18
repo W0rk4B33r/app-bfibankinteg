@@ -8,6 +8,7 @@ sap.ui.define([
 
 	return Controller.extend("com.apptech.app-bankinteg.controller.Login", {
 		onInit: function () {
+			
 		//get all databse
 		//this.oMdlDatabase = new JSONModel("model/databases.json");
 		this.oMdlDatabase = new JSONModel();

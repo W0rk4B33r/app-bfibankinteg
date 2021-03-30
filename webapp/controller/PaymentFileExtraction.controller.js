@@ -261,8 +261,24 @@ sap.ui.define([
 			this.getView().byId("AsOfDate").setValue("");	
 		},
 		fGenerateSummary: function (){
-		
-				var oDate = "2021-01-06";//this.getView().byId("AsOfDate").getValue();
+
+				var oDate = this.getView().byId("AsOfDate").getValue();//"2021-3-8";//
+				if(oDate === ""){
+					MessageToast.show("Input Date!");
+					return;
+				}
+				oDate = oDate.split("-");
+				oDate = oDate[0] + "-" + parseInt(oDate[1], 10)+ "-" +parseInt(oDate[2], 10);
+				var monthNames = ["January", "February", "March", "April", "May", "June",
+				"July", "August", "September", "October", "November", "December"
+				];
+				var dateExtracted = monthNames[parseInt(oDate[1], 10)];
+				var oDate2 = this.getView().byId("AsOfDate").getValue();
+				oDate2 = oDate2.split("-");
+				dateExtracted = dateExtracted + " " + oDate2[1] + ", " + oDate2[0];
+				var uploadDate = "UPLOAD DATE: " + dateExtracted;
+				var uploadBy = "UPLOADED BY: " + this.sUserCode;
+
 
 				//AJAX selected Key
 				$.ajax({
@@ -283,10 +299,10 @@ sap.ui.define([
 					context: this
 				}).done(function (results) {
 					if (results) {
-						// this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(results) + "}");
-						// this.getView().setModel(this.oMdlAP, "oMdlAP");
 						var oDetails = [];
 						var oRecord = [
+							[''],[''],[''],[''],
+							['' , '', '','','',dateExtracted,'','','','','','','','',''],[''],
 							['Payee Name' , 'Payee Site Name', 'Payee Number','Payess Address1','Payee City'
 							,'Payment Amount ','Currency','Payment Date','Maturity Date','Payment Due Date'
 							,'Dispatch Bank','Dispatch Mode','Dispatch To','Printing Bank Branch','Output Filename']
@@ -294,15 +310,15 @@ sap.ui.define([
 						for (var d = 0; d < results.length; d++) {
 							oDetails = [
 								results[d].U_App_SupplierName,
-								results[d].U_App_Suppliercode,
+								results[d].PayeeSiteName,
 								results[d].PayeeNumber,
-								results[d].Street , 
-								results[d].Street,
+								results[d].PayessAddress1 , 
+								results[d].PayeeCity,
 								results[d].PaymentAmount,
 								results[d].Currency , 
-								results[d].U_App_CreatedDate,
-								results[d].U_App_CreatedDate,
-								results[d].U_App_CreatedDate , 
+								results[d].PaymentDate,
+								results[d].MaturityDate,
+								results[d].PaymentDueDate , 
 								results[d].U_App_DispatchCode,
 								results[d].DispatchMode,
 								results[d].U_App_DistPatchTo , 
@@ -311,6 +327,10 @@ sap.ui.define([
 							];
 							oRecord.push(JSON.parse(JSON.stringify(oDetails)));
 						}
+						oRecord.push(
+							['TOTAL' , '', '','','','1000','','','','','','','','',''],[''],
+							[uploadBy],[uploadDate]
+						);
 						var FileName = "Summary" +  oDate;
 						this.fHandleExcelExportSummary(oRecord,FileName,"xls");
 					}

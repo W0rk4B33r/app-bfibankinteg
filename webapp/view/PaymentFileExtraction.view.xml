@@ -11,9 +11,9 @@
 								<t:Table id="tblDrafts" selectionMode="Single" visibleRowCount="8" ariaLabelledBy="title" enableCellFilter="true"
 									rowSelectionChange="onSelectionChange">
 									<t:extension>
-										<!-- <Toolbar>
+										<Toolbar>
 											<content>
-												<DatePicker id="AsOfDate" valueFormat="yyyy-mm-dd" displayFormat="MM/dd/yyyy" change="handleChange" value="" required="true">
+												<DatePicker id="AsOfDate" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="handleChange" value="" required="true">
 													<layoutData>
 														<l:GridData span="L3 M4 S12"/>
 													</layoutData>
@@ -21,7 +21,7 @@
 												<Button id="btnRptGenerate" text="Generate Summary" tooltip="Add" press="fGenerateSummary" icon="sap-icon://process" visible="{buttons>/buttons/btnRptGenerate}" />
 												<Button id="btnRptClear" text="Clear" tooltip="clear" press="fClear" icon="sap-icon://clear-filter" />
 											</content>
-										</Toolbar> -->
+										</Toolbar>
 										<Toolbar>
 											<content>
 												<Button text="Add" id="btnAddModePE" tooltip="Add" press="onClickAdd" icon="sap-icon://add" visible="{buttons>/buttons/btnAddModePE}"/>

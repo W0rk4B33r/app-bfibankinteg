@@ -196,13 +196,15 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					//MessageToast.show(error);
-					if (xhr.status === 400) {
-						sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					} else {
-						var Message = xhr.responseJSON["error"].message.value;			
-						sap.m.MessageToast.show(Message);
-					}
+					// if (xhr.status === 400) {
+					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
+					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+					// } else {
+					// 	var Message = xhr.responseJSON["error"].message.value;			
+					// 	sap.m.MessageToast.show(Message);
+					// }
+					var Message = xhr.responseJSON["error"].message.value;			
+					sap.m.MessageToast.show(Message);
 					console.error(xhr.responseJSON["error"].message.value);
 				},
 				success: function (json) {},
@@ -232,13 +234,15 @@ sap.ui.define([
 				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
-					if (xhr.status === 400) {
-						sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
-						sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
-					} else {
-						var Message = xhr.responseJSON["error"].message.value;			
+					// if (xhr.status === 400) {
+					// 	sap.m.MessageToast.show("Session End. Redirecting to Login Page..");
+					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+					// } else {
+					// 	var Message = xhr.responseJSON["error"].message.value;			
+					// 	sap.m.MessageToast.show(Message);
+					// }
+					var Message = xhr.responseJSON["error"].message.value;			
 						sap.m.MessageToast.show(Message);
-					}
 					console.error(xhr.responseJSON["error"].message.value);
 				},
 				success: function (json) {},

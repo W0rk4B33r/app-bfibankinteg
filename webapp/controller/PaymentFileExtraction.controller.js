@@ -311,6 +311,7 @@ sap.ui.define([
 							,'Payment Amount ','Currency','Payment Date','Maturity Date','Payment Due Date'
 							,'Dispatch Bank','Dispatch Mode','Dispatch To','Printing Bank Branch','Output Filename']
 						];
+						var oTotalAmount = 0;
 						for (var d = 0; d < results.length; d++) {
 							oDetails = [
 								results[d].U_App_SupplierName,
@@ -329,10 +330,11 @@ sap.ui.define([
 								results[d].U_App_PNBPrntBrnch,
 								results[d].OutputFilename
 							];
+							oTotalAmount = oTotalAmount + results[d].PaymentAmount;
 							oRecord.push(JSON.parse(JSON.stringify(oDetails)));
 						}
 						oRecord.push(
-							['TOTAL' , '', '','','','1000','','','','','','','','',''],[''],
+							['TOTAL' , '', '','','',oTotalAmount,'','','','','','','','',''],[''],
 							[uploadBy],[uploadDate]
 						);
 						var FileName = "Summary" +  oDate;

@@ -152,12 +152,16 @@
 															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
 													</t:template>
 												</t:Column>
-												<t:Column width="7rem">
+												<t:Column width="8rem">
 													<Label text="Check Date"/>
+													
 													<t:template>
-														<Input
+														<DatePicker valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy" change="handleChange" value="{ path:'oMdlAP>DocDueDate'}" editable="true">
+															
+														</DatePicker>
+														<!-- <Input
 															value="{ path:'oMdlAP>DocDueDate'}"
-															textAlign="End" fieldWidth="80%" width="100%" enabled="false"/>
+															textAlign="End" fieldWidth="80%" width="100%" enabled="true"/> -->
 													</t:template>
 												</t:Column>
 												<t:Column width="6rem">

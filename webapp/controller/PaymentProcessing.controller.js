@@ -854,7 +854,9 @@ sap.ui.define([
 						oT_PAYMENT_PROCESSING_D.U_App_InvDocNum = this.oMdlAP.getData().allopenAP[iCounter].DocNum;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceNo = this.oMdlAP.getData().allopenAP[iCounter].DocEntry;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceDate = this.oMdlAP.getData().allopenAP[iCounter].DocDate;
-						oT_PAYMENT_PROCESSING_D.U_App_CheckDate = this.oMdlAP.getData().allopenAP[iCounter].DocDueDate;
+						var CheckDate = this.oMdlAP.getData().allopenAP[iCounter].DocDueDate.split("/");
+						CheckDate = CheckDate[2] + CheckDate[0] + CheckDate[1];
+						oT_PAYMENT_PROCESSING_D.U_App_CheckDate = CheckDate;
 						oT_PAYMENT_PROCESSING_D.U_App_SuppRefNo = this.oMdlAP.getData().allopenAP[iCounter].NumAtCard;
 						oT_PAYMENT_PROCESSING_D.U_App_Remarks = this.oMdlAP.getData().allopenAP[iCounter].Comments;
 						oT_PAYMENT_PROCESSING_D.U_App_InvoiceType = this.oMdlAP.getData().allopenAP[iCounter].DocType;

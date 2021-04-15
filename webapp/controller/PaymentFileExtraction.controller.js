@@ -1028,7 +1028,7 @@ sap.ui.define([
 				var iTotalCheck = 1;
 				var sPayeeName = this.oMdlAP.getData().allopenAP[d].CardName;
 				var splitAdd = this.oMdlAP.getData().allopenAP[d].Address;
-				splitAdd = splitAdd.match(/.{1,50}/g);
+				splitAdd = splitAdd.match(/.{1,50}/g); // split string every 50 char
 				var sAddress = (splitAdd[0] === null ? "" :  splitAdd[0]);
 				var sAddress2 =  (splitAdd[1] === null ? "" :  splitAdd[1]);
 				var sTIN = (this.oMdlAP.getData().allopenAP[d].TIN === null ? "" :  this.oMdlAP.getData().allopenAP[d].TIN);

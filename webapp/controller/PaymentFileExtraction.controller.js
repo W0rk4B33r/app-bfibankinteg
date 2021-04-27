@@ -505,7 +505,7 @@ sap.ui.define([
 				"Code" : this.oMdlPayExtract.getData().EditRecord.Code
 			}];
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
-				oT_PAYMENT_EXTRACTING_D.Cancelled = 'Y';
+				// oT_PAYMENT_EXTRACTING_D.Cancelled = 'Y';
 
 				aBatchUpdate.push(JSON.parse(JSON.stringify(({
 					"tableName": "PaymentDrafts",
@@ -1030,7 +1030,7 @@ sap.ui.define([
 				var splitAdd = this.oMdlAP.getData().allopenAP[d].Address;
 				var splitAdd2 = splitAdd.match(/.{1,50}/g); // split string every 50 char
 				var sAddress = (splitAdd2 === null || splitAdd2 === "null"  ? "" :  splitAdd2[0]);
-				var sAddress2 =  (splitAdd2 === null || splitAdd2 === "null" ? "" :  splitAdd2[1]);
+				var sAddress2 =  (splitAdd2 === null || splitAdd2 === "null" || splitAdd2[1] === undefined ? "" :  splitAdd2[1]);
 				var sTIN = (this.oMdlAP.getData().allopenAP[d].TIN === null ? "" :  this.oMdlAP.getData().allopenAP[d].TIN);
 				var sZipCode = (this.oMdlAP.getData().allopenAP[d].ZipCode === null ? "" :  this.oMdlAP.getData().allopenAP[d].ZipCode);
 				var sPayeeCode =this.oMdlAP.getData().allopenAP[d].CardCode;//results.CardCode;
@@ -1346,9 +1346,9 @@ sap.ui.define([
 	
 					objectUDTUpdate = oRequestUpdate[i];
 					sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
-					sBatchRequest = sBatchRequest + "PATCH /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.DocEntry +")";
-					sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";
-					sBatchRequest = sBatchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
+					sBatchRequest = sBatchRequest + "DELETE /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.DocEntry +")\n\n";
+					// sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";
+					// sBatchRequest = sBatchRequest + JSON.stringify(objectUDTUpdate.data) + "\n\n";
 				}
 			}else{
 				//DELETE

@@ -432,7 +432,7 @@ sap.ui.define([
 				// this.getView().byId("searchID").setVisible(false);
 				this.getView().byId("btnSave").setEnabled(false);
 				this.getView().byId("btnDraft").setEnabled(false);
-				this.getView().byId("btnCancel").setEnabled(false);
+				this.getView().byId("btnCancel").setEnabled(true);
 			}else if(sStatus === "Saved"){
 				this.getView().byId("DateFrom").setEnabled(false);
 				this.getView().byId("DateTo").setEnabled(false);

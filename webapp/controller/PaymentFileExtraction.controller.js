@@ -505,6 +505,9 @@ sap.ui.define([
 				"Code" : this.oMdlPayExtract.getData().EditRecord.Code
 			}];
 			for (var d = 0; d < this.oMdlAP.getData().allopenAP.length; d++) {
+				var DraftDocEntry = this.oMdlAP.getData().allopenAP[d].DraftDocEntry;
+
+
 				// oT_PAYMENT_EXTRACTING_D.Cancelled = 'Y';
 
 				aBatchUpdate.push(JSON.parse(JSON.stringify(({
@@ -1342,9 +1345,20 @@ sap.ui.define([
 				}
 				//update Draft Document	
 				var objectUDTUpdate = "";
-				for (var i = 0; i < oRequestUpdate.length; i++) { 
-	
-					objectUDTUpdate = oRequestUpdate[i];
+				const result = [];
+				const map = new Map();
+				for (const item of oRequestUpdate) {
+					if(!map.has(item.id)){
+						map.set(item.id, true);    // set any value to Map
+						result.push({
+							DocEntry: item.DocEntry,
+							tableName: item.tableName
+						});
+					}
+				}
+				for (var i = 0; i < result.length; i++) { 
+					
+					objectUDTUpdate = result[i];
 					sBatchRequest = sBatchRequest + "--b\nContent-Type:application/http\nContent-Transfer-Encoding:binary\n\n";
 					sBatchRequest = sBatchRequest + "DELETE /b1s/v1/"  + objectUDTUpdate.tableName + "("+ objectUDTUpdate.DocEntry +")\n\n";
 					// sBatchRequest = sBatchRequest + "\nContent-Type: application/json\n\n";

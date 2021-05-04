@@ -111,7 +111,8 @@ sap.ui.define([
 						oPaymentChecks.DueDate = sStringDate;
 						//new Date(Date.parse(this.oMdlUploading.getData().Uploading[d].CheckDate));//this.oMdlUploading.getData().Uploading[d].CheckDate;// "2020-02-06";
 						var oCheckNum = this.oMdlUploading.getData().Uploading[d].CheckNum;
-						oPaymentChecks.CheckNumber = oCheckNum.substring(0,9) //1234;
+						var CheckNumLength = oCheckNum.length;
+						oPaymentChecks.CheckNumber = (oCheckNum.length < 9 ? oCheckNum : oCheckNum.substring(CheckNumLength - 9)); //1234;
 						oPaymentChecks.BankCode = "PNB";
 						//oPaymentChecks.Branch = "123-0129";//"803-279";
 						oPaymentChecks.AccounttNum = this.oMdlUploading.getData().Uploading[d].BankAccount;//"23058023";

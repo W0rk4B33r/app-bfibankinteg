@@ -98,6 +98,7 @@ sap.ui.define([
 					oRecord.CounterReference = this.oMdlUploading.getData().Uploading[d].VoucherNum;
 					// oRecord.U_APP_IsPosted = "N";
 					oRecord.CashSum = 0.0;
+					oRecord.U_APP_CheckNumber = this.oMdlUploading.getData().Uploading[d].CheckNum;
 					sDocEntry = this.oMdlUploading.getData().Uploading[d].RefNum.replace(" ","");
 					//for (var d = 0; d < this.oMdlUploading.getData().Uploading.length; d++) {
 						// //check details

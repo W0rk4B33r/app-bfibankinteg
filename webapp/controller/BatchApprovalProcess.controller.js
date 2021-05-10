@@ -170,12 +170,12 @@ sap.ui.define([
 		//GET ALL BATCHCODE
 		fGetAllBatch: function(){
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllBatch&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
@@ -194,12 +194,12 @@ sap.ui.define([
 		fGetAllRecord: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllSavedRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=getAllSavedRecord&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
@@ -244,13 +244,13 @@ sap.ui.define([
 		getSearchDataHead: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			//get all open AP base on parameters
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName="+ procName +"&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
@@ -272,13 +272,13 @@ sap.ui.define([
 		getSearchDataDet: function(dbName,procName,queryTag,value1,value2,value3,value4){
 			this.oMdlAP = new sap.ui.model.json.JSONModel();
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=" + queryTag
 				+"&VALUE1="+ value1 +"&VALUE2="+ value2 +"&VALUE3="+ value3 +"&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
@@ -341,7 +341,7 @@ sap.ui.define([
 		},
 		updateRecords: function(table,code,Data,batchNum,isApprove){
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/"+table+"('"+code+"')",
+				url: "https://18.141.110.57:50000/b1s/v1/"+table+"('"+code+"')",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,

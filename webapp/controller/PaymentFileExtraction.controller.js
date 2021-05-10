@@ -186,13 +186,13 @@ sap.ui.define([
 		fGetRecords: function (queryTag, sRecord) {
 			// var aReturnResult = [];
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					//MessageToast.show(error);
@@ -224,13 +224,13 @@ sap.ui.define([
 		fGetTableData: function (queryTag) {
 			var aReturnResult = [];
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=&VALUE2=&VALUE3=&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					aReturnResult = [];
@@ -286,13 +286,13 @@ sap.ui.define([
 
 				//AJAX selected Key
 				$.ajax({
-					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSummary" +
+					url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSummary" +
 						"&VALUE1=" + oDate + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
 					dataType: "json",
 					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 					},
 					error: function (xhr, status, error) {
 						var Message = xhr.responseJSON["error"].message.value;			
@@ -397,13 +397,13 @@ sap.ui.define([
 
 				//AJAX selected Key
 				$.ajax({
-					url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
+					url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=getSpecificDraft" +
 						"&VALUE1=" + sDraftNum + "&VALUE2=&VALUE3=&VALUE4=",
 					type: "GET",
 					async: false,
 					dataType: "json",
 					beforeSend: function (xhr) {
-						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+						xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 					},
 					error: function (xhr, status, error) {
 						//MessageToast.show(error);
@@ -518,7 +518,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,aBatchUpdate);
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a", 
 				data: sBodyRequest,
@@ -661,7 +661,7 @@ sap.ui.define([
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				aysnc: false,
@@ -741,13 +741,13 @@ sap.ui.define([
 		//search------------
 		fGetSearchDataDet: function (dbName, procName, queryTag, value1, value2, value3, value4) {
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName=" + this.sDataBase + "&procName=spAppBankIntegration&QUERYTAG=" + queryTag +
 					"&VALUE1=" + value1 + "&VALUE2=" + value2 + "&VALUE3=" + value3 + "&VALUE4=",
 				type: "GET",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			
@@ -767,7 +767,7 @@ sap.ui.define([
 		fPostPaymentDraft: function (oRecord) {
 			$.ajax({
 
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/PaymentDrafts",
+				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts",
 				type: "POST",
 				contentType: "application/json",
 				async: false,
@@ -804,7 +804,7 @@ sap.ui.define([
 			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
+				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -831,7 +831,7 @@ sap.ui.define([
 		fGetBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
+				url: "https://18.141.110.57:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
 					CardCode + "'",
 				type: "GET",
 				xhrFields: {
@@ -944,7 +944,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://sl-eut.biotechfarms.net/b1s/v1/$batch",
+				url: "https://18.141.110.57:50000/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,
@@ -984,14 +984,14 @@ sap.ui.define([
 		},
 		deleteIfExisting: function(oDetailsCode,Type){
 			$.ajax({
-				url: "https://xsjs.biotechfarms.net/app-xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExistPE"
+				url: "https://xs.biotechfarms.net/app_xsjs/ExecQuery.xsjs?dbName="+ this.sDataBase +"&procName=spAppBankIntegration&QUERYTAG=CheckIfExistPE"
 				+ "&VALUE1=" + 	oDetailsCode + "&VALUE2="+ Type +"&VALUE3=&VALUE4=",
 				type: "GET",
 				contentType: "application/json",
 				async: false,
 				dataType: "json",
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:Qwerty0987$"));
+					xhr.setRequestHeader("Authorization", "Basic " + btoa("SYSTEM:P@ssw0rd805~"));
 				},
 				error: function (xhr, status, error) {
 					var Message = xhr.responseJSON["error"].message.value;			

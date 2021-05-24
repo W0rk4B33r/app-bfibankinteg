@@ -710,7 +710,7 @@ sap.ui.define([
 			AppUI5.fShowBusyIndicator(15000);
 			this.sStatus = "Saved";
 			this.onAddProcess();
-			AppUI5.fHideBusyIndicator();
+			// AppUI5.fHideBusyIndicator();
 			this.getView().byId("btnSave").setEnabled(true);
 		},
 		onDeleteRow: function(oEvent){
@@ -922,6 +922,7 @@ sap.ui.define([
 				},
 				success: function (json) {
 					sap.m.MessageToast.show("Success saving Batch: " + BatchCode );
+					AppUI5.fHideBusyIndicator();
 				},
 				context: this
 

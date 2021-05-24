@@ -702,12 +702,14 @@ sap.ui.define([
 			return HeaderCode;
 		},
 		onSave: function (oEvent) {
+			AppUI5.fShowBusyIndicator(15000);
 			this.getView().byId("btnSave").setEnabled(false);
 			if(!this.fVAlidate()){
 				this.getView().byId("btnSave").setEnabled(true);
+				AppUI5.fHideBusyIndicator();
 				return false;
 			}
-			AppUI5.fShowBusyIndicator(15000);
+			// AppUI5.fShowBusyIndicator(15000);
 			this.sStatus = "Saved";
 			this.onAddProcess();
 			// AppUI5.fHideBusyIndicator();

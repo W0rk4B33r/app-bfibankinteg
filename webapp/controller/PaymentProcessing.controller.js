@@ -44,6 +44,9 @@ sap.ui.define([
 			//For Status
 			this.sStatus = "";
 
+			this.isClickAdd = false;
+			this.sSuppCode = "";
+
 			//get Buttons
 			this.oMdlButtons = new JSONModel();
 			this.oResults = AppUI5.fGetButtons(this.sDataBase,this.sUserCode,"paymentprocessing");
@@ -623,6 +626,7 @@ sap.ui.define([
 			return true;
 		},
 		onAdd: function (oEvent) {
+			
 			this.getView().byId("btnDraft").setEnabled(false);
 			if(!this.fVAlidate()){
 				this.getView().byId("btnDraft").setEnabled(true);
@@ -632,8 +636,11 @@ sap.ui.define([
 			this.sStatus = "Draft";
 			//Check if Existing
 			//this.deleteIfExisting();
-			this.onAddProcess();
-			this.getView().byId("btnDraft").setEnabled(true);
+			if (this.onAddProcess()){
+				this.getView().byId("btnDraft").setEnabled(true);
+			}
+			
+			
 		},
 		
 		deleteIfExisting: function(oDetailsCode,Type){
@@ -702,16 +709,26 @@ sap.ui.define([
 			return HeaderCode;
 		},
 		onSave: function (oEvent) {
-			this.getView().byId("btnSave").setEnabled(false);
-			if(!this.fVAlidate()){
-				this.getView().byId("btnSave").setEnabled(true);
+			if (this.isClickAdd && this.sSuppCode === this.oMdlEditRecord.getData().EditRecord.SupplierCode) {
+				this.isClickAdd = false;
 				return false;
 			}
+			this.isClickAdd = true;
+			this.sSuppCode = this.oMdlEditRecord.getData().EditRecord.SupplierCode;
+			this.getView().byId("btnSave").setEnabled(false);
 			AppUI5.fShowBusyIndicator(15000);
+			if(!this.fVAlidate()){
+				this.getView().byId("btnSave").setEnabled(true);
+				AppUI5.fHideBusyIndicator();
+				return false;
+			}
 			this.sStatus = "Saved";
-			this.onAddProcess();
+			if(this.onAddProcess()){
+				this.getView().byId("btnSave").setEnabled(true);
+				isClickAdd = false;
+			}
 			// AppUI5.fHideBusyIndicator();
-			this.getView().byId("btnSave").setEnabled(true);
+			
 		},
 		onDeleteRow: function(oEvent){
 			var oTable = this.getView().byId("tblDetails");
@@ -753,6 +770,7 @@ sap.ui.define([
 		//Cancel Process
 		//Add Process----------------
 		onAddProcess: function (oEvent) {
+			var isSuccess = false;
 			//Get data if existing
 			//header
 			//Skip delete if status is rejected
@@ -935,6 +953,7 @@ sap.ui.define([
 					sap.m.MessageToast.show(oMessage);
 					console.error(oMessage);
 					AppUI5.fHideBusyIndicator();
+					isSuccess = true;
 				}else{
 					if (results) {
 						this.getView().byId("DocumentNo").setValue(BatchCode);
@@ -943,8 +962,10 @@ sap.ui.define([
 						this.oMdlBatch.refresh();
 						that.fPrepareTable(false);
 						this.oMdlAllRecord.refresh();
+						isSuccess = true;
 					}
 				}
+				return isSuccess;
 			});
 		
 			

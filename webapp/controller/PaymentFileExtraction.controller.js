@@ -635,7 +635,12 @@ sap.ui.define([
 							oPaymentInvoices.TotalDiscountFC = 0.0;
 							oPaymentInvoices.TotalDiscountSC = 0.0;
 
-							iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
+							if(this.oMdlAP.getData().allopenAP[i].InvoiceType === 'APCM'){
+								iTotal = iTotal - (Math.round(iSumApplied * 100) / 100);
+							}else{
+								iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
+							}	
+							//iTotal = iTotal + (Math.round(iSumApplied * 100) / 100);
 							//oRecord.PaymentInvoices.push(oPaymentInvoices);
 							oRecord.PaymentInvoices.push(JSON.parse(JSON.stringify(oPaymentInvoices)));
 

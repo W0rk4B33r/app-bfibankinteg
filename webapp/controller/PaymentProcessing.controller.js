@@ -523,7 +523,22 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					var oResult = JSON.stringify(results).replace("[", "").replace("]", "");
+					var oRecord = {};
+					oRecord.oRecord_Details = [];
+					var oRecordDetails = {};
+					for (var d = 0; d < results.length; d++) {
+						oRecordDetails.Code = results[d].Code;
+						oRecordDetails.DateFrom = results[d].DateFrom;
+						oRecordDetails.DateTagged = results[d].DateTagged;
+						oRecordDetails.DateTo = results[d].DateTo;
+						oRecordDetails.DocumentNo = results[d].DocumentNo;
+						oRecordDetails.Remarks = results[d].Remarks;
+						oRecordDetails.Status = results[d].Status;
+						oRecordDetails.SupplierCode = results[d].SupplierCode;
+						oRecordDetails.SupplierName = results[d].SupplierName.replace('Ã', 'Ñ');
+						oRecord.oRecord_Details.push(JSON.parse(JSON.stringify(oRecordDetails)));
+					}
+					var oResult = JSON.stringify(oRecord.oRecord_Details).replace("[", "").replace("]", "");
 					this.oMdlEditRecord.setJSON("{\"EditRecord\" : " + oResult + "}");
 					this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
 					this.oMdlEditRecord.refresh();
@@ -551,7 +566,34 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(results) + "}");
+					var oRecord = {};
+					oRecord.oRecord_Details = [];
+					var oRecordDetails = {};
+					for (var d = 0; d < results.length; d++) {
+						oRecordDetails.BatchNum = results[d].BatchNum;
+						oRecordDetails.CRANo = results[d].CRANo;
+						oRecordDetails.CardCode = results[d].CardCode;
+						oRecordDetails.CardName = results[d].CardName.replace('Ã', 'Ñ');
+						oRecordDetails.Code = results[d].Code;
+						oRecordDetails.Comments = results[d].Comments;
+						oRecordDetails.DocCur = results[d].DocCur;
+						oRecordDetails.DocDate = results[d].DocDate;
+						oRecordDetails.DocDueDate = results[d].DocDueDate;
+						oRecordDetails.DocEntry = results[d].DocEntry;
+						oRecordDetails.DocNum = results[d].DocNum;
+						oRecordDetails.DocTotal = results[d].DocTotal;
+						oRecordDetails.DocType = results[d].DocType;
+						oRecordDetails.Dscription = results[d].Dscription;
+						oRecordDetails.InvoiceType = results[d].InvoiceType;
+						oRecordDetails.NumAtCard = results[d].NumAtCard;
+						oRecordDetails.PaymentAmount = results[d].PaymentAmount;
+						oRecordDetails.Priority = results[d].Priority;
+						oRecordDetails.RemainingBalance = results[d].RemainingBalance;
+						oRecordDetails.TaxAmount = results[d].TaxAmount;
+						oRecordDetails.WTaxAmount = results[d].WTaxAmount;
+						oRecord.oRecord_Details.push(JSON.parse(JSON.stringify(oRecordDetails)));
+					}
+					this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(oRecord.oRecord_Details) + "}");
 					this.getView().setModel(this.oMdlAP, "oMdlAP");
 				}
 			});

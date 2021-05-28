@@ -763,7 +763,7 @@ sap.ui.define([
 					oRecord.oRecord_Details = [];
 					var oRecordDetails = {};
 					for (var d = 0; d < results.length; d++) {
-						oRecordDetails.Address = results[d].Address;
+						oRecordDetails.Address = results[d].Address.replace('Ã', 'Ñ');
 						oRecordDetails.BatchDetailCode = results[d].BatchDetailCode;
 						oRecordDetails.BatchNum = results[d].BatchNum;
 						oRecordDetails.CRANo = results[d].CRANo;

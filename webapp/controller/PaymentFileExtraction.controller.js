@@ -759,7 +759,43 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(results) + "}");
+					var oRecord = {};
+					oRecord.oRecord_Details = [];
+					var oRecordDetails = {};
+					for (var d = 0; d < results.length; d++) {
+						oRecordDetails.Address = results[d].Address;
+						oRecordDetails.BatchDetailCode = results[d].BatchDetailCode;
+						oRecordDetails.BatchNum = results[d].BatchNum;
+						oRecordDetails.CRANo = results[d].CRANo;
+						oRecordDetails.CardCode = results[d].CardCode;
+						oRecordDetails.CardName = results[d].CardName.replace('Ã', 'Ñ');
+						oRecordDetails.CheckSum = results[d].CheckSum;
+						oRecordDetails.Code = results[d].Code;
+						oRecordDetails.Comments = results[d].Comments;
+						oRecordDetails.DocCur = results[d].DocCur;
+						oRecordDetails.DocDate = results[d].DocDate;
+						oRecordDetails.DocDueDate = results[d].DocDueDate;
+						oRecordDetails.DocEntry = results[d].DocEntry;
+						oRecordDetails.DocNum = results[d].DocNum;
+						oRecordDetails.DocTotal = results[d].DocTotal;
+						oRecordDetails.DocType = results[d].DocType;
+						oRecordDetails.DraftDocEntry = results[d].DraftDocEntry;
+						oRecordDetails.Dscription = results[d].Dscription;
+						oRecordDetails.InvoiceType = results[d].InvoiceType;
+						oRecordDetails.NumAtCard = results[d].NumAtCard;
+						oRecordDetails.PaymentAmount = results[d].PaymentAmount;
+						oRecordDetails.Priority = results[d].Priority;
+						oRecordDetails.Rate = results[d].Rate;
+						oRecordDetails.RemainingBalance = results[d].RemainingBalance;
+						oRecordDetails.TIN = results[d].TIN;
+						oRecordDetails.TaxAmount = results[d].TaxAmount;
+						oRecordDetails.TaxCode = results[d].TaxCode;
+						oRecordDetails.WTaxAmount = results[d].WTaxAmount;
+						oRecordDetails.ZipCode = results[d].ZipCode;
+
+					oRecord.oRecord_Details.push(JSON.parse(JSON.stringify(oRecordDetails)));
+					}
+					this.oMdlAP.setJSON("{\"allopenAP\" : " + JSON.stringify(oRecord.oRecord_Details) + "}");
 					this.getView().setModel(this.oMdlAP, "oMdlAP");
 				}
 			});

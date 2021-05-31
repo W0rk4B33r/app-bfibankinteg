@@ -341,7 +341,7 @@ sap.ui.define([
 		},
 		updateRecords: function(table,code,Data,batchNum,isApprove){
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/"+table+"('"+code+"')",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/"+table+"('"+code+"')",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,

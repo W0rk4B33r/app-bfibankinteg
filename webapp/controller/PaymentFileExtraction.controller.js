@@ -518,7 +518,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,aBatchUpdate);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a", 
 				data: sBodyRequest,
@@ -666,7 +666,7 @@ sap.ui.define([
 			var aBatchDelete = [];
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				aysnc: false,
@@ -808,7 +808,7 @@ sap.ui.define([
 		fPostPaymentDraft: function (oRecord) {
 			$.ajax({
 
-				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/PaymentDrafts",
 				type: "POST",
 				contentType: "application/json",
 				async: false,
@@ -845,7 +845,7 @@ sap.ui.define([
 			oData = JSON.stringify(oT_PAYMENT_PROCESSING_H);
 
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/PaymentDrafts(" + iDocEntry + ")",
 				type: "PATCH",
 				contentType: "application/json",
 				async: false,
@@ -872,7 +872,7 @@ sap.ui.define([
 		fGetBPInfo: function (CardCode) {
 			var that = this;
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
+				url: "https://sl-test.biotechfarms.net/b1s/v1/BusinessPartners?$select=CardName,CardCode,Address,FederalTaxID,ZipCode&$filter=CardCode eq '" +
 					CardCode + "'",
 				type: "GET",
 				xhrFields: {
@@ -985,7 +985,7 @@ sap.ui.define([
 			}
 			var sBodyRequest = this.fPrepareBatchRequestBody(aBatchInsert,false,aBatchDelete);
 			$.ajax({
-				url: "https://18.141.110.57:50000/b1s/v1/$batch",
+				url: "https://sl-test.biotechfarms.net/b1s/v1/$batch",
 				type: "POST",
 				contentType: "multipart/mixed;boundary=a",
 				data: sBodyRequest,

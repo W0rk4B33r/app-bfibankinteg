@@ -213,7 +213,19 @@ sap.ui.define([
 				if (results.length <= 0) {
 					aReturnResult = [];
 				} else {
-					aReturnResult = results;
+					var oRecord = {};
+					oRecord.oRecord_Details = [];
+					var oRecordDetails = {};
+					for (var d = 0; d < results.length; d++) {
+						oRecordDetails.U_App_DocNum = results[d].U_App_DocNum;
+						oRecordDetails.U_App_Suppliercode = results[d].U_App_Suppliercode;
+						oRecordDetails.U_App_SupplierName = results[d].U_App_SupplierName.replace('Ã', 'Ñ');
+						oRecordDetails.U_App_Status = results[d].U_App_Status;
+						oRecordDetails.U_App_Remarks = results[d].U_App_Remarks;
+						oRecordDetails.U_App_CreatedDate = results[d].U_App_CreatedDate;
+						oRecord.oRecord_Details.push(JSON.parse(JSON.stringify(oRecordDetails)));
+					}
+					aReturnResult = oRecord.oRecord_Details;
 				}
 			});
 			return aReturnResult;
@@ -261,7 +273,24 @@ sap.ui.define([
 				context: this
 			}).done(function (results) {
 				if (results) {
-					var oResult = JSON.stringify(results).replace("[", "").replace("]", "");
+					var oRecord = {};
+					oRecord.oRecord_Details = [];
+					var oRecordDetails = {};
+					for (var d = 0; d < results.length; d++) {
+
+						oRecordDetails.Code = results[d].Code;
+						oRecordDetails.DateFrom = results[d].DateFrom;
+						oRecordDetails.DateTagged = results[d].DateTagged;
+						oRecordDetails.DateTo = results[d].DateTo;
+						oRecordDetails.DocumentNo = results[d].DocumentNo;
+						oRecordDetails.Remarks = results[d].Remarks;
+						oRecordDetails.Status = results[d].Status;
+						oRecordDetails.SupplierCode = results[d].SupplierCode;
+						oRecordDetails.SupplierName = results[d].SupplierName.replace('Ã', 'Ñ');
+
+						oRecord.oRecord_Details.push(JSON.parse(JSON.stringify(oRecordDetails)));
+					}
+					var oResult = JSON.stringify(oRecord.oRecord_Details).replace("[", "").replace("]", "");
 					this.oMdlEditRecord.setJSON("{\"EditRecord\" : " + oResult + "}");
 					this.getView().setModel(this.oMdlEditRecord, "oMdlEditRecord");
 					this.oMdlEditRecord.refresh();
